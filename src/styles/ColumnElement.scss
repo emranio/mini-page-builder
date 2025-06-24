@@ -1,0 +1,93 @@
+.column-element-container {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.column-element {
+    width: 100%;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+
+    .column-element-header {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 5px;
+
+        .column-settings-button {
+            background-color: #f5f5f5;
+            border-color: #e8e8e8;
+        }
+    }
+
+    .column-element-row {
+        display: flex;
+        width: 100%;
+        overflow: hidden;
+        flex-wrap: wrap;
+        transition: all 0.2s ease;
+
+        &.during-drag {
+            &:hover {
+                border-color: #1890ff;
+                background-color: rgba(24, 144, 255, 0.03);
+            }
+        }
+
+        .column-element-col {
+            display: flex;
+            min-height: 180px;
+            height: 100%;
+            margin-bottom: 10px;
+
+            @media (max-width: 768px) {
+                width: 100% !important;
+                max-width: 100% !important;
+                flex: 0 0 100% !important;
+            }
+
+            .column-drop-area {
+                background-color: #fafafa;
+                border: 1px dashed #e0e0e0;
+                border-radius: 4px;
+                padding: 10px;
+                width: 100%;
+                height: 100%;
+                min-height: 150px;
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+                transition: all 0.2s ease;
+
+                &:hover {
+                    border-color: #1890ff;
+                    background-color: #f0f5ff;
+                }
+
+                /* During drag make the dropzone more noticeable */
+                &.during-drag {
+                    border: 1px dashed rgba(24, 144, 255, 0.3);
+                    background-color: rgba(24, 144, 255, 0.03);
+
+                    &:hover {
+                        border: 1px dashed rgba(24, 144, 255, 0.8);
+                        background-color: rgba(24, 144, 255, 0.1);
+                    }
+                }
+
+                /* Make dropzone more visible when column is hovered during drag */
+                .column-element-col:hover &.during-drag {
+                    border: 1px dashed rgba(24, 144, 255, 0.6);
+                    background-color: rgba(24, 144, 255, 0.07);
+                }
+            }
+        }
+    }
+}
+
+/* Styles for the settings modal */
+.column-widths-container {
+    max-height: 350px;
+    overflow-y: auto;
+    padding-right: 5px;
+    margin-bottom: 10px;
+}

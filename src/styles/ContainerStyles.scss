@@ -1,0 +1,73 @@
+/* Container styles */
+.canvas {
+    .drop-zone {
+
+        /* Drop zone hover states */
+        &.drop-zone-hover {
+            background-color: rgba(24, 144, 255, 0.1);
+            outline: 2px dashed #1890ff;
+        }
+
+        /* Show a subtle border during any drag operation */
+        &.during-drag {
+            border: 1px dashed rgba(24, 144, 255, 0.3);
+            background-color: rgba(24, 144, 255, 0.03);
+            transition: all 0.2s ease;
+        }
+
+        /* When parent is hovered during drag, make the drop zone more visible */
+        .draggable-element:hover &.during-drag {
+            border: 1px dashed rgba(24, 144, 255, 0.6);
+            background-color: rgba(24, 144, 255, 0.05);
+        }
+    }
+
+    /* Container styles for flexbox containers */
+    .flexbox-container {
+        background-color: rgba(0, 0, 0, 0.02);
+        border: 1px dashed #b5b5b5;
+        padding: 10px;
+        margin-bottom: 15px;
+        box-sizing: border-box;
+        position: relative;
+        width: 100% !important;
+        transition: all 0.2s ease;
+
+        &.during-drag {
+            &:hover {
+                border-color: #1890ff;
+                background-color: rgba(24, 144, 255, 0.05);
+            }
+        }
+    }
+}
+
+/* Simple container styling */
+.flexbox-container {
+    border-color: #d9d9d9 !important;
+    width: 100% !important;
+}
+
+/* Ensure elements inside containers have consistent spacing */
+.flexbox-content>.drop-zone>.draggable-element {
+    margin-bottom: 10px;
+
+    /* Remove margin from the last child */
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+/* Container actions positioning */
+.container-actions {
+    margin-top: 8px;
+    text-align: center;
+
+    .add-container-button {
+        background-color: #f0f0f0;
+
+        &:hover {
+            background-color: #e0e0e0;
+        }
+    }
+}

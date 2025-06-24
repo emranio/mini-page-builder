@@ -1,0 +1,231 @@
+@import '~antd/dist/reset.css';
+@import './ContainerLayout.scss';
+@import './ContainerStyles.scss';
+@import './ColumnElement.scss';
+@import './DragOperations.scss';
+
+/* Layout */
+.builder-layout {
+    display: flex;
+    min-height: 100vh;
+    height: 100%;
+    background: #f0f2f5;
+
+    .left-panel {
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        z-index: 10;
+        overflow-y: auto;
+
+        .panel-content {
+            padding: 20px;
+        }
+
+        .elements-card {
+            margin-bottom: 20px;
+        }
+    }
+
+    .right-panel {
+        padding: 20px;
+        overflow-y: auto;
+
+        .panel-content {
+            padding: 20px;
+            height: 100%;
+        }
+
+        .canvas {
+            min-height: 600px;
+            background: #fff;
+            border: 1px solid #e8e8e8;
+            border-radius: 4px;
+            padding: 20px;
+            position: relative;
+            /* Added for absolute positioning of empty-canvas */
+        }
+
+        .empty-canvas {
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            /* This ensures the Empty component doesn't block drag and drop */
+
+            .ant-empty-image {
+                margin-bottom: 20px;
+            }
+        }
+    }
+}
+
+/* Element Items in Left Panel */
+.element-item {
+    cursor: move;
+    margin-bottom: 10px;
+
+    .element-card {
+        transition: all 0.3s;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+    }
+
+    .element-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
+        padding: 10px 0;
+    }
+
+    .element-icon {
+        font-size: 24px;
+        margin-bottom: 8px;
+    }
+}
+
+/* Drop Zone - Base styles only, layout handled in ContainerLayout.scss */
+.drop-zone {
+    min-height: 40px;
+    width: 100%;
+    position: relative;
+
+    &.drop-zone-hover {
+        background-color: rgba(24, 144, 255, 0.1);
+        outline: 2px dashed #1890ff;
+    }
+}
+
+/* Draggable Element */
+.draggable-element {
+    position: relative;
+    margin: 5px 0;
+    padding: 5px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+
+    &:hover {
+        border-color: #d9d9d9;
+
+        .element-actions {
+            opacity: 1;
+        }
+    }
+
+    &.dragging {
+        opacity: 0.5;
+    }
+
+    &.drop-target {
+        background-color: rgba(24, 144, 255, 0.1);
+    }
+
+    .element-actions {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        z-index: 10;
+        opacity: 0;
+        transition: opacity 0.2s;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 4px;
+    }
+
+    .element-wrapper {
+        width: 100%;
+    }
+}
+
+/* Flexbox Container - Base styles only, details in ContainerLayout.scss and ContainerStyles.scss */
+.flexbox-container {
+    position: relative;
+    min-height: 60px;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px dashed #d9d9d9;
+    background-color: rgba(0, 0, 0, 0.02);
+    box-sizing: border-box;
+    width: 100%;
+    /* Default to full width */
+    transition: width 0.2s ease-out;
+
+    /* These styles are being managed in ContainerStyles.scss */
+    .flexbox-content {
+        width: 100%;
+        min-height: 40px;
+        box-sizing: border-box;
+    }
+
+    .container-actions {
+        margin-top: 10px;
+        text-align: center;
+    }
+}
+
+/* Elements */
+.text-element {
+    width: 100%;
+    padding: 10px;
+    margin: 0;
+    border: 1px solid transparent;
+    cursor: text;
+    transition: all 0.2s;
+    box-sizing: border-box;
+
+    &:hover {
+        border-color: #d9d9d9;
+    }
+}
+
+.text-element-editor {
+    width: 100%;
+    padding: 10px;
+}
+
+/* Ensure elements are stacked vertically within flexbox content */
+.flexbox-content .draggable-element {
+    width: 100%;
+    display: block;
+}
+
+.image-element {
+    position: relative;
+    width: 100%;
+    padding: 5px 0;
+    box-sizing: border-box;
+
+    .image-container {
+        position: relative;
+        width: 100%;
+
+        .newsletter-image {
+            display: block;
+            max-width: 100%;
+        }
+
+        .image-edit-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        &:hover .image-edit-button {
+            opacity: 1;
+        }
+    }
+}

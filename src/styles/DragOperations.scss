@@ -1,0 +1,86 @@
+/* Styling for drag and drop operations */
+
+/* Global styles for when dragging is happening */
+body.dragging {
+    cursor: grabbing !important;
+
+    .drop-zone {
+        outline: 1px dashed rgba(24, 144, 255, 0.2);
+    }
+}
+
+/* Highlight elements that can accept drops during dragging */
+.draggable-element {
+    transition: all 0.2s ease;
+    position: relative;
+
+    /* Add visual cue when hovering over draggable elements */
+    &:hover {
+        .element-actions {
+            opacity: 1;
+        }
+    }
+
+    &.dragging {
+        opacity: 0.5;
+    }
+
+    &.drop-target {
+        outline: 2px solid #1890ff;
+    }
+
+    /* Add a subtle highlight during global drag state */
+    .during-drag &:hover {
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(24, 144, 255, 0.03);
+            pointer-events: none;
+            border: 1px dashed rgba(24, 144, 255, 0.3);
+            z-index: 1;
+        }
+    }
+}
+
+/* Make drop zones more visible when parent is hovered */
+.draggable-element:hover .drop-zone.during-drag {
+    background-color: rgba(24, 144, 255, 0.05);
+    border: 1px dashed rgba(24, 144, 255, 0.6);
+}
+
+/* Add a pulsing effect to drop zones during drag */
+.drop-zone.during-drag {
+    animation: pulse 2s infinite;
+    background-color: rgba(24, 144, 255, 0.02);
+}
+
+@keyframes pulse {
+    0% {
+        background-color: rgba(24, 144, 255, 0.02);
+    }
+
+    50% {
+        background-color: rgba(24, 144, 255, 0.05);
+    }
+
+    100% {
+        background-color: rgba(24, 144, 255, 0.02);
+    }
+}
+
+/* Canvas highlighting during drag operations */
+.canvas-during-drag {
+    border-color: #91d5ff !important;
+    box-shadow: 0 0 8px rgba(24, 144, 255, 0.2);
+    transition: all 0.3s ease;
+
+    .empty-canvas {
+        border: 2px dashed #1890ff;
+        border-radius: 4px;
+        background-color: rgba(24, 144, 255, 0.05);
+    }
+}
