@@ -50,8 +50,9 @@ const LeftPanel = () => {
     const selectedElementConfig = selectedElement ? elementRegistry[selectedElement.type] : null;
     const SettingsComponent = selectedElementConfig?.settings;
 
-    // Throttled update for settings
+    // Direct update for settings without throttling to ensure changes appear instantly
     const throttledUpdate = (elementId, newProps) => {
+        console.log("Updating element from settings panel:", elementId, newProps);
         updateElement(elementId, newProps);
     };
 

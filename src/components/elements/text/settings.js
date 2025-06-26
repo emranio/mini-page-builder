@@ -28,6 +28,7 @@ const TextElementSettings = ({
 
     const handleValuesChange = (changedValues, allValues) => {
         // Live update the element as user changes settings
+        console.log("Settings form changed:", changedValues);
         throttledUpdate(element.id, allValues);
     };
 

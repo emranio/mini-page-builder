@@ -16,16 +16,33 @@ const TextElementView = ({
     throttledUpdate
 }) => {
     const [isEditing, setIsEditing] = useState(false);
-    const [localContent, setLocalContent] = useState(content);
+
+    // Don't use local state for content, instead use the prop directly
+    // and only track content changes during editing
+    const [editingContent, setEditingContent] = useState(null);
     const { setSelectedElementId } = useBuilder();
 
+    // Reset editing content when exiting edit mode or when content prop changes
+    React.useEffect(() => {
+        if (!isEditing) {
+            setEditingContent(null);
+        }
+    }, [isEditing]);
+
+    // Initialize editing content when entering edit mode
+    const startEditing = () => {
+        setEditingContent(content);
+        setIsEditing(true);
+    };
+
     const handleChange = (value) => {
-        setLocalContent(value);
+        setEditingContent(value);
+        // Only update the element when actually editing in place
         throttledUpdate(id, { content: value });
     };
 
     const handleDoubleClick = () => {
-        setIsEditing(true);
+        startEditing();
     };
 
     const handleClick = (e) => {
@@ -34,7 +51,12 @@ const TextElementView = ({
     };
 
     const handleBlur = () => {
+        // Finalize the edit
         setIsEditing(false);
+        // Make sure the content is updated with our final value
+        if (editingContent !== null && editingContent !== content) {
+            throttledUpdate(id, { content: editingContent });
+        }
     };
 
     const textStyle = {
@@ -45,11 +67,14 @@ const TextElementView = ({
         margin: 0
     };
 
+    // For debugging
+    console.log(`TextElementView render: id=${id}, content="${content}", isEditing=${isEditing}, editingContent="${editingContent}"`);
+
     return isEditing ? (
         <TextArea
             autoSize
             autoFocus
-            value={localContent}
+            value={editingContent}
             onChange={(e) => handleChange(e.target.value)}
             onBlur={handleBlur}
             className="text-element-editor"
@@ -62,7 +87,7 @@ const TextElementView = ({
             onDoubleClick={handleDoubleClick}
             style={textStyle}
         >
-            {localContent}
+            {content || 'Click to edit text'}
         </Paragraph>
     );
 };

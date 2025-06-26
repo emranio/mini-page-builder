@@ -21,6 +21,7 @@ export const BuilderProvider = ({ children }) => {
     const [elements, setElements] = useState([]);
     const [rootElementsOrder, setRootElementsOrder] = useState([]); // Track order of root elements
     const [isDragging, setIsDragging] = useState(false);
+    const [draggedElementId, setDraggedElementId] = useState(null);
     const [selectedElementId, setSelectedElementId] = useState(null);
 
     // Add/remove body class when dragging state changes
@@ -29,6 +30,10 @@ export const BuilderProvider = ({ children }) => {
             document.body.classList.add('dragging');
         } else {
             document.body.classList.remove('dragging');
+            // Small delay to ensure UI updates after drag ends
+            setTimeout(() => {
+                setDraggedElementId(null);
+            }, 50);
         }
     }, [isDragging]);
 
@@ -156,13 +161,28 @@ export const BuilderProvider = ({ children }) => {
 
     // Update element properties
     const updateElement = useCallback((elementId, newProps) => {
-        setElements(prevElements =>
-            prevElements.map(element =>
+        console.log(`Updating element ${elementId} with props:`, newProps);
+
+        setElements(prevElements => {
+            const elementToUpdate = prevElements.find(el => el.id === elementId);
+            if (!elementToUpdate) {
+                console.warn(`Element ${elementId} not found, cannot update`);
+                return prevElements;
+            }
+
+            console.log(`Before update - element props:`, elementToUpdate.props);
+
+            const updatedElements = prevElements.map(element =>
                 element.id === elementId
                     ? { ...element, props: { ...element.props, ...newProps } }
                     : element
-            )
-        );
+            );
+
+            const updatedElement = updatedElements.find(el => el.id === elementId);
+            console.log(`After update - element props:`, updatedElement.props);
+
+            return updatedElements;
+        });
     }, []);
 
     // Delete an element and its children recursively
@@ -277,6 +297,8 @@ export const BuilderProvider = ({ children }) => {
         hasMixedChildren,
         isDragging,
         setIsDragging,
+        draggedElementId,
+        setDraggedElementId,
         selectedElementId,
         setSelectedElementId
     };

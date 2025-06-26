@@ -48,12 +48,13 @@ export const withBaseElement = (WrappedComponent) => {
                 clearTimeout(throttleTimeout);
             }
 
-            const timeout = setTimeout(() => {
-                updateElement(elementId, newProps);
-                setThrottleTimeout(null);
-            }, 300);
+            console.log("BaseElement throttledUpdate called for", elementId, newProps);
 
-            setThrottleTimeout(timeout);
+            // Immediate update for better responsiveness
+            updateElement(elementId, newProps);
+
+            // Clear any previous timeout
+            setThrottleTimeout(null);
         }, [updateElement, throttleTimeout]);
 
         // Cleanup on unmount

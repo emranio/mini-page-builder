@@ -9,6 +9,21 @@ body.dragging {
     }
 }
 
+/* Element placeholder during drag */
+.element-placeholder {
+    background-color: rgba(24, 144, 255, 0.1);
+    border: 1px dashed rgba(24, 144, 255, 0.5);
+    border-radius: 4px;
+    padding: 8px;
+    text-align: center;
+    color: #1890ff;
+    font-size: 12px;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 /* Highlight elements that can accept drops during dragging */
 .draggable-element {
     transition: all 0.2s ease;

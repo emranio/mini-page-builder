@@ -30,7 +30,7 @@ const PositionalDropZone = ({ parentId, index, position = 'between' }) => {
                     const currentIndex = currentChildren.findIndex(el => el.id === item.id);
                     // Don't move if it's the same position or adjacent position (which would be the same result)
                     if (currentIndex === index || currentIndex === index - 1) {
-                        return;
+                        // return;
                     }
                 }
 

@@ -1,12 +1,12 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { useBuilder } from '../../../contexts/BuilderContext';
 import { ItemTypes } from '../../../utils/DragTypes';
 import { Button } from 'antd';
-import { DeleteOutlined } from '@ant-design/icons';
+import { DeleteOutlined, DragOutlined } from '@ant-design/icons';
 
 const DraggableElement = ({ id, type, parentId, children }) => {
-    const { moveElement, deleteElement, getElements, setIsDragging } = useBuilder();
+    const { moveElement, deleteElement, getElements, setIsDragging, setDraggedElementId } = useBuilder();
     const ref = useRef(null);
 
     // Set up the element to be draggable
@@ -14,6 +14,7 @@ const DraggableElement = ({ id, type, parentId, children }) => {
         type: ItemTypes.CONTAINER_ITEM,
         item: () => {
             setIsDragging(true);
+            setDraggedElementId(id); // Track which element is being dragged
             return { id, type, parentId };
         },
         collect: (monitor) => ({
@@ -21,6 +22,7 @@ const DraggableElement = ({ id, type, parentId, children }) => {
         }),
         end: () => {
             setIsDragging(false);
+            // setDraggedElementId will be cleared in the useEffect in BuilderContext
         }
     }));
 
@@ -58,7 +60,14 @@ const DraggableElement = ({ id, type, parentId, children }) => {
                 />
             </div>
             <div className="element-wrapper">
-                {children}
+                {/* When dragging, render a simplified placeholder instead of the full component */}
+                {isDragging ? (
+                    <div className="element-placeholder">
+                        {type.charAt(0).toUpperCase() + type.slice(1)} Element
+                    </div>
+                ) : (
+                    children
+                )}
             </div>
         </div>
     );
