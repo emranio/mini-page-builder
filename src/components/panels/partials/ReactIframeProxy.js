@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Frame, { FrameContextConsumer } from 'react-frame-component';
+import IframeDropZone from './IframeDropZone';
 import '../../../styles/ReactIframeProxy.scss';
 
 /**
@@ -137,7 +138,6 @@ const ReactIframeProxy = ({
                                 .drop-zone {
                                     min-height: 40px;
                                     margin: 4px 0;
-                                    background-color: #f00;
                                     border: 2px dashed transparent;
                                     border-radius: 4px;
                                     transition: all 0.2s ease;
@@ -201,9 +201,12 @@ const ReactIframeProxy = ({
                     <FrameContextConsumer>
                         {({ document, window }) =>
                             ReactDOM.createPortal(
-                                <div style={{ width: '100%', height: '100%' }}>
+                                <IframeDropZone
+                                    iframeWindow={window}
+                                    iframeDocument={document}
+                                >
                                     {children}
-                                </div>,
+                                </IframeDropZone>,
                                 document.body
                             )
                         }

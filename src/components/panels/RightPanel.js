@@ -1,6 +1,7 @@
 import React from 'react';
 import { Layout, Typography, Empty, Row, Col } from 'antd';
 import { useBuilder } from '../../contexts/BuilderContext';
+import useIframeDragDrop from '../../hooks/useIframeDragDrop';
 import { DropZone } from '../elements/commons';
 import { ReactIframeProxy, ResponsiveViewSelector } from './partials';
 
@@ -8,7 +9,8 @@ const { Content } = Layout;
 const { Text } = Typography;
 
 const RightPanel = ({ leftPanelCollapsed, responsiveView, onResponsiveViewChange }) => {
-    const { getElements, isDragging } = useBuilder();
+    const { getElements } = useBuilder();
+    const { isDragging } = useIframeDragDrop();
     const rootElements = getElements(null); // Get elements at the root level
 
     // Get width based on responsive view
