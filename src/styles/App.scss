@@ -8,8 +8,10 @@
 /* Layout */
 .builder-layout {
     display: flex;
-    min-height: 100vh;
-    height: 100%;
+    height: 100vh;
+    /* Fixed height to fill the viewport */
+    overflow: hidden;
+    /* Hide overflow on main layout */
     background: #f0f2f5;
 
     .left-panel {
@@ -17,6 +19,11 @@
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         z-index: 10;
         overflow-y: auto;
+        /* Keep the scrollbar for left panel */
+        height: 100%;
+        /* Full height */
+        flex: 0 0 300px;
+        /* Fixed width */
 
         .panel-content {
             padding: 20px;
@@ -29,21 +36,29 @@
 
     .right-panel {
         padding: 20px;
-        overflow-y: auto;
+        overflow: hidden;
+        /* Remove scrollbar from right panel container */
+        flex: 1;
+        /* Take remaining space */
+        height: 100%;
+        /* Full height */
 
         .panel-content {
-            padding: 20px;
-            height: calc(100% - 40px);
+            padding: 0;
+            height: 100%;
             display: flex;
             flex-direction: column;
 
             h3 {
-                margin-bottom: 16px;
+                margin: 0 0 16px 0;
+                padding: 0 20px;
             }
 
             .react-iframe-proxy {
                 flex: 1;
-                margin-bottom: 20px;
+                margin: 0;
+                height: calc(100% - 40px);
+                /* Subtract the title height */
             }
         }
 
