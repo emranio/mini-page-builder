@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Layout, Card, Typography, Row, Col, Button } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { ElementItem } from '../elements/commons';
+import { ResizeHandle } from '../commons';
 import { ItemTypes } from '../../utils/DragTypes';
 import { useBuilder } from '../../contexts/BuilderContext';
 import TextElement from '../elements/text';
@@ -12,8 +13,21 @@ import ColumnElement from '../elements/column';
 const { Sider } = Layout;
 const { Title } = Typography;
 
-const LeftPanel = () => {
+const LeftPanel = ({ width = 300, collapsed = false, onWidthChange, onToggleCollapse }) => {
     const { selectedElementId, setSelectedElementId, getElementById, updateElement } = useBuilder();
+    const lastWidthRef = useRef(width);
+
+    // Store the last non-collapsed width
+    useEffect(() => {
+        if (!collapsed) {
+            lastWidthRef.current = width;
+        }
+    }, [collapsed, width]);
+
+    const handleResize = (dx) => {
+        const newWidth = Math.max(200, Math.min(500, width + dx));
+        onWidthChange(newWidth);
+    };
 
     const elements = [
         {
@@ -61,9 +75,13 @@ const LeftPanel = () => {
     };
 
     return (
-        <Sider width={300} className="left-panel">
+        <Sider
+            width={collapsed ? 0 : width}
+            className={`left-panel ${collapsed ? 'collapsed' : ''}`}
+            style={{ position: 'relative' }}
+        >
             <div className="panel-content">
-                {selectedElement && SettingsComponent ? (
+                {!collapsed && (selectedElement && SettingsComponent ? (
                     // Show settings panel
                     <>
                         <div style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }}>
@@ -99,8 +117,15 @@ const LeftPanel = () => {
                             </Row>
                         </Card>
                     </>
-                )}
+                ))}
             </div>
+            <ResizeHandle
+                onResize={handleResize}
+                onToggle={onToggleCollapse}
+                collapsed={collapsed}
+                minWidth={200}
+                maxWidth={500}
+            />
         </Sider>
     );
 };

@@ -5,6 +5,16 @@
 @import './DragOperations.scss';
 @import './ReactIframeProxy.scss';
 
+/* Variables */
+:root {
+    --resize-handle-color: #e8e8e8;
+    --resize-handle-hover: #1890ff;
+    --panel-transition: all 0.3s ease;
+    --desktop-width: 100%;
+    --tablet-width: 768px;
+    --mobile-width: 375px;
+}
+
 /* Layout */
 .builder-layout {
     display: flex;
@@ -13,24 +23,67 @@
     overflow: hidden;
     /* Hide overflow on main layout */
     background: #f0f2f5;
+    position: relative;
+    /* For absolute positioning of elements */
 
     .left-panel {
         background: #fff;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         z-index: 10;
         overflow-y: auto;
-        /* Keep the scrollbar for left panel */
+        overflow-x: hidden;
         height: 100%;
-        /* Full height */
-        flex: 0 0 300px;
-        /* Fixed width */
+        transition: none;
+        position: relative;
+
+        &.collapsed {
+            flex: 0 0 0 !important;
+            width: 0 !important;
+            overflow: hidden;
+        }
 
         .panel-content {
             padding: 20px;
+            min-width: 200px;
         }
 
         .elements-card {
             margin-bottom: 20px;
+        }
+
+        /* Resize handle styling */
+        .resize-handle {
+            transition: background-color 0.2s ease;
+            z-index: 100;
+
+            &.resizing {
+                cursor: col-resize;
+
+                &:after {
+                    content: '';
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    z-index: 99;
+                    pointer-events: none;
+                }
+            }
+
+            &:hover {
+                background-color: rgba(24, 144, 255, 0.1);
+            }
+
+            .toggle-icon {
+                opacity: 0.6;
+                transition: opacity 0.2s ease, transform 0.2s ease;
+
+                &:hover {
+                    opacity: 1;
+                    transform: scale(1.1);
+                }
+            }
         }
     }
 
@@ -54,11 +107,49 @@
                 padding: 0 20px;
             }
 
-            .react-iframe-proxy {
+            .iframe-container {
                 flex: 1;
+                height: calc(100% - 60px);
+                overflow: auto;
+                padding: 0 20px;
+                transition: var(--panel-transition);
+
+                &.centered {
+                    display: flex;
+                    justify-content: center;
+                    align-items: flex-start;
+                    padding-top: 20px;
+                    background-color: #eaeaea;
+
+                    &:before {
+                        content: '';
+                        position: absolute;
+                        left: 50%;
+                        top: 80px;
+                        transform: translateX(-50%);
+                        color: #999;
+                        font-size: 12px;
+                        white-space: nowrap;
+                        pointer-events: none;
+                    }
+
+                    &:after {
+                        content: '';
+                        position: absolute;
+                        top: 70px;
+                        left: 0;
+                        right: 0;
+                        height: 1px;
+                        background: #ddd;
+                        pointer-events: none;
+                    }
+                }
+            }
+
+            .react-iframe-proxy {
                 margin: 0;
-                height: calc(100% - 40px);
-                /* Subtract the title height */
+                height: 100%;
+                transition: var(--panel-transition);
             }
         }
 

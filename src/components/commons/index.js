@@ -1,5 +1,9 @@
 import ReactIframeProxy from './ReactIframeProxy';
+import ResizeHandle from './ResizeHandle';
+import ResponsiveViewSelector from './ResponsiveViewSelector';
 
 export {
-    ReactIframeProxy
+    ReactIframeProxy,
+    ResizeHandle,
+    ResponsiveViewSelector
 };
