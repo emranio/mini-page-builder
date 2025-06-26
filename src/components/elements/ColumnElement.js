@@ -23,7 +23,17 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
             const equalWidth = Math.floor(100 / columns);
             setCurrentWidths(Array(columns).fill(equalWidth));
         }
-    }, [columns, JSON.stringify(columnWidths)]); // Use JSON.stringify to avoid array reference issues
+    }, [columns]); // Removed columnWidths dependency to prevent re-render loops
+
+    // Separate effect to handle prop changes when not resizing
+    useEffect(() => {
+        if (isResizingRef.current) return; // Don't update during resize
+
+        // Only update if columnWidths actually changed (not empty/undefined)
+        if (columnWidths && columnWidths.length > 0) {
+            setCurrentWidths([...columnWidths]);
+        }
+    }, [columnWidths.length, columnWidths.join(',')]); // Use length and join for stable comparison
 
     // Initialize column sub-elements if they don't exist
     useEffect(() => {
@@ -93,8 +103,21 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
 
     // Handle resize end - save to global state
     const handleResizeEnd = () => {
-        isResizingRef.current = false;
-        updateElement(id, { columnWidths: [...currentWidths] });
+        // Use setTimeout to ensure the resize flag is cleared after the state update
+        setTimeout(() => {
+            isResizingRef.current = false;
+        }, 100); // Small delay to prevent race conditions
+
+        // Only update if values actually changed
+        const element = getElementById(id);
+        const currentColumnWidths = element?.props?.columnWidths || [];
+        const hasChanged = currentWidths.some((width, index) =>
+            Math.abs(width - (currentColumnWidths[index] || 0)) > 0.1
+        );
+
+        if (hasChanged) {
+            updateElement(id, { columnWidths: [...currentWidths] });
+        }
     };
 
     // Handle opening the settings modal
