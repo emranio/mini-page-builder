@@ -60,7 +60,7 @@ const ResizeHandle = ({
             onMouseDown={handleMouseDown}
             style={{
                 position: 'absolute',
-                right: '-5px',
+                right: '0',
                 top: 0,
                 width: '10px',
                 height: '100%',

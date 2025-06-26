@@ -27,11 +27,8 @@
     /* For absolute positioning of elements */
 
     .left-panel {
-        background: #fff;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        background: transparent;
         z-index: 10;
-        overflow-y: auto;
-        overflow-x: hidden;
         height: 100%;
         transition: none;
         position: relative;
@@ -39,12 +36,17 @@
         &.collapsed {
             flex: 0 0 0 !important;
             width: 0 !important;
-            overflow: hidden;
+            overflow: visible !important;
         }
 
         .panel-content {
-            padding: 20px;
+            background: #fff;
+            margin-right: 5px;
+            padding: 10px;
             min-width: 200px;
+            height: 100%;
+            overflow-y: auto;
+            overflow-x: visible;
         }
 
         .elements-card {
@@ -77,6 +79,7 @@
 
             .toggle-icon {
                 opacity: 0.6;
+                z-index: 99;
                 transition: opacity 0.2s ease, transform 0.2s ease;
 
                 &:hover {
