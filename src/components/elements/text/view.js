@@ -26,8 +26,11 @@ const TextElementView = ({
     React.useEffect(() => {
         if (!isEditing) {
             setEditingContent(null);
+        } else {
+            // Update editing content when content changes while in edit mode
+            setEditingContent(content);
         }
-    }, [isEditing]);
+    }, [isEditing, content]);
 
     // Initialize editing content when entering edit mode
     const startEditing = () => {
@@ -38,7 +41,8 @@ const TextElementView = ({
     const handleChange = (value) => {
         setEditingContent(value);
         // Only update the element when actually editing in place
-        throttledUpdate(id, { content: value });
+        // Don't update the element props during editing to prevent re-rendering
+        // Changes will be applied on blur
     };
 
     const handleDoubleClick = () => {
@@ -59,6 +63,15 @@ const TextElementView = ({
         }
     };
 
+    // Handle key presses during editing
+    const handleKeyDown = (e) => {
+        // Exit editing mode when Enter is pressed (without shift)
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleBlur();
+        }
+    };
+
     const textStyle = {
         fontSize: `${fontSize}px`,
         fontWeight,
@@ -68,7 +81,7 @@ const TextElementView = ({
     };
 
     // For debugging
-    console.log(`TextElementView render: id=${id}, content="${content}", isEditing=${isEditing}, editingContent="${editingContent}"`);
+    console.log(`TextElementView render: id=${id}, content="${content}", isEditing=${isEditing}, editingContent="${editingContent}", source="view"`);
 
     return isEditing ? (
         <TextArea
@@ -77,6 +90,7 @@ const TextElementView = ({
             value={editingContent}
             onChange={(e) => handleChange(e.target.value)}
             onBlur={handleBlur}
+            onKeyDown={handleKeyDown}
             className="text-element-editor"
             style={textStyle}
         />

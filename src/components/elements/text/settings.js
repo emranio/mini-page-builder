@@ -28,9 +28,35 @@ const TextElementSettings = ({
 
     const handleValuesChange = (changedValues, allValues) => {
         // Live update the element as user changes settings
-        console.log("Settings form changed:", changedValues);
-        throttledUpdate(element.id, allValues);
+        console.log("Settings form changed:", changedValues, "source=settings");
+
+        // If we're editing content in the settings panel, use a separate update method
+        // to avoid triggering UI changes in the canvas view
+        if (changedValues.hasOwnProperty('content')) {
+            // Add a small delay to batch content updates from typing
+            if (window.textSettingsTimeout) {
+                clearTimeout(window.textSettingsTimeout);
+            }
+
+            window.textSettingsTimeout = setTimeout(() => {
+                throttledUpdate(element.id, allValues);
+                window.textSettingsTimeout = null;
+            }, 500); // 500ms delay for content updates
+        } else {
+            // For other properties, update immediately
+            throttledUpdate(element.id, allValues);
+        }
     };
+
+    // Clean up the timeout when component unmounts
+    useEffect(() => {
+        return () => {
+            if (window.textSettingsTimeout) {
+                clearTimeout(window.textSettingsTimeout);
+                window.textSettingsTimeout = null;
+            }
+        };
+    }, []);
 
     return (
         <BaseSettings
