@@ -35,13 +35,14 @@ const ResponsiveViewSelector = ({ value, onChange }) => {
     ];
 
     return (
-        <Space style={{ marginRight: 20 }}>
+        <Space style={{ marginRight: 0 }}>
             <Text strong>Responsive Preview:</Text>
             <Select
                 value={value}
                 onChange={onChange}
                 style={{ width: 120 }}
                 popupMatchSelectWidth={false}
+                size='small'
             >
                 {viewports.map(viewport => (
                     <Option key={viewport.key} value={viewport.key}>

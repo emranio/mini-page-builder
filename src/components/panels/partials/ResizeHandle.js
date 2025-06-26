@@ -58,18 +58,6 @@ const ResizeHandle = ({
         <div
             className={`resize-handle ${isDragging ? 'resizing' : ''}`}
             onMouseDown={handleMouseDown}
-            style={{
-                position: 'absolute',
-                right: '0',
-                top: 0,
-                width: '10px',
-                height: '100%',
-                cursor: 'col-resize',
-                zIndex: 100,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}
         >
             <div
                 className="toggle-icon"
@@ -77,31 +65,10 @@ const ResizeHandle = ({
                     e.stopPropagation();
                     onToggle();
                 }}
-                style={{
-                    width: '24px',
-                    height: '24px',
-                    background: '#f0f2f5',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-                    cursor: 'pointer',
-                    color: '#1890ff'
-                }}
             >
                 {collapsed ? <VerticalRightOutlined /> : <VerticalLeftOutlined />}
             </div>
-            <div
-                style={{
-                    position: 'absolute',
-                    top: 0,
-                    bottom: 0,
-                    left: '4px',
-                    width: '2px',
-                    background: isDragging ? '#1890ff' : '#e8e8e8'
-                }}
-            />
+            <div className="resize-bar" />
         </div>
     );
 };
