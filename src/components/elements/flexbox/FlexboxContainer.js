@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
-import { useBuilder } from '../../contexts/BuilderContext';
-import DropZone from './DropZone';
+import { useBuilder } from '../../../contexts/BuilderContext';
+import { DropZone } from '../commons';
 import { Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 

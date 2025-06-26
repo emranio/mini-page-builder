@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button, Modal, Form, Slider, InputNumber, Space } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
-import { useBuilder } from '../../contexts/BuilderContext';
-import DropZone from '../containers/DropZone';
+import { useBuilder } from '../../../contexts/BuilderContext';
+import { DropZone } from '../commons';
 import ResizeBar from './ResizeBar';
 
 const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) => {
@@ -10,7 +10,8 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
     const [isSettingsVisible, setIsSettingsVisible] = useState(false);
     const [form] = Form.useForm();
     const [currentWidths, setCurrentWidths] = useState([]);
-    const isResizingRef = useRef(false);    // Initialize current widths only when columns or columnWidths props change
+    const isResizingRef = useRef(false);    // Initialize current widths only when columns change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         if (isResizingRef.current) return; // Don't update during resize
 
@@ -32,7 +33,8 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
             const equalWidth = Math.floor(100 / columns);
             setCurrentWidths(Array(columns).fill(equalWidth));
         }
-    }, [columns]); // Removed columnWidths dependency to prevent re-render loops
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [columns]); // Intentionally excluding columnWidths to prevent re-render loops
 
     // Separate effect to handle prop changes when not resizing
     useEffect(() => {
@@ -48,7 +50,8 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
                 setCurrentWidths([...columnWidths]);
             }
         }
-    }, [columnWidths.length, columns]); // Simplified dependencies
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [columnWidths.length, columns]); // Intentionally simplified dependencies
 
     // Initialize column sub-elements if they don't exist
     useEffect(() => {

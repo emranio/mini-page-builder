@@ -1,8 +1,7 @@
 import React from 'react';
 import { useDrag } from 'react-dnd';
 import { Card } from 'antd';
-import { ItemTypes } from '../../utils/DragTypes';
-import { useBuilder } from '../../contexts/BuilderContext';
+import { useBuilder } from '../../../contexts/BuilderContext';
 
 const ElementItem = ({ type, icon, label }) => {
     const { setIsDragging } = useBuilder();

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Input, Button, Image, Space, Modal } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
-import { useBuilder } from '../../contexts/BuilderContext';
+import { useBuilder } from '../../../contexts/BuilderContext';
 
 const ImageElement = ({ id, src = 'https://placehold.co/200x50?text=click+to+edit&font=roboto', alt = 'Image', editable = false }) => {
     const [isEditing, setIsEditing] = useState(false);

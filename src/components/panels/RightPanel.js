@@ -1,7 +1,7 @@
 import React from 'react';
 import { Layout, Typography, Empty } from 'antd';
 import { useBuilder } from '../../contexts/BuilderContext';
-import DropZone from '../containers/DropZone';
+import { DropZone } from '../elements/commons';
 
 const { Content } = Layout;
 const { Title } = Typography;

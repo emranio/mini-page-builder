@@ -1,15 +1,12 @@
 import React from 'react';
-import { useBuilder } from '../../contexts/BuilderContext';
-import TextElement from '../elements/TextElement';
-import ImageElement from '../elements/ImageElement';
-import FlexboxContainer from '../containers/FlexboxContainer';
-import ColumnElement from '../elements/ColumnElement';
-import { ItemTypes } from '../../utils/DragTypes';
-import DraggableElement from '../containers/DraggableElement';
+import TextElement from '../text';
+import ImageElement from '../image';
+import FlexboxContainer from '../flexbox';
+import { ColumnElement } from '../column';
+import { ItemTypes } from '../../../utils/DragTypes';
+import DraggableElement from './DraggableElement';
 
 const ElementRenderer = ({ element }) => {
-    const { getElementById } = useBuilder();
-
     if (!element) return null;
 
     // Wrap the element content in a draggable wrapper

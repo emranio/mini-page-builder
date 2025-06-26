@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
-import { useBuilder } from '../../contexts/BuilderContext';
-import { ItemTypes } from '../../utils/DragTypes';
+import { useBuilder } from '../../../contexts/BuilderContext';
+import { ItemTypes } from '../../../utils/DragTypes';
 import { Button, Dropdown } from 'antd';
 import { MoreOutlined, DeleteOutlined } from '@ant-design/icons';
 

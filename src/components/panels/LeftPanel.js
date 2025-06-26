@@ -1,7 +1,7 @@
 import React from 'react';
 import { Layout, Card, Typography, Row, Col } from 'antd';
 import { FontSizeOutlined, PictureOutlined, AppstoreOutlined, ColumnWidthOutlined } from '@ant-design/icons';
-import ElementItem from '../elements/ElementItem';
+import { ElementItem } from '../elements/commons';
 import { ItemTypes } from '../../utils/DragTypes';
 
 const { Sider } = Layout;
