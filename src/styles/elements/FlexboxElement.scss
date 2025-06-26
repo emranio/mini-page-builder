@@ -1,0 +1,113 @@
+/* Flexbox Element Styles */
+.flexbox-element {
+    display: flex;
+    min-height: 80px;
+    padding: 16px;
+    margin: 8px 0;
+    border: 2px dashed #e6e6e6;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    position: relative;
+    background-color: #fafafa;
+
+    &:hover {
+        border-color: #1890ff;
+        background-color: rgba(24, 144, 255, 0.03);
+        box-shadow: 0 2px 8px rgba(24, 144, 255, 0.1);
+    }
+
+    &.flexbox-element-row {
+        flex-direction: row;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    &.flexbox-element-column {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    &.flexbox-element-wrap {
+        flex-wrap: wrap;
+    }
+
+    /* Justify content variations */
+    &.flexbox-justify-start {
+        justify-content: flex-start;
+    }
+
+    &.flexbox-justify-center {
+        justify-content: center;
+    }
+
+    &.flexbox-justify-end {
+        justify-content: flex-end;
+    }
+
+    &.flexbox-justify-between {
+        justify-content: space-between;
+    }
+
+    &.flexbox-justify-around {
+        justify-content: space-around;
+    }
+
+    /* Align items variations */
+    &.flexbox-align-start {
+        align-items: flex-start;
+    }
+
+    &.flexbox-align-center {
+        align-items: center;
+    }
+
+    &.flexbox-align-end {
+        align-items: flex-end;
+    }
+
+    &.flexbox-align-stretch {
+        align-items: stretch;
+    }
+
+    .container-actions {
+        position: absolute;
+        top: -30px;
+        right: 8px;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        display: flex;
+        gap: 4px;
+        z-index: 20;
+
+        .ant-btn {
+            background: white;
+            border: 1px solid #d9d9d9;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 12px;
+            height: 24px;
+            padding: 0 8px;
+
+            &:hover {
+                background: #f5f5f5;
+                border-color: #40a9ff;
+            }
+        }
+    }
+
+    &:hover .container-actions {
+        opacity: 1;
+    }
+
+    /* Empty state */
+    &:empty::before {
+        content: "Flexbox Container - Drop elements here";
+        color: #bfbfbf;
+        font-style: italic;
+        text-align: center;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+    }
+}

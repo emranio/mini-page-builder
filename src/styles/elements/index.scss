@@ -1,0 +1,42 @@
+/* Main Elements Stylesheet */
+@import './TextElement.scss';
+@import './ImageElement.scss';
+@import './FlexboxElement.scss';
+@import './ColumnElement.scss';
+
+/* Common element styles */
+.element-wrapper {
+    position: relative;
+
+    &:hover .element-actions {
+        opacity: 1;
+    }
+}
+
+.element-actions {
+    position: absolute;
+    top: -20px;
+    right: 0;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    display: flex;
+    gap: 4px;
+    z-index: 100;
+
+    .ant-btn {
+        background: white;
+        border: 1px solid #d9d9d9;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+        &:hover {
+            background: #f5f5f5;
+            border-color: #40a9ff;
+        }
+    }
+}
+
+/* Selected element state */
+.element-selected {
+    outline: 2px solid #1890ff;
+    outline-offset: 2px;
+}

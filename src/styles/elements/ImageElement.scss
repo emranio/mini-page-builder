@@ -1,0 +1,87 @@
+/* Image Element Styles */
+.image-element {
+    margin: 8px 0;
+    position: relative;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+
+    &:hover {
+        border-color: #e6e6e6;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+        .image-overlay {
+            opacity: 1;
+        }
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        border-radius: inherit;
+    }
+
+    .image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.1);
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: inherit;
+    }
+
+    /* Placeholder for empty image */
+    &.image-placeholder {
+        min-height: 200px;
+        background-color: #f5f5f5;
+        border: 2px dashed #d9d9d9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        color: #8c8c8c;
+
+        &::before {
+            content: "🖼️";
+            font-size: 48px;
+            margin-bottom: 8px;
+        }
+
+        &::after {
+            content: "Click to add image";
+            font-size: 14px;
+            font-style: italic;
+        }
+
+        &:hover {
+            border-color: #1890ff;
+            background-color: #f6ffed;
+            color: #1890ff;
+        }
+    }
+
+    /* Image size variations */
+    &.image-size-small {
+        max-width: 200px;
+    }
+
+    &.image-size-medium {
+        max-width: 400px;
+    }
+
+    &.image-size-large {
+        max-width: 600px;
+    }
+
+    &.image-size-full {
+        width: 100%;
+    }
+}
