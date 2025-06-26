@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form, InputNumber, Select, Space } from 'antd';
 import { BaseSettings } from '../base';
 
@@ -12,6 +12,20 @@ const FlexboxElementSettings = ({
     inline = false
 }) => {
     const [form] = Form.useForm();
+
+    // Update form values when element props change
+    useEffect(() => {
+        const newValues = {
+            padding: element.props?.padding || 10,
+            margin: element.props?.margin || 5,
+            backgroundColor: element.props?.backgroundColor || 'transparent',
+            borderStyle: element.props?.borderStyle || 'dashed',
+            borderWidth: element.props?.borderWidth || 1,
+            borderColor: element.props?.borderColor || '#d9d9d9',
+            borderRadius: element.props?.borderRadius || 0
+        };
+        form.setFieldsValue(newValues);
+    }, [form, element.props]);
 
     const handleValuesChange = (changedValues, allValues) => {
         // Live update the element as user changes settings

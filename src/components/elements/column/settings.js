@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Form, Slider, InputNumber, Space, Select } from 'antd';
 import { BaseSettings } from '../base';
 
@@ -13,7 +13,21 @@ const ColumnElementSettings = ({
 }) => {
     const [form] = Form.useForm();
     const columns = element.props?.columns || 2;
-    const columnWidths = element.props?.columnWidths || [];
+    const columnWidths = useMemo(() => element.props?.columnWidths || [], [element.props?.columnWidths]);
+
+    // Update form values when element props change (e.g., when resizing from right panel)
+    useEffect(() => {
+        const newValues = {
+            columns: columns,
+            columnWidths: columnWidths.length > 0 ? columnWidths : Array(columns).fill(Math.floor(100 / columns)),
+            gap: element.props?.gap || 10,
+            backgroundColor: element.props?.backgroundColor || 'transparent',
+            borderStyle: element.props?.borderStyle || 'dashed',
+            borderWidth: element.props?.borderWidth || 1,
+            borderColor: element.props?.borderColor || '#d9d9d9'
+        };
+        form.setFieldsValue(newValues);
+    }, [form, element.props, columns, columnWidths]);
 
     const handleValuesChange = (changedValues, allValues) => {
         // Live update the element as user changes settings

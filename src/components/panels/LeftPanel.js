@@ -1,6 +1,6 @@
 import React from 'react';
 import { Layout, Card, Typography, Row, Col, Button } from 'antd';
-import { ArrowLeftOutlined, AppstoreOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 import { ElementItem } from '../elements/commons';
 import { ItemTypes } from '../../utils/DragTypes';
 import { useBuilder } from '../../contexts/BuilderContext';

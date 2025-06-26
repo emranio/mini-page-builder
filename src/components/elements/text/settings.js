@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form, Input, InputNumber, Select, Space } from 'antd';
 import { BaseSettings } from '../base';
 
@@ -13,6 +13,18 @@ const TextElementSettings = ({
     inline = false
 }) => {
     const [form] = Form.useForm();
+
+    // Update form values when element props change
+    useEffect(() => {
+        const newValues = {
+            content: element.props?.content || 'Click to edit text',
+            fontSize: element.props?.fontSize || 14,
+            fontWeight: element.props?.fontWeight || 'normal',
+            color: element.props?.color || '#000000',
+            textAlign: element.props?.textAlign || 'left'
+        };
+        form.setFieldsValue(newValues);
+    }, [form, element.props]);
 
     const handleValuesChange = (changedValues, allValues) => {
         // Live update the element as user changes settings
