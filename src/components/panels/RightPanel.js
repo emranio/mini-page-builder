@@ -32,7 +32,7 @@ const RightPanel = ({ leftPanelCollapsed, responsiveView, onResponsiveViewChange
             <div className="panel-content">
                 <Row align="middle" justify="space-between" style={{ marginBottom: 5, padding: '0 5px' }}>
                     <Col>
-                        <Text level={3} style={{ margin: 0 }}>Email Canvas</Text>
+                        <Text level={3} style={{ margin: 0, textAlign: 'center' }}>Email Canvas</Text>
                     </Col>
                     <Col>
                         <ResponsiveViewSelector

@@ -72,9 +72,9 @@
             cursor: col-resize;
             z-index: 100;
             display: flex;
-            align-items: flex-start;
+            align-items: flex-end;
             justify-content: center;
-            padding-top: 10px;
+            padding-bottom: 10px;
             transition: background-color 0.2s ease;
 
             &.resizing {
