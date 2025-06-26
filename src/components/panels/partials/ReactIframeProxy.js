@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import '../../styles/ReactIframeProxy.scss';
+import '../../../styles/ReactIframeProxy.scss';
 
 /**
  * ReactIframeProxy - A component that visually mimics an iframe but uses regular React components

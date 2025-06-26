@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { Layout, Card, Typography, Row, Col, Button } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { ElementItem } from '../elements/commons';
-import { ResizeHandle } from '../commons';
+import { ResizeHandle } from './partials';
 import { ItemTypes } from '../../utils/DragTypes';
 import { useBuilder } from '../../contexts/BuilderContext';
 import TextElement from '../elements/text';

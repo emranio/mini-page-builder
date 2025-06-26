@@ -2,7 +2,7 @@ import React from 'react';
 import { Layout, Typography, Empty, Row, Col } from 'antd';
 import { useBuilder } from '../../contexts/BuilderContext';
 import { DropZone } from '../elements/commons';
-import { ReactIframeProxy, ResponsiveViewSelector } from '../commons';
+import { ReactIframeProxy, ResponsiveViewSelector } from './partials';
 
 const { Content } = Layout;
 const { Text } = Typography;
