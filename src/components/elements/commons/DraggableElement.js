@@ -24,59 +24,10 @@ const DraggableElement = ({ id, type, parentId, children }) => {
         }
     }));
 
-    // Set up the element to also accept drops for reordering
+    // Set up the element to also accept drops for reordering (disabled to avoid conflicts with positional drop zones)
     const [{ isOver }, drop] = useDrop(() => ({
         accept: ItemTypes.CONTAINER_ITEM,
-        hover: (item, monitor) => {
-            if (!ref.current) {
-                return;
-            }
-
-            const hoverBoundingRect = ref.current.getBoundingClientRect();
-            const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-            const clientOffset = monitor.getClientOffset();
-            const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-
-            const dragElement = monitor.getItem();
-
-            // Don't do anything if we're hovering over ourselves
-            if (dragElement.id === id) {
-                return;
-            }
-
-            // Only proceed if we have the same parent
-            if (dragElement.parentId === parentId) {
-                // Find sibling elements to determine the index
-                const siblingElements = getElements(parentId);
-
-                // Get current indexes
-                const dragIndex = siblingElements.findIndex(el => el.id === dragElement.id);
-                const hoverIndex = siblingElements.findIndex(el => el.id === id);
-
-                // Don't replace items with themselves
-                if (dragIndex === hoverIndex) {
-                    return;
-                }
-
-                // Determine direction of movement
-                const isDragLowerThanHover = dragIndex > hoverIndex;
-
-                // Only perform the move when the cursor is at the appropriate position
-                if (isDragLowerThanHover && hoverClientY > hoverMiddleY) {
-                    return;
-                }
-
-                if (!isDragLowerThanHover && hoverClientY < hoverMiddleY) {
-                    return;
-                }
-
-                // Time to actually perform the action
-                moveElement(dragElement.id, parentId, hoverIndex);
-
-                // Update the drag item's position for better UX
-                item.index = hoverIndex;
-            }
-        },
+        // Removed hover logic - positioning is now handled by PositionalDropZone components
         collect: monitor => ({
             isOver: !!monitor.isOver()
         })

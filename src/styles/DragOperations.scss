@@ -84,3 +84,106 @@ body.dragging {
         background-color: rgba(24, 144, 255, 0.05);
     }
 }
+
+/* Positional Drop Zone Styles */
+.positional-drop-zone {
+    height: 8px;
+    margin: 2px 0;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    background-color: transparent;
+    border: 1px dashed transparent;
+    position: relative;
+    z-index: 10;
+
+    &.top {
+        margin-bottom: 4px;
+        margin-top: 0;
+    }
+
+    &.between {
+        margin: 4px 0;
+    }
+
+    &:hover,
+    &.positional-drop-zone-hover {
+        background-color: rgba(24, 144, 255, 0.1);
+        border-color: #1890ff;
+        height: 12px;
+    }
+
+    /* Add visual indicator during hover */
+    &.positional-drop-zone-hover::before {
+        content: 'Drop here';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #1890ff;
+        color: white;
+        padding: 2px 8px;
+        border-radius: 3px;
+        font-size: 10px;
+        white-space: nowrap;
+        z-index: 20;
+    }
+}
+
+/* Positional Drop Zones - only visible during drag operations */
+.positional-drop-zone {
+    height: 2px;
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    transition: all 0.2s ease;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    z-index: 10;
+
+    /* Invisible clickable area that's larger than visual indicator */
+    &::before {
+        content: '';
+        position: absolute;
+        top: -8px;
+        left: 0;
+        right: 0;
+        height: 16px;
+        background-color: transparent;
+    }
+
+    &.positional-drop-zone-hover {
+        height: 4px;
+        background-color: #1890ff;
+        border-radius: 2px;
+        box-shadow: 0 0 4px rgba(24, 144, 255, 0.5);
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background-color: #1890ff;
+            border-radius: 50%;
+            box-shadow: 0 0 4px rgba(24, 144, 255, 0.8);
+        }
+    }
+
+    /* Different styling for top position */
+    &.top {
+        margin-bottom: 4px;
+    }
+
+    /* Styling for between positions */
+    &.between {
+        margin: 2px 0;
+    }
+}
+
+/* Hide positional drop zones when not dragging */
+body:not(.dragging) .positional-drop-zone {
+    display: none;
+}

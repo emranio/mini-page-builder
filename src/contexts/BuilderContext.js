@@ -19,6 +19,7 @@ const elementRegistry = {
 
 export const BuilderProvider = ({ children }) => {
     const [elements, setElements] = useState([]);
+    const [rootElementsOrder, setRootElementsOrder] = useState([]); // Track order of root elements
     const [isDragging, setIsDragging] = useState(false);
     const [selectedElementId, setSelectedElementId] = useState(null);
 
@@ -32,7 +33,7 @@ export const BuilderProvider = ({ children }) => {
     }, [isDragging]);
 
     // Create a new element
-    const createElement = useCallback((type, parentId = null, props = {}) => {
+    const createElement = useCallback((type, parentId = null, props = {}, index = null) => {
         // Get default props from element registry
         const elementConfig = elementRegistry[type];
         const defaultProps = elementConfig?.defaultProps || {};
@@ -53,19 +54,38 @@ export const BuilderProvider = ({ children }) => {
             if (parentId) {
                 const parentIndex = newElements.findIndex(el => el.id === parentId);
                 if (parentIndex !== -1) {
+                    const parentChildren = [...(newElements[parentIndex].children || [])];
+
+                    // Insert at specific index if provided, otherwise append to end
+                    if (index !== null && index >= 0 && index <= parentChildren.length) {
+                        parentChildren.splice(index, 0, newElement.id);
+                    } else {
+                        parentChildren.push(newElement.id);
+                    }
+
                     // Create a new parent object with updated children array
                     newElements[parentIndex] = {
                         ...newElements[parentIndex],
-                        children: [
-                            ...(newElements[parentIndex].children || []),
-                            newElement.id
-                        ]
+                        children: parentChildren
                     };
                 }
             }
 
             return newElements;
         });
+
+        // Handle root element ordering
+        if (parentId === null) {
+            setRootElementsOrder(prevOrder => {
+                const newOrder = [...prevOrder];
+                if (index !== null && index >= 0 && index <= newOrder.length) {
+                    newOrder.splice(index, 0, newElement.id);
+                } else {
+                    newOrder.push(newElement.id);
+                }
+                return newOrder;
+            });
+        }
 
         return newElement.id;
     }, []);
@@ -80,7 +100,7 @@ export const BuilderProvider = ({ children }) => {
             }
             const oldParentId = elementToMove.parentId;
 
-            // Remove from old parent's children
+            // Remove from old parent's children (if not root level)
             const updatedElements = prevElements.map(el => {
                 if (el.id === oldParentId) {
                     return {
@@ -97,7 +117,7 @@ export const BuilderProvider = ({ children }) => {
                 parentId: targetParentId
             };
 
-            // Add to new parent's children at the specified index
+            // Add to new parent's children at the specified index (if not root level)
             const result = updatedElements
                 .map(el => {
                     if (el.id === targetParentId) {
@@ -113,6 +133,24 @@ export const BuilderProvider = ({ children }) => {
                 .map(el => el.id === elementId ? updatedElementToMove : el);
 
             return result;
+        });
+
+        // Handle root element ordering changes
+        setRootElementsOrder(prevOrder => {
+            const newOrder = [...prevOrder];
+
+            // Remove from old position
+            const oldIndex = newOrder.indexOf(elementId);
+            if (oldIndex !== -1) {
+                newOrder.splice(oldIndex, 1);
+            }
+
+            // Add to new position if moving to root level
+            if (targetParentId === null) {
+                newOrder.splice(index, 0, elementId);
+            }
+
+            return newOrder;
         });
     }, []);
 
@@ -161,6 +199,11 @@ export const BuilderProvider = ({ children }) => {
             // Filter out all deleted elements
             return updatedElements.filter(el => !idsToDelete.has(el.id));
         });
+
+        // Remove from root elements order if it's a root element
+        setRootElementsOrder(prevOrder =>
+            prevOrder.filter(id => id !== elementId)
+        );
     }, []);    // Resize containers - this function is kept for backward compatibility but does nothing now
     const resizeContainer = useCallback((elementId, newWidthPercent) => {
         // All containers are now 100% width, so this function does nothing
@@ -168,14 +211,24 @@ export const BuilderProvider = ({ children }) => {
 
     // Get all elements at the root level or children of a specific parent
     const getElements = useCallback((parentId = null) => {
-        // Filter elements directly by their parentId property
-        const result = elements.filter(element => {
-            const hasMatchingParent = element.parentId === parentId;
-            return hasMatchingParent;
-        });
+        if (parentId === null) {
+            // For root level, return elements in the order defined by rootElementsOrder
+            return rootElementsOrder.map(elementId =>
+                elements.find(el => el.id === elementId)
+            ).filter(Boolean);
+        }
 
-        return result;
-    }, [elements]);
+        // For children, get them in the order specified by parent's children array
+        const parent = elements.find(el => el.id === parentId);
+        if (!parent || !parent.children) {
+            return elements.filter(element => element.parentId === parentId);
+        }
+
+        // Return children in the correct order
+        return parent.children.map(childId =>
+            elements.find(el => el.id === childId)
+        ).filter(Boolean);
+    }, [elements, rootElementsOrder]);
 
     // Get a specific element by ID
     const getElementById = useCallback((id) => {
