@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Button, Modal, Form, Slider, InputNumber, Space } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 import { useBuilder } from '../../contexts/BuilderContext';
@@ -10,17 +10,20 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
     const [isSettingsVisible, setIsSettingsVisible] = useState(false);
     const [form] = Form.useForm();
     const [currentWidths, setCurrentWidths] = useState([]);
+    const isResizingRef = useRef(false);
 
-    // Ensure we have column widths for all columns
-    const defaultColumnWidths = Array(columns).fill(0).map((_, index, arr) => {
-        // If we have a saved width, use it; otherwise distribute evenly
-        return columnWidths[index] || Math.floor(100 / arr.length);
-    });
-
-    // Keep track of the current column widths for resize operations
+    // Initialize current widths only when columns or columnWidths props change
     useEffect(() => {
-        setCurrentWidths(columnWidths.length ? columnWidths : defaultColumnWidths);
-    }, [columnWidths, columns]);
+        if (isResizingRef.current) return; // Don't update during resize
+
+        if (columnWidths.length > 0) {
+            setCurrentWidths([...columnWidths]);
+        } else {
+            // Create equal width columns
+            const equalWidth = Math.floor(100 / columns);
+            setCurrentWidths(Array(columns).fill(equalWidth));
+        }
+    }, [columns, JSON.stringify(columnWidths)]); // Use JSON.stringify to avoid array reference issues
 
     // Initialize column sub-elements if they don't exist
     useEffect(() => {
@@ -53,18 +56,16 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
         }
     }, [id, columns, createElement, updateElement, getElementById]);
 
-    // Handle resizing between columns - only update local state during resize
+    // Handle resizing between columns
     const handleColumnResize = (index, deltaX) => {
+        const rowElement = document.querySelector(`.column-element-row[data-id="${id}"]`);
+        if (!rowElement) return;
+
+        const rowWidth = rowElement.clientWidth;
+        const deltaPercentage = (deltaX / rowWidth) * 100;
+        const minColumnWidth = 5;
+
         setCurrentWidths(prevWidths => {
-            const rowElement = document.querySelector(`.column-element-row[data-id="${id}"]`);
-            if (!rowElement) return prevWidths;
-
-            const rowWidth = rowElement.clientWidth;
-            if (rowWidth <= 0) return prevWidths;
-
-            const deltaPercentage = (deltaX / rowWidth) * 100;
-            const minColumnWidth = 5;
-
             const newWidths = [...prevWidths];
             let leftColNewWidth = newWidths[index] + deltaPercentage;
             let rightColNewWidth = newWidths[index + 1] - deltaPercentage;
@@ -85,9 +86,15 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
         });
     };
 
+    // Handle resize start
+    const handleResizeStart = () => {
+        isResizingRef.current = true;
+    };
+
     // Handle resize end - save to global state
     const handleResizeEnd = () => {
-        updateElement(id, { columnWidths: currentWidths });
+        isResizingRef.current = false;
+        updateElement(id, { columnWidths: [...currentWidths] });
     };
 
     // Handle opening the settings modal
@@ -138,7 +145,7 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
 
         return Array(columns).fill(0).map((_, index) => {
             // Use the current widths for rendering
-            const width = currentWidths[index] || defaultColumnWidths[index];
+            const width = currentWidths[index] || Math.floor(100 / columns);
             // Get the column ID if it exists
             const columnId = currentColumnIds[index];
 
@@ -166,6 +173,7 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
             const resizeBar = index < columns - 1 ? (
                 <ResizeBar
                     key={`resize-${id}-${index}`}
+                    onResizeStart={handleResizeStart}
                     onResize={(deltaX) => handleColumnResize(index, deltaX)}
                     onResizeEnd={handleResizeEnd}
                 />

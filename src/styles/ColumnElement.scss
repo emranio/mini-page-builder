@@ -109,19 +109,19 @@
 
         /* Resize bar styling */
         .column-resize-bar {
-            width: 4px;
+            width: 8px;
             height: 100%;
             background-color: transparent;
             cursor: col-resize;
             position: absolute;
             z-index: 100;
-            /* Increase z-index to ensure it's above other elements */
             margin: 0;
             padding: 0;
             transition: background-color 0.2s ease;
             top: 0;
             bottom: 0;
-            right: 0;
+            right: -4px;
+            /* Position it at the right edge of the column */
 
             &:hover,
             &.active {
@@ -155,7 +155,7 @@
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
-                width: 4px;
+                width: 6px;
                 height: 40px;
                 background-color: rgba(24, 144, 255, 0.5);
                 border-radius: 3px;
@@ -170,12 +170,10 @@
 
             &:hover {
                 background-color: rgba(24, 144, 255, 0.1);
-                /* Light background for better visibility */
             }
 
             &.active {
                 background-color: rgba(24, 144, 255, 0.2);
-                /* More visible when actively resizing */
             }
         }
     }
