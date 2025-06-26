@@ -71,12 +71,6 @@ const LeftPanel = () => {
                                 onClick={showElementList}
                                 size="small"
                                 style={{ marginRight: 8 }}
-                            />
-                            <Button
-                                icon={<AppstoreOutlined />}
-                                onClick={showElementList}
-                                size="small"
-                                style={{ marginRight: 12 }}
                             >
                                 Elements
                             </Button>
