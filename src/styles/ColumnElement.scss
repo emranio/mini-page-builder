@@ -23,8 +23,13 @@
         display: flex;
         width: 100%;
         overflow: hidden;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
+        /* Prevent wrapping */
         transition: all 0.2s ease;
+        position: relative;
+        align-items: stretch;
+        gap: 0;
+        /* Remove any gap between flex items */
 
         &.during-drag {
             &:hover {
@@ -33,16 +38,36 @@
             }
         }
 
-        .column-element-col {
+        .column-wrapper {
             display: flex;
             min-height: 180px;
             height: 100%;
             margin-bottom: 10px;
+            margin-right: 0;
+            /* Ensure no margin between columns */
+            padding: 0;
+            position: relative;
 
             @media (max-width: 768px) {
                 width: 100% !important;
                 max-width: 100% !important;
                 flex: 0 0 100% !important;
+            }
+
+            .column-content {
+                flex: 1;
+                display: flex;
+            }
+
+            .resize-bar-container {
+                position: absolute;
+                right: -4px;
+                top: 0;
+                bottom: 0;
+                width: 8px;
+                z-index: 50;
+                /* Higher z-index to ensure it's on top */
+                cursor: col-resize;
             }
 
             .column-drop-area {
@@ -75,10 +100,83 @@
                 }
 
                 /* Make dropzone more visible when column is hovered during drag */
-                .column-element-col:hover &.during-drag {
+                .column-wrapper:hover &.during-drag {
                     border: 1px dashed rgba(24, 144, 255, 0.6);
                     background-color: rgba(24, 144, 255, 0.07);
                 }
+            }
+        }
+
+        /* Resize bar styling */
+        .column-resize-bar {
+            width: 4px;
+            height: 100%;
+            background-color: transparent;
+            cursor: col-resize;
+            position: absolute;
+            z-index: 100;
+            /* Increase z-index to ensure it's above other elements */
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.2s ease;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+
+            &:hover,
+            &.active {
+                background-color: rgba(24, 144, 255, 0.2);
+            }
+
+            &:before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 1px;
+                height: 100%;
+                background-color: #d9d9d9;
+            }
+
+            &:hover:before,
+            &.active:before {
+                background-color: rgba(24, 144, 255, 0.5);
+            }
+
+            &.active {
+                &:before {
+                    background-color: rgba(24, 144, 255, 0.8);
+                }
+            }
+
+            .resize-bar-handle {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 4px;
+                height: 40px;
+                background-color: rgba(24, 144, 255, 0.5);
+                border-radius: 3px;
+                opacity: 0;
+                transition: opacity 0.2s ease;
+            }
+
+            &:hover .resize-bar-handle,
+            &.active .resize-bar-handle {
+                opacity: 1;
+            }
+
+            &:hover {
+                background-color: rgba(24, 144, 255, 0.1);
+                /* Light background for better visibility */
+            }
+
+            &.active {
+                background-color: rgba(24, 144, 255, 0.2);
+                /* More visible when actively resizing */
             }
         }
     }

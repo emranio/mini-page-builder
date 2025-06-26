@@ -20,8 +20,6 @@ export const BuilderProvider = ({ children }) => {
 
     // Create a new element
     const createElement = useCallback((type, parentId = null, props = {}) => {
-        console.log("Creating element:", type, "parentId:", parentId, "props:", props);
-
         const newElement = {
             id: uuidv4(),
             type,
@@ -30,11 +28,7 @@ export const BuilderProvider = ({ children }) => {
             children: type === 'flexbox' ? [] : null
         };
 
-        console.log("New element:", newElement);
-
         setElements(prevElements => {
-            console.log("Previous elements:", prevElements);
-
             // Create a new array with the new element
             const newElements = [...prevElements, newElement];
 
@@ -53,7 +47,6 @@ export const BuilderProvider = ({ children }) => {
                 }
             }
 
-            console.log("Updated elements:", newElements);
             return newElements;
         });
 
@@ -62,12 +55,10 @@ export const BuilderProvider = ({ children }) => {
 
     // Move an element to a new parent or position
     const moveElement = useCallback((elementId, targetParentId, index) => {
-        console.log(`Moving element ${elementId} to parent ${targetParentId} at index ${index}`);
         setElements(prevElements => {
             // Find the element to move and its current parent
             const elementToMove = prevElements.find(el => el.id === elementId);
             if (!elementToMove) {
-                console.error(`Element with id ${elementId} not found`);
                 return prevElements;
             }
             const oldParentId = elementToMove.parentId;
@@ -104,7 +95,6 @@ export const BuilderProvider = ({ children }) => {
                 })
                 .map(el => el.id === elementId ? updatedElementToMove : el);
 
-            console.log("Updated elements after move:", result);
             return result;
         });
     }, []);
@@ -157,20 +147,16 @@ export const BuilderProvider = ({ children }) => {
     }, []);    // Resize containers - this function is kept for backward compatibility but does nothing now
     const resizeContainer = useCallback((elementId, newWidthPercent) => {
         // All containers are now 100% width, so this function does nothing
-        console.log(`Resize functionality removed, all containers use 100% width`);
     }, []);
 
     // Get all elements at the root level or children of a specific parent
     const getElements = useCallback((parentId = null) => {
-        console.log("Getting elements for parentId:", parentId, "All elements:", elements);
-
         // Filter elements directly by their parentId property
         const result = elements.filter(element => {
             const hasMatchingParent = element.parentId === parentId;
             return hasMatchingParent;
         });
 
-        console.log("Filtered elements:", result);
         return result;
     }, [elements]);
 

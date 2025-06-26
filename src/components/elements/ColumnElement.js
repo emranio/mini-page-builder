@@ -1,19 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Button, Modal, Form, Slider, InputNumber, Space } from 'antd';
+import { Button, Modal, Form, Slider, InputNumber, Space } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 import { useBuilder } from '../../contexts/BuilderContext';
 import DropZone from '../containers/DropZone';
+import ResizeBar from './ResizeBar';
 
 const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) => {
     const { updateElement, createElement, getElementById, isDragging } = useBuilder();
     const [isSettingsVisible, setIsSettingsVisible] = useState(false);
     const [form] = Form.useForm();
+    const [currentWidths, setCurrentWidths] = useState([]);
 
     // Ensure we have column widths for all columns
     const defaultColumnWidths = Array(columns).fill(0).map((_, index, arr) => {
         // If we have a saved width, use it; otherwise distribute evenly
         return columnWidths[index] || Math.floor(100 / arr.length);
     });
+
+    // Keep track of the current column widths for resize operations
+    useEffect(() => {
+        setCurrentWidths(columnWidths.length ? columnWidths : defaultColumnWidths);
+    }, [columnWidths, columns]);
 
     // Initialize column sub-elements if they don't exist
     useEffect(() => {
@@ -44,13 +51,54 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
                 columnIds: newColumnIds
             });
         }
-    }, [id, columns, createElement, updateElement, getElementById]);
+    }, [id, columns, createElement, updateElement, getElementById]);    // Handle resizing between columns
+    const handleColumnResize = (index, deltaX) => {
+        // Calculate the pixel width of the container to convert delta to percentage
+        const rowElement = document.querySelector(`.column-element-row[data-id="${id}"]`);
+        if (!rowElement) {
+            return;
+        }
+
+        const rowWidth = rowElement.clientWidth;
+        const deltaPercentage = (deltaX / rowWidth) * 100;
+
+        // Don't allow columns to be smaller than 5%
+        const minColumnWidth = 5;
+
+        // Create a copy of the current widths for manipulation
+        const newWidths = [...currentWidths];
+
+        // Calculate new widths ensuring they don't go below the minimum
+        let leftColNewWidth = Math.max(minColumnWidth, newWidths[index] - deltaPercentage);
+        let rightColNewWidth = Math.max(minColumnWidth, newWidths[index + 1] + deltaPercentage);
+
+        // Check if either column would go below the minimum width
+        if (leftColNewWidth <= minColumnWidth) {
+            // Left column hit minimum - adjust right column to compensate
+            leftColNewWidth = minColumnWidth;
+            // The right column gets the remaining percentage that could be applied
+            rightColNewWidth = newWidths[index] + newWidths[index + 1] - minColumnWidth;
+        } else if (rightColNewWidth <= minColumnWidth) {
+            // Right column hit minimum - adjust left column to compensate
+            rightColNewWidth = minColumnWidth;
+            // The left column gets the remaining percentage that could be applied
+            leftColNewWidth = newWidths[index] + newWidths[index + 1] - minColumnWidth;
+        }
+
+        // Update the new widths
+        newWidths[index] = parseFloat(leftColNewWidth.toFixed(1));
+        newWidths[index + 1] = parseFloat(rightColNewWidth.toFixed(1));
+
+        // Update the state and element properties
+        setCurrentWidths(newWidths);
+        updateElement(id, { columnWidths: newWidths });
+    };
 
     // Handle opening the settings modal
     const showSettings = () => {
         form.setFieldsValue({
             columnCount: columns,
-            columnWidths: defaultColumnWidths
+            columnWidths: currentWidths
         });
         setIsSettingsVisible(true);
     };
@@ -81,6 +129,7 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
                 columnWidths: finalWidths
             });
 
+            setCurrentWidths(finalWidths);
             setIsSettingsVisible(false);
         });
     };
@@ -92,52 +141,69 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
         const currentColumnIds = element?.props?.columnIds || [];
 
         return Array(columns).fill(0).map((_, index) => {
-            // Use the default widths if columnWidths doesn't have enough entries
-            const width = columnWidths[index] || defaultColumnWidths[index];
+            // Use the current widths for rendering
+            const width = currentWidths[index] || defaultColumnWidths[index];
             // Get the column ID if it exists
             const columnId = currentColumnIds[index];
 
             // Calculate flex basis based on width percentage
             const flexBasis = `${width}%`;
 
-            // If we don't have a column ID yet (might happen during initial render), show empty column
-            if (!columnId) {
-                return (
-                    <Col
-                        key={`col-${id}-${index}`}
-                        xs={24} // Full width on mobile
-                        sm={width <= 30 ? 12 : 24} // Half width for small columns on tablet
-                        md={width <= 30 ? 8 : width <= 50 ? 12 : 24} // Responsive on medium screens
-                        style={{
-                            flex: `0 0 ${flexBasis}`,
-                            maxWidth: flexBasis,
-                            boxSizing: 'border-box'
-                        }}
-                        className="column-element-col"
-                    >                <div className={`column-drop-area ${isDragging ? 'during-drag' : ''}`}>
-                            <div className="loading">Loading column...</div>
-                        </div>
-                    </Col>
-                );
-            }
+            // Create the column
+            const columnContent = (
+                <div
+                    style={{
+                        flex: '1 1 auto',
+                        width: '100%',
+                        minHeight: '180px',
+                        display: 'flex'
+                    }}
+                    className="column-content"
+                >
+                    <div className={`column-drop-area ${isDragging ? 'during-drag' : ''}`}>
+                        {columnId ? <DropZone parentId={columnId} /> : <div className="loading">Loading column...</div>}
+                    </div>
+                </div>
+            );
 
+            // Add a resize bar if this is not the last column
+            const resizeBar = index < columns - 1 ? (
+                <ResizeBar
+                    key={`resize-${id}-${index}`}
+                    onResize={(deltaX) => handleColumnResize(index, deltaX)}
+                />
+            ) : null;
+
+            // Return the column wrapper with appropriate width
             return (
-                <Col
-                    key={`col-${id}-${index}`}
-                    xs={24} // Full width on mobile
-                    sm={width <= 30 ? 12 : 24} // Half width for small columns on tablet
-                    md={width <= 30 ? 8 : width <= 50 ? 12 : 24} // Responsive on medium screens
+                <div
+                    key={`col-wrapper-${id}-${index}`}
                     style={{
                         flex: `0 0 ${flexBasis}`,
                         maxWidth: flexBasis,
-                        boxSizing: 'border-box'
+                        boxSizing: 'border-box',
+                        display: 'flex',
+                        position: 'relative',
                     }}
-                    className="column-element-col"
+                    className="column-wrapper"
                 >
-                    <div className={`column-drop-area ${isDragging ? 'during-drag' : ''}`}>
-                        <DropZone parentId={columnId} />
-                    </div>
-                </Col>
+                    {columnContent}
+                    {index < columns - 1 && (
+                        <div
+                            className="resize-bar-container"
+                            style={{
+                                position: 'absolute',
+                                right: '-2px',
+                                top: 0,
+                                bottom: 0,
+                                width: '10px', // Wider to make it easier to grab
+                                zIndex: 50
+                            }}
+                        >
+                            {resizeBar}
+                        </div>
+                    )}
+                </div>
             );
         });
     };
@@ -176,21 +242,26 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
                 </Button>
             </div>
 
-            <Row
-                gutter={[10, 10]}
+            <div
                 className={`column-element-row ${isDragging ? 'during-drag' : ''}`}
-                wrap={true}
+                data-id={id}
                 style={{
                     margin: '10px 0',
                     minHeight: '200px',
                     border: '1px dashed #d9d9d9',
                     padding: '10px',
                     width: '100%',
-                    overflow: 'hidden'
+                    overflow: 'hidden',
+                    position: 'relative',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    flexWrap: 'nowrap',
+                    alignItems: 'stretch',
+                    justifyContent: 'space-between'
                 }}
             >
                 {renderColumns()}
-            </Row>
+            </div>
 
             <Modal
                 title="Column Settings"
@@ -204,7 +275,7 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
                     layout="vertical"
                     initialValues={{
                         columnCount: columns,
-                        columnWidths: defaultColumnWidths
+                        columnWidths: currentWidths
                     }}
                 >
                     <Form.Item
