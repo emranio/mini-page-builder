@@ -9,7 +9,8 @@ const TextElementSettings = ({
     open,
     onClose,
     element,
-    throttledUpdate
+    throttledUpdate,
+    inline = false
 }) => {
     const [form] = Form.useForm();
 
@@ -33,6 +34,7 @@ const TextElementSettings = ({
             }}
             onValuesChange={handleValuesChange}
             width={500}
+            inline={inline}
         >
             <Form.Item
                 label="Content"

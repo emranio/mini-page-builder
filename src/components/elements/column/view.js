@@ -17,10 +17,15 @@ const ColumnElementView = ({
     borderColor = '#d9d9d9',
     throttledUpdate
 }) => {
-    const { updateElement, createElement, getElementById, isDragging } = useBuilder();
+    const { updateElement, createElement, getElementById, isDragging, setSelectedElementId } = useBuilder();
     const [isSettingsVisible, setIsSettingsVisible] = useState(false);
     const [currentWidths, setCurrentWidths] = useState([]);
     const isResizingRef = useRef(false);
+
+    const handleClick = (e) => {
+        e.stopPropagation();
+        setSelectedElementId(id);
+    };
 
     // Initialize current widths only when columns change
     useEffect(() => {
@@ -250,7 +255,7 @@ const ColumnElementView = ({
     };
 
     return (
-        <div className="column-element column-element-container">
+        <div className="column-element column-element-container" onClick={handleClick}>
             <div
                 className={`column-element-row ${isDragging ? 'during-drag' : ''}`}
                 data-id={id}

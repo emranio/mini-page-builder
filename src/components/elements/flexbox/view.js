@@ -16,8 +16,13 @@ const FlexboxElementView = ({
     borderRadius = 0,
     throttledUpdate
 }) => {
-    const { createElement, isDragging } = useBuilder();
+    const { createElement, isDragging, setSelectedElementId } = useBuilder();
     const containerRef = useRef(null);
+
+    const handleClick = (e) => {
+        e.stopPropagation();
+        setSelectedElementId(id);
+    };
 
     // Add a new flexbox container inside this container
     const handleAddFlexbox = () => {
@@ -42,6 +47,7 @@ const FlexboxElementView = ({
             className={`flexbox-container ${isDragging ? 'during-drag' : ''}`}
             data-id={id}
             style={containerStyle}
+            onClick={handleClick}
         >
             {/* Use dedicated DropZone for container contents */}
             <div className="flexbox-content">

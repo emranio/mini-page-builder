@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image } from 'antd';
 import { withBaseElement } from '../base';
+import { useBuilder } from '../../../contexts/BuilderContext';
 
 const ImageElementView = ({
     id,
@@ -11,6 +12,13 @@ const ImageElementView = ({
     borderRadius = 0,
     throttledUpdate
 }) => {
+    const { setSelectedElementId } = useBuilder();
+
+    const handleClick = (e) => {
+        e.stopPropagation();
+        setSelectedElementId(id);
+    };
+
     const imageStyle = {
         width,
         height,
@@ -18,7 +26,7 @@ const ImageElementView = ({
     };
 
     return (
-        <div className="image-element">
+        <div className="image-element" onClick={handleClick}>
             <div className="image-container">
                 <Image
                     src={src}

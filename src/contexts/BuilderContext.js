@@ -20,6 +20,7 @@ const elementRegistry = {
 export const BuilderProvider = ({ children }) => {
     const [elements, setElements] = useState([]);
     const [isDragging, setIsDragging] = useState(false);
+    const [selectedElementId, setSelectedElementId] = useState(null);
 
     // Add/remove body class when dragging state changes
     useEffect(() => {
@@ -222,7 +223,9 @@ export const BuilderProvider = ({ children }) => {
         hasOnlyContainerChildren,
         hasMixedChildren,
         isDragging,
-        setIsDragging
+        setIsDragging,
+        selectedElementId,
+        setSelectedElementId
     };
 
     return (

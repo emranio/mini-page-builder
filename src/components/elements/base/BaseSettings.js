@@ -2,8 +2,8 @@ import React from 'react';
 import { Modal, Form } from 'antd';
 
 /**
- * Abstract settings component that provides common modal functionality
- * All element settings should extend this component
+ * Abstract settings component that provides common functionality
+ * Can work both as modal and inline component
  */
 const BaseSettings = ({
     title,
@@ -13,8 +13,28 @@ const BaseSettings = ({
     children,
     onValuesChange,
     initialValues,
+    inline = false,
     ...modalProps
 }) => {
+    const formContent = (
+        <Form
+            form={form}
+            layout="vertical"
+            initialValues={initialValues}
+            onValuesChange={onValuesChange} // Live updates on change
+        >
+            {children}
+        </Form>
+    );
+
+    if (inline) {
+        return (
+            <div className="inline-settings">
+                {formContent}
+            </div>
+        );
+    }
+
     return (
         <Modal
             title={title}
@@ -24,14 +44,7 @@ const BaseSettings = ({
             destroyOnClose
             {...modalProps}
         >
-            <Form
-                form={form}
-                layout="vertical"
-                initialValues={initialValues}
-                onValuesChange={onValuesChange} // Live updates on change
-            >
-                {children}
-            </Form>
+            {formContent}
         </Modal>
     );
 };

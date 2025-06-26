@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Input, Typography } from 'antd';
 import { withBaseElement } from '../base';
+import { useBuilder } from '../../../contexts/BuilderContext';
 
 const { Paragraph } = Typography;
 const { TextArea } = Input;
@@ -16,6 +17,7 @@ const TextElementView = ({
 }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [localContent, setLocalContent] = useState(content);
+    const { setSelectedElementId } = useBuilder();
 
     const handleChange = (value) => {
         setLocalContent(value);
@@ -24,6 +26,11 @@ const TextElementView = ({
 
     const handleDoubleClick = () => {
         setIsEditing(true);
+    };
+
+    const handleClick = (e) => {
+        e.stopPropagation();
+        setSelectedElementId(id);
     };
 
     const handleBlur = () => {
@@ -51,6 +58,7 @@ const TextElementView = ({
     ) : (
         <Paragraph
             className="text-element"
+            onClick={handleClick}
             onDoubleClick={handleDoubleClick}
             style={textStyle}
         >

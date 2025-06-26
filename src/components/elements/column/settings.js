@@ -8,7 +8,8 @@ const ColumnElementSettings = ({
     open,
     onClose,
     element,
-    throttledUpdate
+    throttledUpdate,
+    inline = false
 }) => {
     const [form] = Form.useForm();
     const columns = element.props?.columns || 2;
@@ -57,6 +58,7 @@ const ColumnElementSettings = ({
             }}
             onValuesChange={handleValuesChange}
             width={600}
+            inline={inline}
         >
             <Form.Item
                 name="columns"

@@ -1,7 +1,9 @@
 import React from 'react';
-import { Layout, Card, Typography, Row, Col } from 'antd';
+import { Layout, Card, Typography, Row, Col, Button } from 'antd';
+import { ArrowLeftOutlined, AppstoreOutlined } from '@ant-design/icons';
 import { ElementItem } from '../elements/commons';
 import { ItemTypes } from '../../utils/DragTypes';
+import { useBuilder } from '../../contexts/BuilderContext';
 import TextElement from '../elements/text';
 import ImageElement from '../elements/image';
 import FlexboxElement from '../elements/flexbox';
@@ -11,6 +13,8 @@ const { Sider } = Layout;
 const { Title } = Typography;
 
 const LeftPanel = () => {
+    const { selectedElementId, setSelectedElementId, getElementById, updateElement } = useBuilder();
+
     const elements = [
         {
             type: ItemTypes.TEXT,
@@ -34,19 +38,73 @@ const LeftPanel = () => {
         },
     ];
 
+    // Element registry for getting settings components
+    const elementRegistry = {
+        text: TextElement,
+        image: ImageElement,
+        flexbox: FlexboxElement,
+        column: ColumnElement
+    };
+
+    const selectedElement = selectedElementId ? getElementById(selectedElementId) : null;
+    const selectedElementConfig = selectedElement ? elementRegistry[selectedElement.type] : null;
+    const SettingsComponent = selectedElementConfig?.settings;
+
+    // Throttled update for settings
+    const throttledUpdate = (elementId, newProps) => {
+        updateElement(elementId, newProps);
+    };
+
+    const showElementList = () => {
+        setSelectedElementId(null);
+    };
+
     return (
         <Sider width={300} className="left-panel">
             <div className="panel-content">
-                <Title level={3}>Elements</Title>
-                <Card title="Drag & Drop Components" className="elements-card">
-                    <Row gutter={[16, 16]}>
-                        {elements.map((element, index) => (
-                            <Col span={12} key={index}>
-                                <ElementItem type={element.type} icon={element.icon} label={element.label} />
-                            </Col>
-                        ))}
-                    </Row>
-                </Card>
+                {selectedElement && SettingsComponent ? (
+                    // Show settings panel
+                    <>
+                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }}>
+                            <Button
+                                icon={<ArrowLeftOutlined />}
+                                onClick={showElementList}
+                                size="small"
+                                style={{ marginRight: 8 }}
+                            />
+                            <Button
+                                icon={<AppstoreOutlined />}
+                                onClick={showElementList}
+                                size="small"
+                                style={{ marginRight: 12 }}
+                            >
+                                Elements
+                            </Button>
+                            <Title level={4} style={{ margin: 0 }}>
+                                {selectedElementConfig.name} Settings
+                            </Title>
+                        </div>
+                        <SettingsComponent
+                            element={selectedElement}
+                            throttledUpdate={throttledUpdate}
+                            inline={true}
+                        />
+                    </>
+                ) : (
+                    // Show elements list
+                    <>
+                        <Title level={3}>Elements</Title>
+                        <Card title="Drag & Drop Components" className="elements-card">
+                            <Row gutter={[16, 16]}>
+                                {elements.map((element, index) => (
+                                    <Col span={12} key={index}>
+                                        <ElementItem type={element.type} icon={element.icon} label={element.label} />
+                                    </Col>
+                                ))}
+                            </Row>
+                        </Card>
+                    </>
+                )}
             </div>
         </Sider>
     );

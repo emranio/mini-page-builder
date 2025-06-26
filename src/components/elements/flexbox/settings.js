@@ -8,7 +8,8 @@ const FlexboxElementSettings = ({
     open,
     onClose,
     element,
-    throttledUpdate
+    throttledUpdate,
+    inline = false
 }) => {
     const [form] = Form.useForm();
 
@@ -34,6 +35,7 @@ const FlexboxElementSettings = ({
             }}
             onValuesChange={handleValuesChange}
             width={500}
+            inline={inline}
         >
             <Space.Compact block>
                 <Form.Item

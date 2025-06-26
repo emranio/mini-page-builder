@@ -1,31 +1,13 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { useBuilder } from '../../../contexts/BuilderContext';
 import { ItemTypes } from '../../../utils/DragTypes';
-import { Button, Dropdown } from 'antd';
-import { MoreOutlined, DeleteOutlined, SettingOutlined } from '@ant-design/icons';
-import TextElement from '../text';
-import ImageElement from '../image';
-import FlexboxElement from '../flexbox';
-import ColumnElement from '../column';
-
-// Element registry for getting settings components
-const elementRegistry = {
-    text: TextElement,
-    image: ImageElement,
-    flexbox: FlexboxElement,
-    column: ColumnElement
-};
+import { Button } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
 
 const DraggableElement = ({ id, type, parentId, children }) => {
-    const { moveElement, deleteElement, getElements, setIsDragging, getElementById, updateElement } = useBuilder();
+    const { moveElement, deleteElement, getElements, setIsDragging } = useBuilder();
     const ref = useRef(null);
-    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-
-    // Get element data and settings component
-    const element = getElementById(id);
-    const elementConfig = elementRegistry[type];
-    const SettingsComponent = elementConfig?.settings;
 
     // Set up the element to be draggable
     const [{ isDragging }, drag] = useDrag(() => ({
@@ -108,32 +90,6 @@ const DraggableElement = ({ id, type, parentId, children }) => {
         deleteElement(id);
     };
 
-    // Handle settings
-    const handleSettings = () => {
-        setIsSettingsOpen(true);
-    };
-
-    // Throttled update for settings
-    const throttledUpdate = (elementId, newProps) => {
-        updateElement(elementId, newProps);
-    };
-
-    const menuItems = [
-        ...(SettingsComponent ? [{
-            key: 'settings',
-            icon: <SettingOutlined />,
-            label: 'Settings',
-            onClick: handleSettings
-        }] : []),
-        {
-            key: 'delete',
-            icon: <DeleteOutlined />,
-            label: 'Delete',
-            onClick: handleDelete,
-            danger: true
-        }
-    ];
-
     return (
         <div
             ref={ref}
@@ -141,32 +97,18 @@ const DraggableElement = ({ id, type, parentId, children }) => {
             style={{ opacity: isDragging ? 0.5 : 1 }}
         >
             <div className="element-actions">
-                <Dropdown
-                    menu={{ items: menuItems }}
-                    trigger={['click']}
-                    placement="bottomRight"
-                >
-                    <Button
-                        type="text"
-                        icon={<MoreOutlined />}
-                        size="small"
-                        className="element-action-button"
-                    />
-                </Dropdown>
+                <Button
+                    type="text"
+                    icon={<DeleteOutlined />}
+                    size="small"
+                    className="element-action-button"
+                    onClick={handleDelete}
+                    danger
+                />
             </div>
             <div className="element-wrapper">
                 {children}
             </div>
-
-            {/* Render settings modal if available */}
-            {SettingsComponent && (
-                <SettingsComponent
-                    open={isSettingsOpen}
-                    onClose={() => setIsSettingsOpen(false)}
-                    element={element}
-                    throttledUpdate={throttledUpdate}
-                />
-            )}
         </div>
     );
 };

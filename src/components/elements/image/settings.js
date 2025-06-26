@@ -6,7 +6,8 @@ const ImageElementSettings = ({
     open,
     onClose,
     element,
-    throttledUpdate
+    throttledUpdate,
+    inline = false
 }) => {
     const [form] = Form.useForm();
 
@@ -30,6 +31,7 @@ const ImageElementSettings = ({
             }}
             onValuesChange={handleValuesChange}
             width={600}
+            inline={inline}
         >
             <Form.Item
                 label="Image URL"
