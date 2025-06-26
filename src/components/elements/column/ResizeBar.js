@@ -1,11 +1,10 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 
 const ResizeBar = ({ onResize, onResizeStart, onResizeEnd }) => {
     const [isDragging, setIsDragging] = useState(false);
     const startXRef = useRef(0);
     const barRef = useRef(null);
     const isDraggingRef = useRef(false);
-    const lastCallTimeRef = useRef(0);
 
 
     // Handle mouse move event
@@ -57,6 +56,7 @@ const ResizeBar = ({ onResize, onResizeStart, onResizeEnd }) => {
             document.removeEventListener('mouseup', handleMouseUp);
             document.body.style.cursor = 'default';
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
