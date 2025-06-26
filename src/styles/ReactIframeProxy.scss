@@ -1,0 +1,101 @@
+.react-iframe-proxy {
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    height: 100%;
+    width: 100%;
+    background-color: #fff;
+
+    .react-iframe-proxy-header {
+        height: 36px;
+        background-color: #f1f1f1;
+        border-bottom: 1px solid #ddd;
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+
+        .browser-dots {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+
+            .dot {
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                margin-right: 6px;
+
+                &.red {
+                    background-color: #ff5f57;
+                }
+
+                &.yellow {
+                    background-color: #ffbd2e;
+                }
+
+                &.green {
+                    background-color: #28c940;
+                }
+            }
+        }
+
+        .browser-address-bar {
+            flex: 1;
+            background-color: #fff;
+            height: 24px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            color: #666;
+            font-size: 12px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
+    .react-iframe-proxy-content {
+        flex: 1;
+        overflow: auto;
+        position: relative;
+        background-color: #fff;
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+// Ensure the inner content styling doesn't leak out
+.react-iframe-proxy-content {
+
+    // Reset some common styles to isolate the content
+    * {
+        box-sizing: border-box;
+    }
+
+    // Create a scrollable area
+    overflow: auto;
+
+    // Mimic how iframe content would behave
+    &::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background: #a1a1a1;
+    }
+}
