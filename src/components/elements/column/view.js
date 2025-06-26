@@ -1,17 +1,28 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Button, Modal, Form, Slider, InputNumber, Space } from 'antd';
-import { SettingOutlined } from '@ant-design/icons';
 import { useBuilder } from '../../../contexts/BuilderContext';
 import { DropZone } from '../commons';
+import { withBaseElement } from '../base';
 import ResizeBar from './ResizeBar';
+import ColumnElementSettings from './settings';
 
-const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) => {
+const ColumnElementView = ({
+    id,
+    columns = 2,
+    columnWidths = [],
+    columnIds = [],
+    gap = 10,
+    backgroundColor = 'transparent',
+    borderStyle = 'dashed',
+    borderWidth = 1,
+    borderColor = '#d9d9d9',
+    throttledUpdate
+}) => {
     const { updateElement, createElement, getElementById, isDragging } = useBuilder();
     const [isSettingsVisible, setIsSettingsVisible] = useState(false);
-    const [form] = Form.useForm();
     const [currentWidths, setCurrentWidths] = useState([]);
-    const isResizingRef = useRef(false);    // Initialize current widths only when columns change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const isResizingRef = useRef(false);
+
+    // Initialize current widths only when columns change
     useEffect(() => {
         if (isResizingRef.current) return; // Don't update during resize
 
@@ -55,7 +66,6 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
 
     // Initialize column sub-elements if they don't exist
     useEffect(() => {
-        // Get the current element to check if we have columnIds
         const element = getElementById(id);
         const currentColumnIds = element?.props?.columnIds || [];
 
@@ -66,14 +76,12 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
             // If we need more columns, create them
             if (currentColumnIds.length < columns) {
                 for (let i = currentColumnIds.length; i < columns; i++) {
-                    // Create a new column sub-element
                     const columnId = createElement('flexbox', id);
                     newColumnIds.push(columnId);
                 }
             }
-            // If we need fewer columns, truncate the array (elements will be deleted by the context)
+            // If we need fewer columns, truncate the array
             else if (currentColumnIds.length > columns) {
-                // Simply truncate the array - the deleteElement logic will be handled separately
                 newColumnIds.splice(columns);
             }
 
@@ -94,23 +102,17 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
         const minColumnWidth = 5;
 
         setCurrentWidths(prevWidths => {
-            // Ensure we have a valid array with the correct length
             let newWidths = [...prevWidths];
-
-            // Debug logging
-            console.log('Before resize - prevWidths:', prevWidths, 'columns:', columns, 'index:', index);
 
             // Validate array length and fill with equal widths if needed
             if (newWidths.length !== columns) {
-                console.log('Array length mismatch, rebuilding with equal widths');
                 const equalWidth = Math.floor(100 / columns);
                 newWidths = Array(columns).fill(equalWidth);
             }
 
-            // Ensure all values are numbers, not null/undefined
+            // Ensure all values are numbers
             newWidths = newWidths.map((width, idx) => {
                 if (typeof width !== 'number' || isNaN(width) || width === null || width === undefined) {
-                    console.log(`Invalid width at index ${idx}:`, width, 'replacing with equal width');
                     return Math.floor(100 / columns);
                 }
                 return width;
@@ -118,7 +120,6 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
 
             // Validate that both columns exist
             if (index >= newWidths.length - 1 || index < 0) {
-                console.log('Invalid resize index:', index, 'array length:', newWidths.length);
                 return newWidths; // Return unchanged if invalid index
             }
 
@@ -137,7 +138,6 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
             newWidths[index] = Math.max(minColumnWidth, leftColNewWidth);
             newWidths[index + 1] = Math.max(minColumnWidth, rightColNewWidth);
 
-            console.log('After resize - newWidths:', newWidths);
             return newWidths;
         });
     };
@@ -149,10 +149,9 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
 
     // Handle resize end - save to global state
     const handleResizeEnd = () => {
-        // Use setTimeout to ensure the resize flag is cleared after the state update
         setTimeout(() => {
             isResizingRef.current = false;
-        }, 100); // Small delay to prevent race conditions
+        }, 100);
 
         // Only update if values actually changed
         const element = getElementById(id);
@@ -166,54 +165,12 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
         }
     };
 
-    // Handle opening the settings modal
-    const showSettings = () => {
-        form.setFieldsValue({
-            columnCount: columns,
-            columnWidths: currentWidths
-        });
-        setIsSettingsVisible(true);
-    };
-
-    // Handle saving settings
-    const handleSettingsSave = () => {
-        form.validateFields().then(values => {
-            const { columnCount, columnWidths } = values;
-
-            // Validate column widths
-            // If total exceeds 100%, normalize them to ensure they sum to 100%
-            const totalWidth = columnWidths.reduce((sum, width) => sum + width, 0);
-            let finalWidths;
-
-            if (totalWidth > 100) {
-                // Normalize to 100%
-                finalWidths = columnWidths.map(width =>
-                    Math.max(5, Math.round((width / totalWidth) * 100))
-                );
-            } else {
-                // Make sure no width is less than 5%
-                finalWidths = columnWidths.map(width => Math.max(5, width));
-            }
-
-            // Update the element with new settings
-            updateElement(id, {
-                columns: columnCount,
-                columnWidths: finalWidths
-            });
-
-            setCurrentWidths(finalWidths);
-            setIsSettingsVisible(false);
-        });
-    };
-
     // Generate columns based on the current settings
     const renderColumns = () => {
-        // Get the current element to access columnIds
         const element = getElementById(id);
         const currentColumnIds = element?.props?.columnIds || [];
 
         return Array(columns).fill(0).map((_, index) => {
-            // Use the current widths for rendering with fallback
             let width = currentWidths[index];
 
             // Ensure width is a valid number
@@ -264,7 +221,7 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
                         boxSizing: 'border-box',
                         display: 'flex',
                         position: 'relative',
-                        overflow: 'visible' // Allow resize bar to be visible
+                        overflow: 'visible'
                     }}
                     className="column-wrapper"
                 >
@@ -275,131 +232,52 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
         });
     };
 
-    // Dynamic form items for column widths
-    const renderColumnWidthFields = (formColumnCount) => {
-        const columnCount = formColumnCount || columns;
-
-        return Array(columnCount).fill(0).map((_, index) => (
-            <Form.Item
-                key={`width-${index}`}
-                label={`Column ${index + 1} Width (%)`}
-                name={['columnWidths', index]}
-                rules={[{ required: true, message: 'Please input the column width' }]}
-            >
-                <InputNumber
-                    min={5}
-                    max={95}
-                    addonAfter="%"
-                    style={{ width: '100%' }}
-                />
-            </Form.Item>
-        ));
+    const containerStyle = {
+        margin: '10px 0',
+        minHeight: '200px',
+        border: `${borderWidth}px ${borderStyle} ${borderColor}`,
+        padding: '10px',
+        width: '100%',
+        overflow: 'hidden',
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'nowrap',
+        gap: `${gap}px`,
+        alignItems: 'stretch',
+        justifyContent: 'space-between',
+        backgroundColor: backgroundColor === 'transparent' ? 'transparent' : backgroundColor
     };
 
     return (
         <div className="column-element column-element-container">
-            <div className="column-element-header">
-                <Button
-                    icon={<SettingOutlined />}
-                    onClick={showSettings}
-                    size="small"
-                    className="column-settings-button"
-                >
-                    Column Settings
-                </Button>
-            </div>
-
             <div
                 className={`column-element-row ${isDragging ? 'during-drag' : ''}`}
                 data-id={id}
-                style={{
-                    margin: '10px 0',
-                    minHeight: '200px',
-                    border: '1px dashed #d9d9d9',
-                    padding: '10px',
-                    width: '100%',
-                    overflow: 'hidden',
-                    position: 'relative',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    flexWrap: 'nowrap',
-                    alignItems: 'stretch',
-                    justifyContent: 'space-between'
-                }}
+                style={containerStyle}
             >
                 {renderColumns()}
             </div>
 
-            <Modal
-                title="Column Settings"
+            <ColumnElementSettings
                 open={isSettingsVisible}
-                onOk={handleSettingsSave}
-                onCancel={() => setIsSettingsVisible(false)}
-                destroyOnClose
-            >
-                <Form
-                    form={form}
-                    layout="vertical"
-                    initialValues={{
-                        columnCount: columns,
-                        columnWidths: currentWidths
-                    }}
-                >
-                    <Form.Item
-                        name="columnCount"
-                        label="Number of Columns"
-                        rules={[{ required: true, message: 'Please select the number of columns' }]}
-                    >
-                        <Slider
-                            min={2}
-                            max={12}
-                            marks={{
-                                2: '2',
-                                4: '4',
-                                6: '6',
-                                8: '8',
-                                10: '10',
-                                12: '12'
-                            }}
-                            onChange={(value) => {
-                                // When column count changes, immediately update column widths
-                                const equalWidth = Math.floor(100 / value);
-                                form.setFieldsValue({
-                                    columnWidths: Array(value).fill(equalWidth)
-                                });
-                            }}
-                        />
-                    </Form.Item>
-
-                    <Form.Item shouldUpdate={(prevValues, currentValues) => prevValues.columnCount !== currentValues.columnCount}>
-                        {() => {
-                            const formColumnCount = form.getFieldValue('columnCount') || columns;
-                            return (
-                                <div className="column-widths-container">
-                                    {renderColumnWidthFields(formColumnCount)}
-                                </div>
-                            );
-                        }}
-                    </Form.Item>
-
-                    <Form.Item>
-                        <Space>
-                            <Button onClick={() => {
-                                // Distribute column widths evenly
-                                const count = form.getFieldValue('columnCount');
-                                const equalWidth = Math.floor(100 / count);
-                                form.setFieldsValue({
-                                    columnWidths: Array(count).fill(equalWidth)
-                                });
-                            }}>
-                                Distribute Evenly
-                            </Button>
-                        </Space>
-                    </Form.Item>
-                </Form>
-            </Modal>
+                onClose={() => setIsSettingsVisible(false)}
+                element={{
+                    id,
+                    props: {
+                        columns,
+                        columnWidths: currentWidths,
+                        gap,
+                        backgroundColor,
+                        borderStyle,
+                        borderWidth,
+                        borderColor
+                    }
+                }}
+                throttledUpdate={throttledUpdate}
+            />
         </div>
     );
 };
 
-export default ColumnElement;
+export default withBaseElement(ColumnElementView);

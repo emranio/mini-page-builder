@@ -1,16 +1,25 @@
 import React, { useState } from 'react';
 import { Input, Typography } from 'antd';
-import { useBuilder } from '../../../contexts/BuilderContext';
+import { withBaseElement } from '../base';
 
 const { Paragraph } = Typography;
 const { TextArea } = Input;
 
-const TextElement = ({ id, content = 'Click to edit text', editable = false }) => {
+const TextElementView = ({
+    id,
+    content = 'Click to edit text',
+    fontSize = 14,
+    fontWeight = 'normal',
+    color = '#000000',
+    textAlign = 'left',
+    throttledUpdate
+}) => {
     const [isEditing, setIsEditing] = useState(false);
-    const { updateElement } = useBuilder();
+    const [localContent, setLocalContent] = useState(content);
 
     const handleChange = (value) => {
-        updateElement(id, { content: value });
+        setLocalContent(value);
+        throttledUpdate(id, { content: value });
     };
 
     const handleDoubleClick = () => {
@@ -21,23 +30,33 @@ const TextElement = ({ id, content = 'Click to edit text', editable = false }) =
         setIsEditing(false);
     };
 
+    const textStyle = {
+        fontSize: `${fontSize}px`,
+        fontWeight,
+        color,
+        textAlign,
+        margin: 0
+    };
+
     return isEditing ? (
         <TextArea
             autoSize
             autoFocus
-            defaultValue={content}
+            value={localContent}
             onChange={(e) => handleChange(e.target.value)}
             onBlur={handleBlur}
             className="text-element-editor"
+            style={textStyle}
         />
     ) : (
         <Paragraph
             className="text-element"
             onDoubleClick={handleDoubleClick}
+            style={textStyle}
         >
-            {content}
+            {localContent}
         </Paragraph>
     );
 };
 
-export default TextElement;
+export default withBaseElement(TextElementView);

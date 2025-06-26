@@ -1,18 +1,37 @@
 import React from 'react';
 import { Layout, Card, Typography, Row, Col } from 'antd';
-import { FontSizeOutlined, PictureOutlined, AppstoreOutlined, ColumnWidthOutlined } from '@ant-design/icons';
 import { ElementItem } from '../elements/commons';
 import { ItemTypes } from '../../utils/DragTypes';
+import TextElement from '../elements/text';
+import ImageElement from '../elements/image';
+import FlexboxElement from '../elements/flexbox';
+import ColumnElement from '../elements/column';
 
 const { Sider } = Layout;
 const { Title } = Typography;
 
 const LeftPanel = () => {
     const elements = [
-        { type: ItemTypes.TEXT, icon: <FontSizeOutlined />, label: 'Text' },
-        { type: ItemTypes.IMAGE, icon: <PictureOutlined />, label: 'Image' },
-        { type: ItemTypes.FLEXBOX, icon: <AppstoreOutlined />, label: 'Container' },
-        { type: ItemTypes.COLUMN, icon: <ColumnWidthOutlined />, label: 'Columns' },
+        {
+            type: ItemTypes.TEXT,
+            icon: TextElement.icon,
+            label: TextElement.name
+        },
+        {
+            type: ItemTypes.IMAGE,
+            icon: ImageElement.icon,
+            label: ImageElement.name
+        },
+        {
+            type: ItemTypes.FLEXBOX,
+            icon: FlexboxElement.icon,
+            label: FlexboxElement.name
+        },
+        {
+            type: ItemTypes.COLUMN,
+            icon: ColumnElement.icon,
+            label: ColumnElement.name
+        },
     ];
 
     return (

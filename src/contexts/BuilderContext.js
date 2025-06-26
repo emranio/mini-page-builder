@@ -1,9 +1,21 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import TextElement from '../components/elements/text';
+import ImageElement from '../components/elements/image';
+import FlexboxElement from '../components/elements/flexbox';
+import ColumnElement from '../components/elements/column';
 
 const BuilderContext = createContext();
 
 export const useBuilder = () => useContext(BuilderContext);
+
+// Element registry for getting default props
+const elementRegistry = {
+    text: TextElement,
+    image: ImageElement,
+    flexbox: FlexboxElement,
+    column: ColumnElement
+};
 
 export const BuilderProvider = ({ children }) => {
     const [elements, setElements] = useState([]);
@@ -20,11 +32,15 @@ export const BuilderProvider = ({ children }) => {
 
     // Create a new element
     const createElement = useCallback((type, parentId = null, props = {}) => {
+        // Get default props from element registry
+        const elementConfig = elementRegistry[type];
+        const defaultProps = elementConfig?.defaultProps || {};
+
         const newElement = {
             id: uuidv4(),
             type,
             parentId,
-            props: { ...props },
+            props: { ...defaultProps, ...props },
             children: type === 'flexbox' ? [] : null
         };
 

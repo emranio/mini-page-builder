@@ -1,0 +1,104 @@
+import React from 'react';
+import { Form, Input, InputNumber, Select, Space } from 'antd';
+import { BaseSettings } from '../base';
+
+const { TextArea } = Input;
+const { Option } = Select;
+
+const TextElementSettings = ({
+    open,
+    onClose,
+    element,
+    throttledUpdate
+}) => {
+    const [form] = Form.useForm();
+
+    const handleValuesChange = (changedValues, allValues) => {
+        // Live update the element as user changes settings
+        throttledUpdate(element.id, allValues);
+    };
+
+    return (
+        <BaseSettings
+            title="Text Settings"
+            open={open}
+            onCancel={onClose}
+            form={form}
+            initialValues={{
+                content: element.props?.content || 'Click to edit text',
+                fontSize: element.props?.fontSize || 14,
+                fontWeight: element.props?.fontWeight || 'normal',
+                color: element.props?.color || '#000000',
+                textAlign: element.props?.textAlign || 'left'
+            }}
+            onValuesChange={handleValuesChange}
+            width={500}
+        >
+            <Form.Item
+                label="Content"
+                name="content"
+                rules={[{ required: true, message: 'Please enter text content' }]}
+            >
+                <TextArea
+                    rows={4}
+                    placeholder="Enter your text content"
+                />
+            </Form.Item>
+
+            <Space.Compact block>
+                <Form.Item
+                    label="Font Size"
+                    name="fontSize"
+                    style={{ flex: 1 }}
+                >
+                    <InputNumber
+                        min={8}
+                        max={72}
+                        addonAfter="px"
+                        style={{ width: '100%' }}
+                    />
+                </Form.Item>
+
+                <Form.Item
+                    label="Font Weight"
+                    name="fontWeight"
+                    style={{ flex: 1, marginLeft: 8 }}
+                >
+                    <Select style={{ width: '100%' }}>
+                        <Option value="normal">Normal</Option>
+                        <Option value="bold">Bold</Option>
+                        <Option value="lighter">Light</Option>
+                    </Select>
+                </Form.Item>
+            </Space.Compact>
+
+            <Space.Compact block>
+                <Form.Item
+                    label="Text Color"
+                    name="color"
+                    style={{ flex: 1 }}
+                >
+                    <Input
+                        type="color"
+                        style={{ width: '100%' }}
+                    />
+                </Form.Item>
+
+                <Form.Item
+                    label="Text Align"
+                    name="textAlign"
+                    style={{ flex: 1, marginLeft: 8 }}
+                >
+                    <Select style={{ width: '100%' }}>
+                        <Option value="left">Left</Option>
+                        <Option value="center">Center</Option>
+                        <Option value="right">Right</Option>
+                        <Option value="justify">Justify</Option>
+                    </Select>
+                </Form.Item>
+            </Space.Compact>
+        </BaseSettings>
+    );
+};
+
+export default TextElementSettings;

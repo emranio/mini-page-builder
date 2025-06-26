@@ -1,13 +1,31 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { useBuilder } from '../../../contexts/BuilderContext';
 import { ItemTypes } from '../../../utils/DragTypes';
 import { Button, Dropdown } from 'antd';
-import { MoreOutlined, DeleteOutlined } from '@ant-design/icons';
+import { MoreOutlined, DeleteOutlined, SettingOutlined } from '@ant-design/icons';
+import TextElement from '../text';
+import ImageElement from '../image';
+import FlexboxElement from '../flexbox';
+import ColumnElement from '../column';
+
+// Element registry for getting settings components
+const elementRegistry = {
+    text: TextElement,
+    image: ImageElement,
+    flexbox: FlexboxElement,
+    column: ColumnElement
+};
 
 const DraggableElement = ({ id, type, parentId, children }) => {
-    const { moveElement, deleteElement, getElements, setIsDragging } = useBuilder();
+    const { moveElement, deleteElement, getElements, setIsDragging, getElementById, updateElement } = useBuilder();
     const ref = useRef(null);
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
+    // Get element data and settings component
+    const element = getElementById(id);
+    const elementConfig = elementRegistry[type];
+    const SettingsComponent = elementConfig?.settings;
 
     // Set up the element to be draggable
     const [{ isDragging }, drag] = useDrag(() => ({
@@ -28,30 +46,14 @@ const DraggableElement = ({ id, type, parentId, children }) => {
     const [{ isOver }, drop] = useDrop(() => ({
         accept: ItemTypes.CONTAINER_ITEM,
         hover: (item, monitor) => {
-            if (!ref.current) return;
+            if (!ref.current) {
+                return;
+            }
 
-            const dragId = item.id;
-            const hoverId = id;
-
-            // Don't replace elements with themselves
-            if (dragId === hoverId) return;
-
-            // Get rectangle on screen
             const hoverBoundingRect = ref.current.getBoundingClientRect();
-
-            // Get vertical middle
             const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-
-            // Determine mouse position
             const clientOffset = monitor.getClientOffset();
-            if (!clientOffset) return;
-
-            // Get pixels to the top
             const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-
-            // Only perform the move when the mouse crosses half of the item's height
-            // when dragging downwards, only move when the cursor is below 50%
-            // when dragging upwards, only move when the cursor is above 50%
 
             const dragElement = monitor.getItem();
 
@@ -87,7 +89,6 @@ const DraggableElement = ({ id, type, parentId, children }) => {
                 }
 
                 // Time to actually perform the action
-                // We're updating in hover because it gives more responsive UI feedback
                 moveElement(dragElement.id, parentId, hoverIndex);
 
                 // Update the drag item's position for better UX
@@ -107,7 +108,23 @@ const DraggableElement = ({ id, type, parentId, children }) => {
         deleteElement(id);
     };
 
+    // Handle settings
+    const handleSettings = () => {
+        setIsSettingsOpen(true);
+    };
+
+    // Throttled update for settings
+    const throttledUpdate = (elementId, newProps) => {
+        updateElement(elementId, newProps);
+    };
+
     const menuItems = [
+        ...(SettingsComponent ? [{
+            key: 'settings',
+            icon: <SettingOutlined />,
+            label: 'Settings',
+            onClick: handleSettings
+        }] : []),
         {
             key: 'delete',
             icon: <DeleteOutlined />,
@@ -140,6 +157,16 @@ const DraggableElement = ({ id, type, parentId, children }) => {
             <div className="element-wrapper">
                 {children}
             </div>
+
+            {/* Render settings modal if available */}
+            {SettingsComponent && (
+                <SettingsComponent
+                    open={isSettingsOpen}
+                    onClose={() => setIsSettingsOpen(false)}
+                    element={element}
+                    throttledUpdate={throttledUpdate}
+                />
+            )}
         </div>
     );
 };
