@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 
-const ResizeBar = ({ onResize }) => {
+const ResizeBar = ({ onResize, onResizeEnd }) => {
     const [isDragging, setIsDragging] = useState(false);
     const startXRef = useRef(0);
     const barRef = useRef(null);
@@ -24,6 +24,11 @@ const ResizeBar = ({ onResize }) => {
         document.body.style.cursor = 'default';
         document.removeEventListener('mousemove', handleMouseMove);
         document.removeEventListener('mouseup', handleMouseUp);
+
+        // Call onResizeEnd when resize is complete
+        if (onResizeEnd) {
+            onResizeEnd();
+        }
     };
 
     // Handle mouse down event

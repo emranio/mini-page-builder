@@ -51,47 +51,43 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
                 columnIds: newColumnIds
             });
         }
-    }, [id, columns, createElement, updateElement, getElementById]);    // Handle resizing between columns
+    }, [id, columns, createElement, updateElement, getElementById]);
+
+    // Handle resizing between columns - only update local state during resize
     const handleColumnResize = (index, deltaX) => {
-        // Calculate the pixel width of the container to convert delta to percentage
-        const rowElement = document.querySelector(`.column-element-row[data-id="${id}"]`);
-        if (!rowElement) {
-            return;
-        }
+        setCurrentWidths(prevWidths => {
+            const rowElement = document.querySelector(`.column-element-row[data-id="${id}"]`);
+            if (!rowElement) return prevWidths;
 
-        const rowWidth = rowElement.clientWidth;
-        const deltaPercentage = (deltaX / rowWidth) * 100;
+            const rowWidth = rowElement.clientWidth;
+            if (rowWidth <= 0) return prevWidths;
 
-        // Don't allow columns to be smaller than 5%
-        const minColumnWidth = 5;
+            const deltaPercentage = (deltaX / rowWidth) * 100;
+            const minColumnWidth = 5;
 
-        // Create a copy of the current widths for manipulation
-        const newWidths = [...currentWidths];
+            const newWidths = [...prevWidths];
+            let leftColNewWidth = newWidths[index] + deltaPercentage;
+            let rightColNewWidth = newWidths[index + 1] - deltaPercentage;
 
-        // Calculate new widths ensuring they don't go below the minimum
-        let leftColNewWidth = Math.max(minColumnWidth, newWidths[index] - deltaPercentage);
-        let rightColNewWidth = Math.max(minColumnWidth, newWidths[index + 1] + deltaPercentage);
+            // Enforce minimum width constraints
+            if (leftColNewWidth < minColumnWidth) {
+                leftColNewWidth = minColumnWidth;
+                rightColNewWidth = newWidths[index] + newWidths[index + 1] - minColumnWidth;
+            } else if (rightColNewWidth < minColumnWidth) {
+                rightColNewWidth = minColumnWidth;
+                leftColNewWidth = newWidths[index] + newWidths[index + 1] - minColumnWidth;
+            }
 
-        // Check if either column would go below the minimum width
-        if (leftColNewWidth <= minColumnWidth) {
-            // Left column hit minimum - adjust right column to compensate
-            leftColNewWidth = minColumnWidth;
-            // The right column gets the remaining percentage that could be applied
-            rightColNewWidth = newWidths[index] + newWidths[index + 1] - minColumnWidth;
-        } else if (rightColNewWidth <= minColumnWidth) {
-            // Right column hit minimum - adjust left column to compensate
-            rightColNewWidth = minColumnWidth;
-            // The left column gets the remaining percentage that could be applied
-            leftColNewWidth = newWidths[index] + newWidths[index + 1] - minColumnWidth;
-        }
+            newWidths[index] = Math.max(minColumnWidth, leftColNewWidth);
+            newWidths[index + 1] = Math.max(minColumnWidth, rightColNewWidth);
 
-        // Update the new widths
-        newWidths[index] = parseFloat(leftColNewWidth.toFixed(1));
-        newWidths[index + 1] = parseFloat(rightColNewWidth.toFixed(1));
+            return newWidths;
+        });
+    };
 
-        // Update the state and element properties
-        setCurrentWidths(newWidths);
-        updateElement(id, { columnWidths: newWidths });
+    // Handle resize end - save to global state
+    const handleResizeEnd = () => {
+        updateElement(id, { columnWidths: currentWidths });
     };
 
     // Handle opening the settings modal
@@ -171,6 +167,7 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
                 <ResizeBar
                     key={`resize-${id}-${index}`}
                     onResize={(deltaX) => handleColumnResize(index, deltaX)}
+                    onResizeEnd={handleResizeEnd}
                 />
             ) : null;
 
@@ -184,25 +181,12 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
                         boxSizing: 'border-box',
                         display: 'flex',
                         position: 'relative',
+                        overflow: 'visible' // Allow resize bar to be visible
                     }}
                     className="column-wrapper"
                 >
                     {columnContent}
-                    {index < columns - 1 && (
-                        <div
-                            className="resize-bar-container"
-                            style={{
-                                position: 'absolute',
-                                right: '-2px',
-                                top: 0,
-                                bottom: 0,
-                                width: '10px', // Wider to make it easier to grab
-                                zIndex: 50
-                            }}
-                        >
-                            {resizeBar}
-                        </div>
-                    )}
+                    {resizeBar}
                 </div>
             );
         });
