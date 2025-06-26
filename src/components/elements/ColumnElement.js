@@ -273,8 +273,8 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
     };
 
     // Dynamic form items for column widths
-    const renderColumnWidthFields = () => {
-        const columnCount = form.getFieldValue('columnCount') || columns;
+    const renderColumnWidthFields = (formColumnCount) => {
+        const columnCount = formColumnCount || columns;
 
         return Array(columnCount).fill(0).map((_, index) => (
             <Form.Item
@@ -358,22 +358,26 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
                                 10: '10',
                                 12: '12'
                             }}
-                            onChange={() => {
-                                // When column count changes, reset column widths
-                                setTimeout(() => {
-                                    const count = form.getFieldValue('columnCount');
-                                    const equalWidth = Math.floor(100 / count);
-                                    form.setFieldsValue({
-                                        columnWidths: Array(count).fill(equalWidth)
-                                    });
-                                }, 0);
+                            onChange={(value) => {
+                                // When column count changes, immediately update column widths
+                                const equalWidth = Math.floor(100 / value);
+                                form.setFieldsValue({
+                                    columnWidths: Array(value).fill(equalWidth)
+                                });
                             }}
                         />
                     </Form.Item>
 
-                    <div className="column-widths-container">
-                        {renderColumnWidthFields()}
-                    </div>
+                    <Form.Item shouldUpdate={(prevValues, currentValues) => prevValues.columnCount !== currentValues.columnCount}>
+                        {() => {
+                            const formColumnCount = form.getFieldValue('columnCount') || columns;
+                            return (
+                                <div className="column-widths-container">
+                                    {renderColumnWidthFields(formColumnCount)}
+                                </div>
+                            );
+                        }}
+                    </Form.Item>
 
                     <Form.Item>
                         <Space>
