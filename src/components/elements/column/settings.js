@@ -19,7 +19,7 @@ const ColumnElementSettings = ({
     useEffect(() => {
         const newValues = {
             columns: columns,
-            columnWidths: columnWidths.length > 0 ? columnWidths : Array(columns).fill(Math.floor(100 / columns)),
+            columnWidths: columnWidths.length > 0 ? columnWidths : Array(columns).fill(Math.round((100 / columns) * 100) / 100),
             gap: element.props?.gap || 10,
             backgroundColor: element.props?.backgroundColor || 'transparent',
             borderStyle: element.props?.borderStyle || 'dashed',
@@ -48,6 +48,8 @@ const ColumnElementSettings = ({
                 <InputNumber
                     min={5}
                     max={95}
+                    step={0.01}
+                    precision={2}
                     addonAfter="%"
                     style={{ width: '100%' }}
                 />
@@ -63,7 +65,7 @@ const ColumnElementSettings = ({
             form={form}
             initialValues={{
                 columns: columns,
-                columnWidths: columnWidths.length > 0 ? columnWidths : Array(columns).fill(Math.floor(100 / columns)),
+                columnWidths: columnWidths.length > 0 ? columnWidths : Array(columns).fill(Math.round((100 / columns) * 100) / 100),
                 gap: element.props?.gap || 10,
                 backgroundColor: element.props?.backgroundColor || 'transparent',
                 borderStyle: element.props?.borderStyle || 'dashed',

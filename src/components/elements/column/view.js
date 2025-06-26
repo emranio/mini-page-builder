@@ -41,12 +41,12 @@ const ColumnElementView = ({
                 setCurrentWidths([...columnWidths]);
             } else {
                 // Create equal width columns if any value is invalid
-                const equalWidth = Math.floor(100 / columns);
+                const equalWidth = Math.round((100 / columns) * 100) / 100;
                 setCurrentWidths(Array(columns).fill(equalWidth));
             }
         } else {
             // Create equal width columns
-            const equalWidth = Math.floor(100 / columns);
+            const equalWidth = Math.round((100 / columns) * 100) / 100;
             setCurrentWidths(Array(columns).fill(equalWidth));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -111,14 +111,14 @@ const ColumnElementView = ({
 
             // Validate array length and fill with equal widths if needed
             if (newWidths.length !== columns) {
-                const equalWidth = Math.floor(100 / columns);
+                const equalWidth = Math.round((100 / columns) * 100) / 100;
                 newWidths = Array(columns).fill(equalWidth);
             }
 
             // Ensure all values are numbers
             newWidths = newWidths.map((width, idx) => {
                 if (typeof width !== 'number' || isNaN(width) || width === null || width === undefined) {
-                    return Math.floor(100 / columns);
+                    return Math.round((100 / columns) * 100) / 100;
                 }
                 return width;
             });
@@ -140,8 +140,8 @@ const ColumnElementView = ({
                 leftColNewWidth = newWidths[index] + newWidths[index + 1] - minColumnWidth;
             }
 
-            newWidths[index] = Math.max(minColumnWidth, leftColNewWidth);
-            newWidths[index + 1] = Math.max(minColumnWidth, rightColNewWidth);
+            newWidths[index] = Math.round(Math.max(minColumnWidth, leftColNewWidth) * 100) / 100;
+            newWidths[index + 1] = Math.round(Math.max(minColumnWidth, rightColNewWidth) * 100) / 100;
 
             return newWidths;
         });
@@ -161,12 +161,16 @@ const ColumnElementView = ({
         // Only update if values actually changed
         const element = getElementById(id);
         const currentColumnWidths = element?.props?.columnWidths || [];
-        const hasChanged = currentWidths.some((width, index) =>
+
+        // Round the current widths to 2 decimal places
+        const roundedWidths = currentWidths.map(width => Math.round(width * 100) / 100);
+
+        const hasChanged = roundedWidths.some((width, index) =>
             Math.abs(width - (currentColumnWidths[index] || 0)) > 0.1
         );
 
         if (hasChanged) {
-            updateElement(id, { columnWidths: [...currentWidths] });
+            updateElement(id, { columnWidths: [...roundedWidths] });
         }
     };
 
