@@ -137,6 +137,7 @@ const ReactIframeProxy = ({
                                 .drop-zone {
                                     min-height: 40px;
                                     margin: 4px 0;
+                                    background-color: #f00;
                                     border: 2px dashed transparent;
                                     border-radius: 4px;
                                     transition: all 0.2s ease;
