@@ -10,14 +10,23 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
     const [isSettingsVisible, setIsSettingsVisible] = useState(false);
     const [form] = Form.useForm();
     const [currentWidths, setCurrentWidths] = useState([]);
-    const isResizingRef = useRef(false);
-
-    // Initialize current widths only when columns or columnWidths props change
+    const isResizingRef = useRef(false);    // Initialize current widths only when columns or columnWidths props change
     useEffect(() => {
         if (isResizingRef.current) return; // Don't update during resize
 
-        if (columnWidths.length > 0) {
-            setCurrentWidths([...columnWidths]);
+        if (columnWidths && columnWidths.length > 0 && columnWidths.length === columns) {
+            // Validate all values are numbers
+            const validWidths = columnWidths.every(width =>
+                typeof width === 'number' && !isNaN(width) && width !== null && width !== undefined
+            );
+
+            if (validWidths) {
+                setCurrentWidths([...columnWidths]);
+            } else {
+                // Create equal width columns if any value is invalid
+                const equalWidth = Math.floor(100 / columns);
+                setCurrentWidths(Array(columns).fill(equalWidth));
+            }
         } else {
             // Create equal width columns
             const equalWidth = Math.floor(100 / columns);
@@ -29,11 +38,17 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
     useEffect(() => {
         if (isResizingRef.current) return; // Don't update during resize
 
-        // Only update if columnWidths actually changed (not empty/undefined)
-        if (columnWidths && columnWidths.length > 0) {
-            setCurrentWidths([...columnWidths]);
+        // Only update if columnWidths actually changed and is valid
+        if (columnWidths && columnWidths.length === columns) {
+            const validWidths = columnWidths.every(width =>
+                typeof width === 'number' && !isNaN(width) && width !== null && width !== undefined
+            );
+
+            if (validWidths) {
+                setCurrentWidths([...columnWidths]);
+            }
         }
-    }, [columnWidths.length, columnWidths.join(',')]); // Use length and join for stable comparison
+    }, [columnWidths.length, columns]); // Simplified dependencies
 
     // Initialize column sub-elements if they don't exist
     useEffect(() => {
@@ -76,7 +91,34 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
         const minColumnWidth = 5;
 
         setCurrentWidths(prevWidths => {
-            const newWidths = [...prevWidths];
+            // Ensure we have a valid array with the correct length
+            let newWidths = [...prevWidths];
+
+            // Debug logging
+            console.log('Before resize - prevWidths:', prevWidths, 'columns:', columns, 'index:', index);
+
+            // Validate array length and fill with equal widths if needed
+            if (newWidths.length !== columns) {
+                console.log('Array length mismatch, rebuilding with equal widths');
+                const equalWidth = Math.floor(100 / columns);
+                newWidths = Array(columns).fill(equalWidth);
+            }
+
+            // Ensure all values are numbers, not null/undefined
+            newWidths = newWidths.map((width, idx) => {
+                if (typeof width !== 'number' || isNaN(width) || width === null || width === undefined) {
+                    console.log(`Invalid width at index ${idx}:`, width, 'replacing with equal width');
+                    return Math.floor(100 / columns);
+                }
+                return width;
+            });
+
+            // Validate that both columns exist
+            if (index >= newWidths.length - 1 || index < 0) {
+                console.log('Invalid resize index:', index, 'array length:', newWidths.length);
+                return newWidths; // Return unchanged if invalid index
+            }
+
             let leftColNewWidth = newWidths[index] + deltaPercentage;
             let rightColNewWidth = newWidths[index + 1] - deltaPercentage;
 
@@ -92,6 +134,7 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
             newWidths[index] = Math.max(minColumnWidth, leftColNewWidth);
             newWidths[index + 1] = Math.max(minColumnWidth, rightColNewWidth);
 
+            console.log('After resize - newWidths:', newWidths);
             return newWidths;
         });
     };
@@ -167,8 +210,14 @@ const ColumnElement = ({ id, columns = 2, columnWidths = [], columnIds = [] }) =
         const currentColumnIds = element?.props?.columnIds || [];
 
         return Array(columns).fill(0).map((_, index) => {
-            // Use the current widths for rendering
-            const width = currentWidths[index] || Math.floor(100 / columns);
+            // Use the current widths for rendering with fallback
+            let width = currentWidths[index];
+
+            // Ensure width is a valid number
+            if (typeof width !== 'number' || isNaN(width) || width === null || width === undefined) {
+                width = Math.floor(100 / columns);
+            }
+
             // Get the column ID if it exists
             const columnId = currentColumnIds[index];
 
