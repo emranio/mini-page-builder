@@ -1,17 +1,11 @@
 import React from 'react';
-import { Layout, Typography, Empty, Row, Col } from 'antd';
-import { useBuilder } from '../../contexts/BuilderContext';
-import useIframeDragDrop from '../../hooks/useIframeDragDrop';
-import { DropZone } from '../elements/commons';
+import { Layout, Typography, Row, Col } from 'antd';
 import { ReactIframeProxy, ResponsiveViewSelector } from './partials';
 
 const { Content } = Layout;
 const { Text } = Typography;
 
 const RightPanel = ({ leftPanelCollapsed, responsiveView, onResponsiveViewChange }) => {
-    const { getElements } = useBuilder();
-    const { isDragging } = useIframeDragDrop();
-    const rootElements = getElements(null); // Get elements at the root level
 
     // Get width based on responsive view
     const getResponsiveWidth = () => {
@@ -53,17 +47,7 @@ const RightPanel = ({ leftPanelCollapsed, responsiveView, onResponsiveViewChange
                             marginLeft: 'auto',
                             marginRight: 'auto'
                         }}
-                    >
-                        <div className={`canvas ${isDragging ? 'canvas-during-drag' : ''}`}>
-                            <DropZone parentId={null} />
-                            {rootElements.length === 0 && (
-                                <Empty
-                                    description={isDragging ? "Drop here to add elements" : "Drag elements here to start building"}
-                                    className="empty-canvas"
-                                />
-                            )}
-                        </div>
-                    </ReactIframeProxy>
+                    />
                 </div>
             </div>
         </Content>
