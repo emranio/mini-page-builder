@@ -5,7 +5,7 @@ import { Layout } from 'antd';
 import LeftPanel from './components/panels/LeftPanel';
 import RightPanel from './components/panels/RightPanel';
 import { BuilderProvider } from './contexts/BuilderContext';
-import './styles/App.scss';
+import './scss/builder/App.scss';
 
 function App() {
   const [leftPanelConfig, setLeftPanelConfig] = useState({

@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import 'antd/dist/reset.css'; // Import Ant Design styles
 import './index.css';
-import './styles/ContainerLayout.scss'; // Import container layout styles
-import './styles/ContainerStyles.scss'; // Import additional container styles
+import './scss/builder/ContainerLayout.scss'; // Import container layout styles
+import './scss/builder/ContainerStyles.scss'; // Import additional container styles
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
