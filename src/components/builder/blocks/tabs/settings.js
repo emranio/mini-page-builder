@@ -1,9 +1,84 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Input, Select, InputNumber, Space, Button, List, Card } from 'antd';
-import { PlusOutlined, DeleteOutlined, EditOutlined, UpOutlined, DownOutlined } from '@ant-design/icons';
+import { PlusOutlined, DeleteOutlined, EditOutlined, HolderOutlined } from '@ant-design/icons';
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { BaseSettings } from '../base';
 
 const { Option } = Select;
+
+// Sortable Tab Item Component
+const SortableTabItem = ({ tab, index, onTitleChange, onDelete, isDeleteDisabled }) => {
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+        isDragging,
+    } = useSortable({ id: tab.id });
+
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+        opacity: isDragging ? 0.5 : 1,
+    };
+
+    return (
+        <div
+            ref={setNodeRef}
+            style={style}
+            className="sortable-tab-item"
+        >
+            <List.Item
+                actions={[
+
+                ]}
+                style={{
+                    padding: '8px 12px',
+                    border: '1px solid #f0f0f0',
+                    borderRadius: '4px',
+                    marginBottom: '4px',
+                    backgroundColor: isDragging ? '#f0f0f0' : '#fff',
+                    cursor: isDragging ? 'grabbing' : 'grab'
+                }}
+            >
+                <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div
+                        {...attributes}
+                        {...listeners}
+                        style={{
+                            cursor: 'grab',
+                            padding: '4px',
+                            display: 'flex',
+                            alignItems: 'center'
+                        }}
+                    >
+                        <HolderOutlined style={{ color: '#8c8c8c' }} />
+                    </div>
+                    <Input
+                        value={tab.title}
+                        onChange={(e) => onTitleChange(index, e.target.value)}
+                        placeholder="Tab title"
+                        style={{ flex: 1 }}
+                        size="small"
+                    />
+                    <Button
+                        type="text"
+                        size="small"
+                        icon={<DeleteOutlined />}
+                        onClick={() => onDelete(index)}
+                        disabled={isDeleteDisabled}
+                        danger
+                        title="Delete tab"
+                    />
+                </div>
+            </List.Item>
+        </div>
+    );
+};
 
 const TabsBlockSettings = ({
     open,
@@ -13,16 +88,31 @@ const TabsBlockSettings = ({
     inline = false
 }) => {
     const [form] = Form.useForm();
+    const [tabItems, setTabItems] = useState([]);
+
     const tabs = element.props?.tabs || [
         { id: 'tab1', title: 'Tab 1' },
         { id: 'tab2', title: 'Tab 2' }
     ];
 
+    // Initialize tab items state
+    useEffect(() => {
+        setTabItems(tabs);
+    }, [element.props?.tabs]);
+
+    // Sensors for drag and drop
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates,
+        })
+    );
+
     // Update form values when element props change
     useEffect(() => {
         const newValues = {
-            tabs: tabs,
-            activeTabId: element.props?.activeTabId || tabs[0]?.id || '',
+            tabs: tabItems,
+            activeTabId: element.props?.activeTabId || tabItems[0]?.id || '',
             backgroundColor: element.props?.backgroundColor || 'transparent',
             borderStyle: element.props?.borderStyle || 'solid',
             borderWidth: element.props?.borderWidth || 1,
@@ -33,11 +123,35 @@ const TabsBlockSettings = ({
             tabPosition: element.props?.tabPosition || 'top'
         };
         form.setFieldsValue(newValues);
-    }, [form, element.props]);
+    }, [form, element.props, tabItems]);
 
     const handleValuesChange = (changedValues, allValues) => {
         // Live update the element as user changes settings
         throttledUpdate(element.id, allValues);
+    };
+
+    // Handle drag end
+    const handleDragEnd = (event) => {
+        const { active, over } = event;
+
+        if (active.id !== over?.id) {
+            const oldIndex = tabItems.findIndex((item) => item.id === active.id);
+            const newIndex = tabItems.findIndex((item) => item.id === over.id);
+
+            const newTabItems = arrayMove(tabItems, oldIndex, newIndex);
+            setTabItems(newTabItems);
+
+            // Also reorder the corresponding tabIds to preserve content
+            const currentTabIds = element.props?.tabIds || [];
+            const newTabIds = arrayMove(currentTabIds, oldIndex, newIndex);
+
+            form.setFieldsValue({ tabs: newTabItems });
+            const allValues = form.getFieldsValue();
+            allValues.tabs = newTabItems;
+
+            // Include tabIds in the update to preserve container content
+            handleValuesChange({ tabs: newTabItems, tabIds: newTabIds }, allValues);
+        }
     };
 
     // Add new tab
@@ -46,11 +160,14 @@ const TabsBlockSettings = ({
         const currentTabs = form.getFieldValue('tabs') || tabs;
         const newTabs = [...currentTabs, { id: newTabId, title: `Tab ${currentTabs.length + 1}` }];
 
+        setTabItems(newTabs);
         form.setFieldsValue({ tabs: newTabs });
         const allValues = form.getFieldsValue();
         allValues.tabs = newTabs;
         handleValuesChange({ tabs: newTabs }, allValues);
-    };    // Delete tab
+    };
+
+    // Delete tab
     const handleDeleteTab = (index) => {
         const currentTabs = form.getFieldValue('tabs') || tabs;
         if (currentTabs.length <= 1) return; // Don't delete if it's the last tab
@@ -69,6 +186,7 @@ const TabsBlockSettings = ({
         const currentTabIds = element.props?.tabIds || [];
         const newTabIds = currentTabIds.filter((_, i) => i !== index);
 
+        setTabItems(newTabs);
         form.setFieldsValue({
             tabs: newTabs,
             activeTabId: newActiveTab
@@ -93,60 +211,11 @@ const TabsBlockSettings = ({
             i === index ? { ...tab, title: newTitle } : tab
         );
 
+        setTabItems(newTabs);
         form.setFieldsValue({ tabs: newTabs });
         const allValues = form.getFieldsValue();
         allValues.tabs = newTabs;
         handleValuesChange({ tabs: newTabs }, allValues);
-    };
-
-    // Move tab up
-    const handleMoveTabUp = (index) => {
-        if (index === 0) return; // Can't move first tab up
-
-        const currentTabs = form.getFieldValue('tabs') || tabs;
-        const newTabs = [...currentTabs];
-
-        // Swap with previous tab
-        [newTabs[index - 1], newTabs[index]] = [newTabs[index], newTabs[index - 1]];
-
-        // Also reorder the corresponding tabIds to preserve content
-        const currentTabIds = element.props?.tabIds || [];
-        const newTabIds = [...currentTabIds];
-        if (newTabIds.length > index) {
-            [newTabIds[index - 1], newTabIds[index]] = [newTabIds[index], newTabIds[index - 1]];
-        }
-
-        form.setFieldsValue({ tabs: newTabs });
-        const allValues = form.getFieldsValue();
-        allValues.tabs = newTabs;
-
-        // Include tabIds in the update to preserve container content
-        handleValuesChange({ tabs: newTabs, tabIds: newTabIds }, allValues);
-    };
-
-    // Move tab down
-    const handleMoveTabDown = (index) => {
-        const currentTabs = form.getFieldValue('tabs') || tabs;
-        if (index === currentTabs.length - 1) return; // Can't move last tab down
-
-        const newTabs = [...currentTabs];
-
-        // Swap with next tab
-        [newTabs[index], newTabs[index + 1]] = [newTabs[index + 1], newTabs[index]];
-
-        // Also reorder the corresponding tabIds to preserve content
-        const currentTabIds = element.props?.tabIds || [];
-        const newTabIds = [...currentTabIds];
-        if (newTabIds.length > index + 1) {
-            [newTabIds[index], newTabIds[index + 1]] = [newTabIds[index + 1], newTabIds[index]];
-        }
-
-        form.setFieldsValue({ tabs: newTabs });
-        const allValues = form.getFieldsValue();
-        allValues.tabs = newTabs;
-
-        // Include tabIds in the update to preserve container content
-        handleValuesChange({ tabs: newTabs, tabIds: newTabIds }, allValues);
     };
 
     return (
@@ -189,58 +258,29 @@ const TabsBlockSettings = ({
                     {() => {
                         const formTabs = form.getFieldValue('tabs') || tabs;
                         return (
-                            <List
-                                size="small"
-                                dataSource={formTabs}
-                                renderItem={(tab, index) => (
-                                    <List.Item
-                                        actions={[
-                                            <Button
-                                                type="text"
-                                                size="small"
-                                                icon={<UpOutlined />}
-                                                onClick={() => handleMoveTabUp(index)}
-                                                disabled={index === 0}
-                                                title="Move up"
-                                            />,
-                                            <Button
-                                                type="text"
-                                                size="small"
-                                                icon={<DownOutlined />}
-                                                onClick={() => handleMoveTabDown(index)}
-                                                disabled={index === formTabs.length - 1}
-                                                title="Move down"
-                                            />,
-                                            <Button
-                                                type="text"
-                                                size="small"
-                                                icon={<DeleteOutlined />}
-                                                onClick={() => handleDeleteTab(index)}
-                                                disabled={formTabs.length <= 1}
-                                                danger
-                                                title="Delete tab"
+                            <DndContext
+                                sensors={sensors}
+                                collisionDetection={closestCenter}
+                                onDragEnd={handleDragEnd}
+                            >
+                                <SortableContext
+                                    items={formTabs.map(tab => tab.id)}
+                                    strategy={verticalListSortingStrategy}
+                                >
+                                    <div style={{ minHeight: '100px' }}>
+                                        {formTabs.map((tab, index) => (
+                                            <SortableTabItem
+                                                key={tab.id}
+                                                tab={tab}
+                                                index={index}
+                                                onTitleChange={handleTabTitleChange}
+                                                onDelete={handleDeleteTab}
+                                                isDeleteDisabled={formTabs.length <= 1}
                                             />
-                                        ]}
-                                        style={{
-                                            padding: '8px 12px',
-                                            border: '1px solid #f0f0f0',
-                                            borderRadius: '4px',
-                                            marginBottom: '4px'
-                                        }}
-                                    >
-                                        <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                            <EditOutlined style={{ color: '#8c8c8c' }} />
-                                            <Input
-                                                value={tab.title}
-                                                onChange={(e) => handleTabTitleChange(index, e.target.value)}
-                                                placeholder="Tab title"
-                                                style={{ flex: 1 }}
-                                                size="small"
-                                            />
-                                        </div>
-                                    </List.Item>
-                                )}
-                            />
+                                        ))}
+                                    </div>
+                                </SortableContext>
+                            </DndContext>
                         );
                     }}
                 </Form.Item>
@@ -287,7 +327,6 @@ const TabsBlockSettings = ({
                 >
                     <Select style={{ width: '100%' }}>
                         <Option value="top">Top</Option>
-                        <Option value="bottom">Bottom</Option>
                         <Option value="left">Left</Option>
                         <Option value="right">Right</Option>
                     </Select>
