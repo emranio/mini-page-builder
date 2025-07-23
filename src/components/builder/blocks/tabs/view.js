@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Tabs, Button, Dropdown, Menu } from 'antd';
-import { PlusOutlined, MoreOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Tabs } from 'antd';
 import { useBuilder } from '../../../../contexts/BuilderContext';
 import { DropZone } from '../commons';
 import { withBaseElement } from '../base';
@@ -25,8 +24,6 @@ const TabsBlockView = ({
 }) => {
     const { updateBlock, createBlock, getBlockById, isDragging, setSelectedBlockId, deleteBlock } = useBuilder();
     const [currentActiveTab, setCurrentActiveTab] = useState(activeTabId);
-    const [editingTabId, setEditingTabId] = useState(null);
-    const [editingTitle, setEditingTitle] = useState('');
 
     const handleClick = (e) => {
         e.stopPropagation();
@@ -74,133 +71,13 @@ const TabsBlockView = ({
         throttledUpdate(id, { activeTabId: activeKey });
     };
 
-    // Add new tab
-    const handleAddTab = () => {
-        const newTabId = `tab${Date.now()}`;
-        const newTabs = [...tabs, { id: newTabId, title: `Tab ${tabs.length + 1}` }];
-
-        throttledUpdate(id, {
-            tabs: newTabs,
-            activeTabId: newTabId
-        });
-        setCurrentActiveTab(newTabId);
-    };
-
-    // Delete tab
-    const handleDeleteTab = (tabId, e) => {
-        e.stopPropagation();
-        if (tabs.length <= 1) return; // Don't delete if it's the last tab
-
-        const newTabs = tabs.filter(tab => tab.id !== tabId);
-        let newActiveTabId = currentActiveTab;
-
-        // If we're deleting the active tab, switch to the first remaining tab
-        if (tabId === currentActiveTab) {
-            newActiveTabId = newTabs[0]?.id || '';
-        }
-
-        throttledUpdate(id, {
-            tabs: newTabs,
-            activeTabId: newActiveTabId
-        });
-        setCurrentActiveTab(newActiveTabId);
-    };
-
-    // Start editing tab title
-    const handleEditTab = (tabId, currentTitle, e) => {
-        e.stopPropagation();
-        setEditingTabId(tabId);
-        setEditingTitle(currentTitle);
-    };
-
-    // Save tab title
-    const handleSaveTabTitle = (tabId) => {
-        const newTabs = tabs.map(tab =>
-            tab.id === tabId ? { ...tab, title: editingTitle } : tab
-        );
-
-        throttledUpdate(id, { tabs: newTabs });
-        setEditingTabId(null);
-        setEditingTitle('');
-    };
-
-    // Cancel editing
-    const handleCancelEdit = () => {
-        setEditingTabId(null);
-        setEditingTitle('');
-    };
-
-    // Handle key press in edit mode
-    const handleKeyPress = (e, tabId) => {
-        if (e.key === 'Enter') {
-            handleSaveTabTitle(tabId);
-        } else if (e.key === 'Escape') {
-            handleCancelEdit();
-        }
-    };
-
-    // Create dropdown menu for tab options
-    const getTabMenu = (tab) => (
-        <Menu>
-            <Menu.Item key="edit" icon={<EditOutlined />} onClick={(e) => handleEditTab(tab.id, tab.title, e)}>
-                Edit Title
-            </Menu.Item>
-            <Menu.Item
-                key="delete"
-                icon={<DeleteOutlined />}
-                onClick={(e) => handleDeleteTab(tab.id, e)}
-                disabled={tabs.length <= 1}
-                danger
-            >
-                Delete Tab
-            </Menu.Item>
-        </Menu>
-    );
-
     // Generate tab items
     const tabItems = tabs.map((tab, index) => {
         const tabContainerId = tabIds[index];
 
         return {
             key: tab.id,
-            label: (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    {editingTabId === tab.id ? (
-                        <input
-                            type="text"
-                            value={editingTitle}
-                            onChange={(e) => setEditingTitle(e.target.value)}
-                            onBlur={() => handleSaveTabTitle(tab.id)}
-                            onKeyDown={(e) => handleKeyPress(e, tab.id)}
-                            autoFocus
-                            style={{
-                                border: '1px solid #d9d9d9',
-                                borderRadius: '4px',
-                                padding: '2px 6px',
-                                fontSize: '14px',
-                                width: '100px'
-                            }}
-                        />
-                    ) : (
-                        <span>{tab.title}</span>
-                    )}
-                    {!editingTabId && (
-                        <Dropdown
-                            overlay={getTabMenu(tab)}
-                            trigger={['click']}
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <Button
-                                type="text"
-                                size="small"
-                                icon={<MoreOutlined />}
-                                style={{ padding: '0 4px', height: '20px', lineHeight: '20px' }}
-                                onClick={(e) => e.stopPropagation()}
-                            />
-                        </Dropdown>
-                    )}
-                </div>
-            ),
+            label: tab.title,
             children: (
                 <div
                     className={`tab-content ${isDragging ? 'during-drag' : ''}`}
@@ -242,17 +119,6 @@ const TabsBlockView = ({
                 type={tabStyle === 'card' ? 'card' : 'line'}
                 tabPosition={tabPosition}
                 items={tabItems}
-                tabBarExtraContent={
-                    <Button
-                        type="dashed"
-                        size="small"
-                        icon={<PlusOutlined />}
-                        onClick={handleAddTab}
-                        style={{ marginLeft: '8px' }}
-                    >
-                        Add Tab
-                    </Button>
-                }
             />
         </div>
     );

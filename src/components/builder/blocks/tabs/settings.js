@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Form, Input, Select, InputNumber, Space, Button, List, Card } from 'antd';
-import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { PlusOutlined, DeleteOutlined, EditOutlined, UpOutlined, DownOutlined } from '@ant-design/icons';
 import { BaseSettings } from '../base';
 
 const { Option } = Select;
@@ -67,6 +67,8 @@ const TabsBlockSettings = ({
             newActiveTab = newTabs[0]?.id || '';
         }
 
+        // Also update tabIds array to remove the corresponding container ID
+        // The container deletion will be handled by the view's useEffect
         form.setFieldsValue({
             tabs: newTabs,
             activeTabId: newActiveTab
@@ -75,6 +77,9 @@ const TabsBlockSettings = ({
         const allValues = form.getFieldsValue();
         allValues.tabs = newTabs;
         allValues.activeTabId = newActiveTab;
+
+        // Force the tabIds to be recalculated by the view
+        // by not including it in the update, the view will detect the mismatch and fix it
         handleValuesChange({ tabs: newTabs, activeTabId: newActiveTab }, allValues);
     };
 
@@ -89,6 +94,56 @@ const TabsBlockSettings = ({
         const allValues = form.getFieldsValue();
         allValues.tabs = newTabs;
         handleValuesChange({ tabs: newTabs }, allValues);
+    };
+
+    // Move tab up
+    const handleMoveTabUp = (index) => {
+        if (index === 0) return; // Can't move first tab up
+
+        const currentTabs = form.getFieldValue('tabs') || tabs;
+        const newTabs = [...currentTabs];
+
+        // Swap with previous tab
+        [newTabs[index - 1], newTabs[index]] = [newTabs[index], newTabs[index - 1]];
+
+        // Also reorder the corresponding tabIds to preserve content
+        const currentTabIds = element.props?.tabIds || [];
+        const newTabIds = [...currentTabIds];
+        if (newTabIds.length > index) {
+            [newTabIds[index - 1], newTabIds[index]] = [newTabIds[index], newTabIds[index - 1]];
+        }
+
+        form.setFieldsValue({ tabs: newTabs });
+        const allValues = form.getFieldsValue();
+        allValues.tabs = newTabs;
+
+        // Include tabIds in the update to preserve container content
+        handleValuesChange({ tabs: newTabs, tabIds: newTabIds }, allValues);
+    };
+
+    // Move tab down
+    const handleMoveTabDown = (index) => {
+        const currentTabs = form.getFieldValue('tabs') || tabs;
+        if (index === currentTabs.length - 1) return; // Can't move last tab down
+
+        const newTabs = [...currentTabs];
+
+        // Swap with next tab
+        [newTabs[index], newTabs[index + 1]] = [newTabs[index + 1], newTabs[index]];
+
+        // Also reorder the corresponding tabIds to preserve content
+        const currentTabIds = element.props?.tabIds || [];
+        const newTabIds = [...currentTabIds];
+        if (newTabIds.length > index + 1) {
+            [newTabIds[index], newTabIds[index + 1]] = [newTabIds[index + 1], newTabIds[index]];
+        }
+
+        form.setFieldsValue({ tabs: newTabs });
+        const allValues = form.getFieldsValue();
+        allValues.tabs = newTabs;
+
+        // Include tabIds in the update to preserve container content
+        handleValuesChange({ tabs: newTabs, tabIds: newTabIds }, allValues);
     };
 
     return (
@@ -140,10 +195,27 @@ const TabsBlockSettings = ({
                                             <Button
                                                 type="text"
                                                 size="small"
+                                                icon={<UpOutlined />}
+                                                onClick={() => handleMoveTabUp(index)}
+                                                disabled={index === 0}
+                                                title="Move up"
+                                            />,
+                                            <Button
+                                                type="text"
+                                                size="small"
+                                                icon={<DownOutlined />}
+                                                onClick={() => handleMoveTabDown(index)}
+                                                disabled={index === formTabs.length - 1}
+                                                title="Move down"
+                                            />,
+                                            <Button
+                                                type="text"
+                                                size="small"
                                                 icon={<DeleteOutlined />}
                                                 onClick={() => handleDeleteTab(index)}
                                                 disabled={formTabs.length <= 1}
                                                 danger
+                                                title="Delete tab"
                                             />
                                         ]}
                                         style={{
