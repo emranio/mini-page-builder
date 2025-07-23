@@ -1,20 +1,20 @@
 import React, { useRef, useEffect } from 'react';
 import { Layout, Card, Typography, Row, Col, Button } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
-import { ElementItem } from '../elements/commons';
+import { BlockItem } from '../blocks/commons';
 import { ResizeHandle } from './partials';
 import { ItemTypes } from '../../../utils/DragTypes';
 import { useBuilder } from '../../../contexts/BuilderContext';
-import TextElement from '../elements/text';
-import ImageElement from '../elements/image';
-import FlexboxElement from '../elements/flexbox';
-import ColumnElement from '../elements/column';
+import TextBlock from '../blocks/text';
+import ImageBlock from '../blocks/image';
+import FlexboxBlock from '../blocks/flexbox';
+import ColumnBlock from '../blocks/column';
 
 const { Sider } = Layout;
 const { Title } = Typography;
 
 const LeftPanel = ({ width = 300, collapsed = false, onWidthChange, onToggleCollapse }) => {
-    const { selectedElementId, setSelectedElementId, getElementById, updateElement } = useBuilder();
+    const { selectedBlockId, setSelectedBlockId, getBlockById, updateBlock } = useBuilder();
     const lastWidthRef = useRef(width);
 
     // Store the last non-collapsed width
@@ -29,49 +29,49 @@ const LeftPanel = ({ width = 300, collapsed = false, onWidthChange, onToggleColl
         onWidthChange(newWidth);
     };
 
-    const elements = [
+    const blocks = [
         {
             type: ItemTypes.TEXT,
-            icon: TextElement.icon,
-            label: TextElement.name
+            icon: TextBlock.icon,
+            label: TextBlock.name
         },
         {
             type: ItemTypes.IMAGE,
-            icon: ImageElement.icon,
-            label: ImageElement.name
+            icon: ImageBlock.icon,
+            label: ImageBlock.name
         },
         {
             type: ItemTypes.FLEXBOX,
-            icon: FlexboxElement.icon,
-            label: FlexboxElement.name
+            icon: FlexboxBlock.icon,
+            label: FlexboxBlock.name
         },
         {
             type: ItemTypes.COLUMN,
-            icon: ColumnElement.icon,
-            label: ColumnElement.name
+            icon: ColumnBlock.icon,
+            label: ColumnBlock.name
         },
     ];
 
-    // Element registry for getting settings components
-    const elementRegistry = {
-        text: TextElement,
-        image: ImageElement,
-        flexbox: FlexboxElement,
-        column: ColumnElement
+    // Block registry for getting settings components
+    const blockRegistry = {
+        text: TextBlock,
+        image: ImageBlock,
+        flexbox: FlexboxBlock,
+        column: ColumnBlock
     };
 
-    const selectedElement = selectedElementId ? getElementById(selectedElementId) : null;
-    const selectedElementConfig = selectedElement ? elementRegistry[selectedElement.type] : null;
-    const SettingsComponent = selectedElementConfig?.settings;
+    const selectedBlock = selectedBlockId ? getBlockById(selectedBlockId) : null;
+    const selectedBlockConfig = selectedBlock ? blockRegistry[selectedBlock.type] : null;
+    const SettingsComponent = selectedBlockConfig?.settings;
 
     // Direct update for settings without throttling to ensure changes appear instantly
-    const throttledUpdate = (elementId, newProps) => {
-        console.log("Updating element from settings panel:", elementId, newProps);
-        updateElement(elementId, newProps);
+    const throttledUpdate = (blockId, newProps) => {
+        console.log("Updating block from settings panel:", blockId, newProps);
+        updateBlock(blockId, newProps);
     };
 
-    const showElementList = () => {
-        setSelectedElementId(null);
+    const showBlockList = () => {
+        setSelectedBlockId(null);
     };
 
     return (
@@ -81,37 +81,37 @@ const LeftPanel = ({ width = 300, collapsed = false, onWidthChange, onToggleColl
             style={{ position: 'relative' }}
         >
             <div className="panel-content">
-                {!collapsed && (selectedElement && SettingsComponent ? (
+                {!collapsed && (selectedBlock && SettingsComponent ? (
                     // Show settings panel
                     <>
                         <div style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }}>
                             <Button
                                 icon={<ArrowLeftOutlined />}
-                                onClick={showElementList}
+                                onClick={showBlockList}
                                 size="small"
                                 style={{ marginRight: 8 }}
                             >
-                                Elements
+                                Blocks
                             </Button>
                             <Title level={4} style={{ margin: 0 }}>
-                                {selectedElementConfig.name} Settings
+                                {selectedBlockConfig.name} Settings
                             </Title>
                         </div>
                         <SettingsComponent
-                            element={selectedElement}
+                            element={selectedBlock}
                             throttledUpdate={throttledUpdate}
                             inline={true}
                         />
                     </>
                 ) : (
-                    // Show elements list
+                    // Show blocks list
                     <>
-                        <Title level={3}>Elements</Title>
-                        <Card title="Drag & Drop Components" className="elements-card">
+                        <Title level={3}>Blocks</Title>
+                        <Card title="Drag & Drop Components" className="blocks-card">
                             <Row gutter={[16, 16]}>
-                                {elements.map((element, index) => (
+                                {blocks.map((block, index) => (
                                     <Col span={12} key={index}>
-                                        <ElementItem type={element.type} icon={element.icon} label={element.label} />
+                                        <BlockItem type={block.type} icon={block.icon} label={block.label} />
                                     </Col>
                                 ))}
                             </Row>

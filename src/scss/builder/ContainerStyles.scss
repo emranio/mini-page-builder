@@ -16,7 +16,7 @@
         }
 
         /* When parent is hovered during drag, make the drop zone more visible */
-        .draggable-element:hover &.during-drag {
+        .draggable-block:hover &.during-drag {
             border: 1px dashed rgba(24, 144, 255, 0.6);
             background-color: rgba(24, 144, 255, 0.05);
         }
@@ -49,7 +49,7 @@
 }
 
 /* Ensure elements inside containers have consistent spacing */
-.flexbox-content>.drop-zone>.draggable-element {
+.flexbox-content>.drop-zone>.draggable-block {
     margin-bottom: 10px;
 
     /* Remove margin from the last child */

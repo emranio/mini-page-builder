@@ -16,15 +16,15 @@ class BaseElement extends React.Component {
      * Throttled update function to prevent excessive API calls
      * @param {string} elementId - The element ID to update
      * @param {object} props - The props to update
-     * @param {function} updateElement - The update function from context
+     * @param {function} updateBlock - The update function from context
      */
-    throttledUpdate = (elementId, props, updateElement) => {
+    throttledUpdate = (elementId, props, updateBlock) => {
         if (this.throttleTimeout) {
             clearTimeout(this.throttleTimeout);
         }
 
         this.throttleTimeout = setTimeout(() => {
-            updateElement(elementId, props);
+            updateBlock(elementId, props);
         }, this.throttleDelay);
     };
 
@@ -40,7 +40,7 @@ class BaseElement extends React.Component {
  */
 export const withBaseElement = (WrappedComponent) => {
     return React.forwardRef((props, ref) => {
-        const { updateElement } = useBuilder();
+        const { updateBlock } = useBuilder();
         const [throttleTimeout, setThrottleTimeout] = useState(null);
 
         const throttledUpdate = useCallback((elementId, newProps) => {
@@ -51,11 +51,11 @@ export const withBaseElement = (WrappedComponent) => {
             console.log("BaseElement throttledUpdate called for", elementId, newProps);
 
             // Immediate update for better responsiveness
-            updateElement(elementId, newProps);
+            updateBlock(elementId, newProps);
 
             // Clear any previous timeout
             setThrottleTimeout(null);
-        }, [updateElement, throttleTimeout]);
+        }, [updateBlock, throttleTimeout]);
 
         // Cleanup on unmount
         React.useEffect(() => {

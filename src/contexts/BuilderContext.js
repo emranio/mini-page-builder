@@ -1,28 +1,28 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import TextElement from '../components/builder/elements/text';
-import ImageElement from '../components/builder/elements/image';
-import FlexboxElement from '../components/builder/elements/flexbox';
-import ColumnElement from '../components/builder/elements/column';
+import TextBlock from '../components/builder/blocks/text';
+import ImageBlock from '../components/builder/blocks/image';
+import FlexboxBlock from '../components/builder/blocks/flexbox';
+import ColumnBlock from '../components/builder/blocks/column';
 
 const BuilderContext = createContext();
 
 export const useBuilder = () => useContext(BuilderContext);
 
-// Element registry for getting default props
-const elementRegistry = {
-    text: TextElement,
-    image: ImageElement,
-    flexbox: FlexboxElement,
-    column: ColumnElement
+// Block registry for getting default props
+const blockRegistry = {
+    text: TextBlock,
+    image: ImageBlock,
+    flexbox: FlexboxBlock,
+    column: ColumnBlock
 };
 
 export const BuilderProvider = ({ children }) => {
-    const [elements, setElements] = useState([]);
-    const [rootElementsOrder, setRootElementsOrder] = useState([]); // Track order of root elements
+    const [blocks, setBlocks] = useState([]);
+    const [rootBlocksOrder, setRootBlocksOrder] = useState([]); // Track order of root blocks
     const [isDragging, setIsDragging] = useState(false);
-    const [draggedElementId, setDraggedElementId] = useState(null);
-    const [selectedElementId, setSelectedElementId] = useState(null);
+    const [draggedBlockId, setDraggedBlockId] = useState(null);
+    const [selectedBlockId, setSelectedBlockId] = useState(null);
 
     // Add/remove body class when dragging state changes
     useEffect(() => {
@@ -32,18 +32,18 @@ export const BuilderProvider = ({ children }) => {
             document.body.classList.remove('dragging');
             // Small delay to ensure UI updates after drag ends
             setTimeout(() => {
-                setDraggedElementId(null);
+                setDraggedBlockId(null);
             }, 50);
         }
     }, [isDragging]);
 
-    // Create a new element
-    const createElement = useCallback((type, parentId = null, props = {}, index = null) => {
-        // Get default props from element registry
-        const elementConfig = elementRegistry[type];
-        const defaultProps = elementConfig?.defaultProps || {};
+    // Create a new block
+    const createBlock = useCallback((type, parentId = null, props = {}, index = null) => {
+        // Get default props from block registry
+        const blockConfig = blockRegistry[type];
+        const defaultProps = blockConfig?.defaultProps || {};
 
-        const newElement = {
+        const newBlock = {
             id: uuidv4(),
             type,
             parentId,
@@ -51,256 +51,258 @@ export const BuilderProvider = ({ children }) => {
             children: type === 'flexbox' ? [] : null
         };
 
-        setElements(prevElements => {
-            // Create a new array with the new element
-            const newElements = [...prevElements, newElement];
+        setBlocks(prevBlocks => {
+            // Create a new array with the new block
+            const newBlocks = [...prevBlocks, newBlock];
 
             // If it has a parent, update the parent's children array
             if (parentId) {
-                const parentIndex = newElements.findIndex(el => el.id === parentId);
+                const parentIndex = newBlocks.findIndex(bl => bl.id === parentId);
                 if (parentIndex !== -1) {
-                    const parentChildren = [...(newElements[parentIndex].children || [])];
+                    const parentChildren = [...(newBlocks[parentIndex].children || [])];
 
                     // Insert at specific index if provided, otherwise append to end
                     if (index !== null && index >= 0 && index <= parentChildren.length) {
-                        parentChildren.splice(index, 0, newElement.id);
+                        parentChildren.splice(index, 0, newBlock.id);
                     } else {
-                        parentChildren.push(newElement.id);
+                        parentChildren.push(newBlock.id);
                     }
 
                     // Create a new parent object with updated children array
-                    newElements[parentIndex] = {
-                        ...newElements[parentIndex],
+                    newBlocks[parentIndex] = {
+                        ...newBlocks[parentIndex],
                         children: parentChildren
                     };
                 }
             }
 
-            return newElements;
+            return newBlocks;
         });
 
-        // Handle root element ordering
+        // Handle root block ordering
         if (parentId === null) {
-            setRootElementsOrder(prevOrder => {
+            setRootBlocksOrder(prevOrder => {
                 const newOrder = [...prevOrder];
                 if (index !== null && index >= 0 && index <= newOrder.length) {
-                    newOrder.splice(index, 0, newElement.id);
+                    newOrder.splice(index, 0, newBlock.id);
                 } else {
-                    newOrder.push(newElement.id);
+                    newOrder.push(newBlock.id);
                 }
                 return newOrder;
             });
         }
 
-        return newElement.id;
+        return newBlock.id;
     }, []);
 
-    // Move an element to a new parent or position
-    const moveElement = useCallback((elementId, targetParentId, index) => {
-        setElements(prevElements => {
-            // Find the element to move and its current parent
-            const elementToMove = prevElements.find(el => el.id === elementId);
-            if (!elementToMove) {
-                return prevElements;
+    // Move a block to a new parent or position
+    const moveBlock = useCallback((blockId, targetParentId, index) => {
+        setBlocks(prevBlocks => {
+            // Find the block to move and its current parent
+            const blockToMove = prevBlocks.find(bl => bl.id === blockId);
+            if (!blockToMove) {
+                return prevBlocks;
             }
-            const oldParentId = elementToMove.parentId;
+            const oldParentId = blockToMove.parentId;
 
             // Remove from old parent's children (if not root level)
-            const updatedElements = prevElements.map(el => {
-                if (el.id === oldParentId) {
+            const updatedBlocks = prevBlocks.map(bl => {
+                if (bl.id === oldParentId) {
                     return {
-                        ...el,
-                        children: el.children.filter(childId => childId !== elementId)
+                        ...bl,
+                        children: bl.children.filter(childId => childId !== blockId)
                     };
                 }
-                return el;
+                return bl;
             });
 
-            // Update the element's parent reference
-            const updatedElementToMove = {
-                ...elementToMove,
+            // Update the block's parent reference
+            const updatedBlockToMove = {
+                ...blockToMove,
                 parentId: targetParentId
             };
 
             // Add to new parent's children at the specified index (if not root level)
-            const result = updatedElements
-                .map(el => {
-                    if (el.id === targetParentId) {
-                        const newChildren = [...(el.children || [])];
-                        newChildren.splice(index, 0, elementId);
+            const result = updatedBlocks
+                .map(bl => {
+                    if (bl.id === targetParentId) {
+                        const newChildren = [...(bl.children || [])];
+                        newChildren.splice(index, 0, blockId);
                         return {
-                            ...el,
+                            ...bl,
                             children: newChildren
                         };
                     }
-                    return el;
+                    return bl;
                 })
-                .map(el => el.id === elementId ? updatedElementToMove : el);
+                .map(bl => bl.id === blockId ? updatedBlockToMove : bl);
 
             return result;
         });
 
-        // Handle root element ordering changes
-        setRootElementsOrder(prevOrder => {
+        // Handle root block ordering changes
+        setRootBlocksOrder(prevOrder => {
             const newOrder = [...prevOrder];
 
             // Remove from old position
-            const oldIndex = newOrder.indexOf(elementId);
+            const oldIndex = newOrder.indexOf(blockId);
             if (oldIndex !== -1) {
                 newOrder.splice(oldIndex, 1);
             }
 
             // Add to new position if moving to root level
             if (targetParentId === null) {
-                newOrder.splice(index, 0, elementId);
+                newOrder.splice(index, 0, blockId);
             }
 
             return newOrder;
         });
     }, []);
 
-    // Update element properties
-    const updateElement = useCallback((elementId, newProps) => {
-        console.log(`Updating element ${elementId} with props:`, newProps);
+    // Update block properties
+    const updateBlock = useCallback((blockId, newProps) => {
+        console.log(`Updating block ${blockId} with props:`, newProps);
 
-        setElements(prevElements => {
-            const elementToUpdate = prevElements.find(el => el.id === elementId);
-            if (!elementToUpdate) {
-                console.warn(`Element ${elementId} not found, cannot update`);
-                return prevElements;
+        setBlocks(prevBlocks => {
+            const blockToUpdate = prevBlocks.find(bl => bl.id === blockId);
+            if (!blockToUpdate) {
+                console.warn(`Block ${blockId} not found, cannot update`);
+                return prevBlocks;
             }
 
-            console.log(`Before update - element props:`, elementToUpdate.props);
+            console.log(`Before update - block props:`, blockToUpdate.props);
 
-            const updatedElements = prevElements.map(element =>
-                element.id === elementId
-                    ? { ...element, props: { ...element.props, ...newProps } }
-                    : element
+            const updatedBlocks = prevBlocks.map(block =>
+                block.id === blockId
+                    ? { ...block, props: { ...block.props, ...newProps } }
+                    : block
             );
 
-            const updatedElement = updatedElements.find(el => el.id === elementId);
-            console.log(`After update - element props:`, updatedElement.props);
+            const updatedBlock = updatedBlocks.find(bl => bl.id === blockId);
+            console.log(`After update - block props:`, updatedBlock.props);
 
-            return updatedElements;
+            return updatedBlocks;
         });
     }, []);
 
-    // Delete an element and its children recursively
-    const deleteElement = useCallback((elementId) => {
-        setElements(prevElements => {
-            // Find element to delete and its parent
-            const elementToDelete = prevElements.find(el => el.id === elementId);
-            const parentId = elementToDelete.parentId;
+    // Delete a block and its children recursively
+    const deleteBlock = useCallback((blockId) => {
+        setBlocks(prevBlocks => {
+            // Find block to delete and its parent
+            const blockToDelete = prevBlocks.find(bl => bl.id === blockId);
+            const parentId = blockToDelete.parentId;
 
             // Get all IDs to delete (including children)
-            const idsToDelete = new Set([elementId]);
+            const idsToDelete = new Set([blockId]);
             const findAllChildren = (id) => {
-                const element = prevElements.find(el => el.id === id);
-                if (element && element.children) {
-                    element.children.forEach(childId => {
+                const block = prevBlocks.find(bl => bl.id === id);
+                if (block && block.children) {
+                    block.children.forEach(childId => {
                         idsToDelete.add(childId);
                         findAllChildren(childId);
                     });
                 }
             };
-            findAllChildren(elementId);
+            findAllChildren(blockId);
 
             // Update parent's children list
-            let updatedElements = prevElements.map(el => {
-                if (el.id === parentId) {
+            let updatedBlocks = prevBlocks.map(bl => {
+                if (bl.id === parentId) {
                     return {
-                        ...el,
-                        children: el.children.filter(childId => childId !== elementId)
+                        ...bl,
+                        children: bl.children.filter(childId => childId !== blockId)
                     };
                 }
-                return el;
+                return bl;
             });
 
-            // Filter out all deleted elements
-            return updatedElements.filter(el => !idsToDelete.has(el.id));
+            // Filter out all deleted blocks
+            return updatedBlocks.filter(bl => !idsToDelete.has(bl.id));
         });
 
-        // Remove from root elements order if it's a root element
-        setRootElementsOrder(prevOrder =>
-            prevOrder.filter(id => id !== elementId)
+        // Remove from root blocks order if it's a root block
+        setRootBlocksOrder(prevOrder =>
+            prevOrder.filter(id => id !== blockId)
         );
-    }, []);    // Resize containers - this function is kept for backward compatibility but does nothing now
-    const resizeContainer = useCallback((elementId, newWidthPercent) => {
+    }, []);
+
+    // Resize containers - this function is kept for backward compatibility but does nothing now
+    const resizeContainer = useCallback((blockId, newWidthPercent) => {
         // All containers are now 100% width, so this function does nothing
     }, []);
 
-    // Get all elements at the root level or children of a specific parent
-    const getElements = useCallback((parentId = null) => {
+    // Get all blocks at the root level or children of a specific parent
+    const getBlocks = useCallback((parentId = null) => {
         if (parentId === null) {
-            // For root level, return elements in the order defined by rootElementsOrder
-            return rootElementsOrder.map(elementId =>
-                elements.find(el => el.id === elementId)
+            // For root level, return blocks in the order defined by rootBlocksOrder
+            return rootBlocksOrder.map(blockId =>
+                blocks.find(bl => bl.id === blockId)
             ).filter(Boolean);
         }
 
         // For children, get them in the order specified by parent's children array
-        const parent = elements.find(el => el.id === parentId);
+        const parent = blocks.find(bl => bl.id === parentId);
         if (!parent || !parent.children) {
-            return elements.filter(element => element.parentId === parentId);
+            return blocks.filter(block => block.parentId === parentId);
         }
 
         // Return children in the correct order
         return parent.children.map(childId =>
-            elements.find(el => el.id === childId)
+            blocks.find(bl => bl.id === childId)
         ).filter(Boolean);
-    }, [elements, rootElementsOrder]);
+    }, [blocks, rootBlocksOrder]);
 
-    // Get a specific element by ID
-    const getElementById = useCallback((id) => {
-        return elements.find(element => element.id === id);
-    }, [elements]);
+    // Get a specific block by ID
+    const getBlockById = useCallback((id) => {
+        return blocks.find(block => block.id === id);
+    }, [blocks]);
 
-    // Get all children of an element
-    const getChildrenOfElement = useCallback((elementId) => {
-        const element = elements.find(el => el.id === elementId);
-        if (!element || !element.children || element.children.length === 0) {
+    // Get all children of a block
+    const getChildrenOfBlock = useCallback((blockId) => {
+        const block = blocks.find(bl => bl.id === blockId);
+        if (!block || !block.children || block.children.length === 0) {
             return [];
         }
 
-        return element.children.map(childId =>
-            elements.find(el => el.id === childId)
+        return block.children.map(childId =>
+            blocks.find(bl => bl.id === childId)
         ).filter(Boolean);
-    }, [elements]);
+    }, [blocks]);
 
     // Check if container has only container children
-    const hasOnlyContainerChildren = useCallback((elementId) => {
-        const children = getChildrenOfElement(elementId);
+    const hasOnlyContainerChildren = useCallback((blockId) => {
+        const children = getChildrenOfBlock(blockId);
         if (children.length === 0) return false;
         return children.every(child => child.type === 'flexbox');
-    }, [getChildrenOfElement]);
+    }, [getChildrenOfBlock]);
 
-    // Check if container has mixed children (elements and containers)
-    const hasMixedChildren = useCallback((elementId) => {
-        const children = getChildrenOfElement(elementId);
+    // Check if container has mixed children (blocks and containers)
+    const hasMixedChildren = useCallback((blockId) => {
+        const children = getChildrenOfBlock(blockId);
         if (children.length <= 1) return false;
         const hasContainers = children.some(child => child.type === 'flexbox');
-        const hasElements = children.some(child => child.type !== 'flexbox');
-        return hasContainers && hasElements;
-    }, [getChildrenOfElement]);
+        const hasBlocks = children.some(child => child.type !== 'flexbox');
+        return hasContainers && hasBlocks;
+    }, [getChildrenOfBlock]);
 
     const value = {
-        elements,
-        createElement,
-        moveElement,
-        updateElement,
-        deleteElement,
+        blocks,
+        createBlock,
+        moveBlock,
+        updateBlock,
+        deleteBlock,
         resizeContainer,
-        getElements,
-        getElementById,
-        getChildrenOfElement,
+        getBlocks,
+        getBlockById,
+        getChildrenOfBlock,
         hasOnlyContainerChildren,
         hasMixedChildren,
         isDragging,
         setIsDragging,
-        draggedElementId,
-        setDraggedElementId,
-        selectedElementId,
-        setSelectedElementId
+        draggedBlockId,
+        setDraggedBlockId,
+        selectedBlockId,
+        setSelectedBlockId
     };
 
     return (

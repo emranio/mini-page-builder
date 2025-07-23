@@ -1,13 +1,13 @@
 import { FontSizeOutlined } from '@ant-design/icons';
-import TextElementView from './view';
-import TextElementSettings from './settings';
+import TextBlockView from './view';
+import TextBlockSettings from './settings';
 
-const TextElement = {
+const TextBlock = {
     name: 'Text',
     category: 'content',
     icon: <FontSizeOutlined />,
-    view: TextElementView,
-    settings: TextElementSettings,
+    view: TextBlockView,
+    settings: TextBlockSettings,
     defaultProps: {
         content: 'Click to edit text',
         fontSize: 14,
@@ -17,4 +17,4 @@ const TextElement = {
     }
 };
 
-export default TextElement;
+export default TextBlock;

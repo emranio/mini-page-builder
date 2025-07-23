@@ -3,9 +3,9 @@ import { useBuilder } from '../../../../contexts/BuilderContext';
 import { DropZone } from '../commons';
 import { withBaseElement } from '../base';
 import ResizeBar from './ResizeBar';
-import ColumnElementSettings from './settings';
+import ColumnBlockSettings from './settings';
 
-const ColumnElementView = ({
+const ColumnBlockView = ({
     id,
     columns = 2,
     columnWidths = [],
@@ -17,14 +17,14 @@ const ColumnElementView = ({
     borderColor = '#d9d9d9',
     throttledUpdate
 }) => {
-    const { updateElement, createElement, getElementById, isDragging, setSelectedElementId } = useBuilder();
+    const { updateBlock, createBlock, getBlockById, isDragging, setSelectedBlockId } = useBuilder();
     const [isSettingsVisible, setIsSettingsVisible] = useState(false);
     const [currentWidths, setCurrentWidths] = useState([]);
     const isResizingRef = useRef(false);
 
     const handleClick = (e) => {
         e.stopPropagation();
-        setSelectedElementId(id);
+        setSelectedBlockId(id);
     };
 
     // Initialize current widths only when columns change
@@ -71,7 +71,7 @@ const ColumnElementView = ({
 
     // Initialize column sub-elements if they don't exist
     useEffect(() => {
-        const element = getElementById(id);
+        const element = getBlockById(id);
         const currentColumnIds = element?.props?.columnIds || [];
 
         // If we don't have columnIds or the number of columns changed, create/update them
@@ -81,7 +81,7 @@ const ColumnElementView = ({
             // If we need more columns, create them
             if (currentColumnIds.length < columns) {
                 for (let i = currentColumnIds.length; i < columns; i++) {
-                    const columnId = createElement('flexbox', id);
+                    const columnId = createBlock('flexbox', id);
                     newColumnIds.push(columnId);
                 }
             }
@@ -91,11 +91,11 @@ const ColumnElementView = ({
             }
 
             // Update the parent element with the column IDs
-            updateElement(id, {
+            updateBlock(id, {
                 columnIds: newColumnIds
             });
         }
-    }, [id, columns, createElement, updateElement, getElementById]);
+    }, [id, columns, createBlock, updateBlock, getBlockById]);
 
     // Handle resizing between columns
     const handleColumnResize = (index, deltaX) => {
@@ -159,7 +159,7 @@ const ColumnElementView = ({
         }, 100);
 
         // Only update if values actually changed
-        const element = getElementById(id);
+        const element = getBlockById(id);
         const currentColumnWidths = element?.props?.columnWidths || [];
 
         // Round the current widths to 2 decimal places
@@ -170,13 +170,13 @@ const ColumnElementView = ({
         );
 
         if (hasChanged) {
-            updateElement(id, { columnWidths: [...roundedWidths] });
+            updateBlock(id, { columnWidths: [...roundedWidths] });
         }
     };
 
     // Generate columns based on the current settings
     const renderColumns = () => {
-        const element = getElementById(id);
+        const element = getBlockById(id);
         const currentColumnIds = element?.props?.columnIds || [];
 
         return Array(columns).fill(0).map((_, index) => {
@@ -268,7 +268,7 @@ const ColumnElementView = ({
                 {renderColumns()}
             </div>
 
-            <ColumnElementSettings
+            <ColumnBlockSettings
                 open={isSettingsVisible}
                 onClose={() => setIsSettingsVisible(false)}
                 element={{
@@ -289,4 +289,4 @@ const ColumnElementView = ({
     );
 };
 
-export default withBaseElement(ColumnElementView);
+export default withBaseElement(ColumnBlockView);

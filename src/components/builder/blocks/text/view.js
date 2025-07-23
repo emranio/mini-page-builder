@@ -6,7 +6,7 @@ import { useBuilder } from '../../../../contexts/BuilderContext';
 const { Paragraph } = Typography;
 const { TextArea } = Input;
 
-const TextElementView = ({
+const TextBlockView = ({
     id,
     content = 'Click to edit text',
     fontSize = 14,
@@ -20,7 +20,7 @@ const TextElementView = ({
     // Don't use local state for content, instead use the prop directly
     // and only track content changes during editing
     const [editingContent, setEditingContent] = useState(null);
-    const { setSelectedElementId } = useBuilder();
+    const { setSelectedBlockId } = useBuilder();
 
     // Reset editing content when exiting edit mode or when content prop changes
     React.useEffect(() => {
@@ -51,7 +51,7 @@ const TextElementView = ({
 
     const handleClick = (e) => {
         e.stopPropagation();
-        setSelectedElementId(id);
+        setSelectedBlockId(id);
     };
 
     const handleBlur = () => {
@@ -81,7 +81,7 @@ const TextElementView = ({
     };
 
     // For debugging
-    console.log(`TextElementView render: id=${id}, content="${content}", isEditing=${isEditing}, editingContent="${editingContent}", source="view"`);
+    console.log(`TextBlockView render: id=${id}, content="${content}", isEditing=${isEditing}, editingContent="${editingContent}", source="view"`);
 
     return isEditing ? (
         <TextArea
@@ -91,12 +91,12 @@ const TextElementView = ({
             onChange={(e) => handleChange(e.target.value)}
             onBlur={handleBlur}
             onKeyDown={handleKeyDown}
-            className="text-element-editor"
+            className="text-block-editor"
             style={textStyle}
         />
     ) : (
         <Paragraph
-            className="text-element"
+            className="text-block"
             onClick={handleClick}
             onDoubleClick={handleDoubleClick}
             style={textStyle}
@@ -106,4 +106,4 @@ const TextElementView = ({
     );
 };
 
-export default withBaseElement(TextElementView);
+export default withBaseElement(TextBlockView);

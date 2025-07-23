@@ -6,7 +6,7 @@ import { Button } from 'antd';
 import { DeleteOutlined, DragOutlined } from '@ant-design/icons';
 
 const DraggableElement = ({ id, type, parentId, children }) => {
-    const { moveElement, deleteElement, getElements, setIsDragging, setDraggedElementId } = useBuilder();
+    const { moveBlock, deleteBlock, getBlocks, setIsDragging, setDraggedBlockId } = useBuilder();
     const ref = useRef(null);
 
     // Set up the element to be draggable
@@ -14,7 +14,7 @@ const DraggableElement = ({ id, type, parentId, children }) => {
         type: ItemTypes.CONTAINER_ITEM,
         item: () => {
             setIsDragging(true);
-            setDraggedElementId(id); // Track which element is being dragged
+            setDraggedBlockId(id); // Track which block is being dragged
             return { id, type, parentId };
         },
         collect: (monitor) => ({
@@ -22,7 +22,7 @@ const DraggableElement = ({ id, type, parentId, children }) => {
         }),
         end: () => {
             setIsDragging(false);
-            // setDraggedElementId will be cleared in the useEffect in BuilderContext
+            // setDraggedBlockId will be cleared in the useEffect in BuilderContext
         }
     }));
 
@@ -40,30 +40,30 @@ const DraggableElement = ({ id, type, parentId, children }) => {
 
     // Handle actions like delete
     const handleDelete = () => {
-        deleteElement(id);
+        deleteBlock(id);
     };
 
     return (
         <div
             ref={ref}
-            className={`draggable-element ${isDragging ? 'dragging' : ''} ${isOver ? 'drop-target' : ''}`}
+            className={`draggable-block ${isDragging ? 'dragging' : ''} ${isOver ? 'drop-target' : ''}`}
             style={{ opacity: isDragging ? 0.5 : 1 }}
         >
-            <div className="element-actions">
+            <div className="block-actions">
                 <Button
                     type="text"
                     icon={<DeleteOutlined />}
                     size="small"
-                    className="element-action-button"
+                    className="block-action-button"
                     onClick={handleDelete}
                     danger
                 />
             </div>
-            <div className="element-wrapper">
+            <div className="block-wrapper">
                 {/* When dragging, render a simplified placeholder instead of the full component */}
                 {isDragging ? (
-                    <div className="element-placeholder">
-                        {type.charAt(0).toUpperCase() + type.slice(1)} Element
+                    <div className="block-placeholder">
+                        {type.charAt(0).toUpperCase() + type.slice(1)} Block
                     </div>
                 ) : (
                     children

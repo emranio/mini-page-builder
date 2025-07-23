@@ -1,13 +1,13 @@
 import { ColumnWidthOutlined } from '@ant-design/icons';
-import ColumnElementView from './view';
-import ColumnElementSettings from './settings';
+import ColumnBlockView from './view';
+import ColumnBlockSettings from './settings';
 
-const ColumnElement = {
+const ColumnBlock = {
     name: 'Columns',
     category: 'layout',
     icon: <ColumnWidthOutlined />,
-    view: ColumnElementView,
-    settings: ColumnElementSettings,
+    view: ColumnBlockView,
+    settings: ColumnBlockSettings,
     defaultProps: {
         columns: 2,
         columnWidths: [50, 50],
@@ -21,4 +21,4 @@ const ColumnElement = {
 };
 
 export { default as ResizeBar } from './ResizeBar';
-export default ColumnElement;
+export default ColumnBlock;

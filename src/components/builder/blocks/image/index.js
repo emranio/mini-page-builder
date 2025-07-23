@@ -1,13 +1,13 @@
 import { PictureOutlined } from '@ant-design/icons';
-import ImageElementView from './view';
-import ImageElementSettings from './settings';
+import ImageBlockView from './view';
+import ImageBlockSettings from './settings';
 
-const ImageElement = {
+const ImageBlock = {
     name: 'Image',
     category: 'media',
     icon: <PictureOutlined />,
-    view: ImageElementView,
-    settings: ImageElementSettings,
+    view: ImageBlockView,
+    settings: ImageBlockSettings,
     defaultProps: {
         src: 'https://placehold.co/200x50?text=click+to+edit&font=roboto',
         alt: 'Image',
@@ -17,4 +17,4 @@ const ImageElement = {
     }
 };
 
-export default ImageElement;
+export default ImageBlock;

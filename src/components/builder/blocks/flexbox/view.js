@@ -5,7 +5,7 @@ import { Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { withBaseElement } from '../base';
 
-const FlexboxElementView = ({
+const FlexboxBlockView = ({
     id,
     padding = 10,
     margin = 5,
@@ -16,17 +16,17 @@ const FlexboxElementView = ({
     borderRadius = 0,
     throttledUpdate
 }) => {
-    const { createElement, isDragging, setSelectedElementId } = useBuilder();
+    const { createBlock, isDragging, setSelectedBlockId } = useBuilder();
     const containerRef = useRef(null);
 
     const handleClick = (e) => {
         e.stopPropagation();
-        setSelectedElementId(id);
+        setSelectedBlockId(id);
     };
 
     // Add a new flexbox container inside this container
     const handleAddFlexbox = () => {
-        createElement('flexbox', id);
+        createBlock('flexbox', id);
     };
 
     const containerStyle = {
@@ -68,4 +68,4 @@ const FlexboxElementView = ({
     );
 };
 
-export default withBaseElement(FlexboxElementView);
+export default withBaseElement(FlexboxBlockView);

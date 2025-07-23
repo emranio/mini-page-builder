@@ -5,7 +5,7 @@ import { BaseSettings } from '../base';
 const { TextArea } = Input;
 const { Option } = Select;
 
-const TextElementSettings = ({
+const TextBlockSettings = ({
     open,
     onClose,
     element,
@@ -142,4 +142,4 @@ const TextElementSettings = ({
     );
 };
 
-export default TextElementSettings;
+export default TextBlockSettings;

@@ -3,7 +3,7 @@ import { Image } from 'antd';
 import { withBaseElement } from '../base';
 import { useBuilder } from '../../../../contexts/BuilderContext';
 
-const ImageElementView = ({
+const ImageBlockView = ({
     id,
     src = 'https://placehold.co/200x50?text=click+to+edit&font=roboto',
     alt = 'Image',
@@ -12,11 +12,11 @@ const ImageElementView = ({
     borderRadius = 0,
     throttledUpdate
 }) => {
-    const { setSelectedElementId } = useBuilder();
+    const { setSelectedBlockId } = useBuilder();
 
     const handleClick = (e) => {
         e.stopPropagation();
-        setSelectedElementId(id);
+        setSelectedBlockId(id);
     };
 
     const imageStyle = {
@@ -26,7 +26,7 @@ const ImageElementView = ({
     };
 
     return (
-        <div className="image-element" onClick={handleClick}>
+        <div className="image-block" onClick={handleClick}>
             <div className="image-container">
                 <Image
                     src={src}
@@ -41,4 +41,4 @@ const ImageElementView = ({
     );
 };
 
-export default withBaseElement(ImageElementView);
+export default withBaseElement(ImageBlockView);

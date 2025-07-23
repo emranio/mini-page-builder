@@ -4,7 +4,7 @@ import { BaseSettings } from '../base';
 
 const { Option } = Select;
 
-const FlexboxElementSettings = ({
+const FlexboxBlockSettings = ({
     open,
     onClose,
     element,
@@ -175,4 +175,4 @@ const FlexboxElementSettings = ({
     );
 };
 
-export default FlexboxElementSettings;
+export default FlexboxBlockSettings;

@@ -4,7 +4,7 @@ import { BaseSettings } from '../base';
 
 const { Option } = Select;
 
-const ColumnElementSettings = ({
+const ColumnBlockSettings = ({
     open,
     onClose,
     element,
@@ -239,4 +239,4 @@ const ColumnElementSettings = ({
     );
 };
 
-export default ColumnElementSettings;
+export default ColumnBlockSettings;

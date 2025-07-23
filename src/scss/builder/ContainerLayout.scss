@@ -12,7 +12,7 @@
 }
 
 /* All children in drop zones take full width */
-.drop-zone>.draggable-element {
+.drop-zone>.draggable-block {
     width: 100% !important;
     display: block !important;
     margin-bottom: 10px !important;
@@ -29,8 +29,8 @@
 }
 
 /* Elements inside the container should be full width */
-.draggable-element>.element-wrapper>.text-element,
-.draggable-element>.element-wrapper>.image-element {
+.draggable-block>.block-wrapper>.text-element,
+.draggable-block>.block-wrapper>.image-element {
     width: 100%;
     box-sizing: border-box;
 }
@@ -43,7 +43,7 @@
 }
 
 /* Make sure the element wrapper takes full width */
-.draggable-element>.element-wrapper {
+.draggable-block>.block-wrapper {
     width: 100%;
     box-sizing: border-box;
 }
@@ -55,7 +55,7 @@
     flex-direction: column !important;
     width: 100% !important;
 
-    &>.draggable-element {
+    &>.draggable-block {
         width: 100% !important;
     }
 }

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Form, Input, InputNumber, Space, Image } from 'antd';
 import { BaseSettings } from '../base';
 
-const ImageElementSettings = ({
+const ImageBlockSettings = ({
     open,
     onClose,
     element,
@@ -132,4 +132,4 @@ const ImageElementSettings = ({
     );
 };
 
-export default ImageElementSettings;
+export default ImageBlockSettings;

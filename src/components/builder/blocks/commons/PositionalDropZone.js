@@ -4,7 +4,7 @@ import { useBuilder } from '../../../../contexts/BuilderContext';
 import { ItemTypes } from '../../../../utils/DragTypes';
 
 const PositionalDropZone = ({ parentId, index, position = 'between' }) => {
-    const { createElement, moveElement, getElements, isDragging } = useBuilder();
+    const { createBlock, moveBlock, getBlocks, isDragging } = useBuilder();
     const dropZoneRef = useRef(null);
 
     const [{ isOver }, drop] = useDrop(() => ({
@@ -15,27 +15,27 @@ const PositionalDropZone = ({ parentId, index, position = 'between' }) => {
                 return;
             }
 
-            // If it's a new element, create it at the specified index
+            // If it's a new block, create it at the specified index
             if (!item.id) {
-                console.log("Creating new element:", item.type, "in parent:", parentId, "at index:", index);
-                createElement(item.type, parentId, {}, index);
+                console.log("Creating new block:", item.type, "in parent:", parentId, "at index:", index);
+                createBlock(item.type, parentId, {}, index);
             }
-            // If it's an existing element being moved
+            // If it's an existing block being moved
             else if (item.id) {
-                console.log("Moving element:", item.id, "to parent:", parentId, "at index:", index);
+                console.log("Moving block:", item.id, "to parent:", parentId, "at index:", index);
 
                 // Prevent dropping into itself or same position
                 if (item.id && item.parentId === parentId) {
-                    const currentChildren = getElements(parentId);
-                    const currentIndex = currentChildren.findIndex(el => el.id === item.id);
+                    const currentChildren = getBlocks(parentId);
+                    const currentIndex = currentChildren.findIndex(bl => bl.id === item.id);
                     // Don't move if it's the same position or adjacent position (which would be the same result)
                     if (currentIndex === index || currentIndex === index - 1) {
                         // return;
                     }
                 }
 
-                // Move the element to the specified position
-                moveElement(item.id, parentId, index);
+                // Move the block to the specified position
+                moveBlock(item.id, parentId, index);
             }
         },
         collect: (monitor) => ({
