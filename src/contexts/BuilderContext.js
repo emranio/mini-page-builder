@@ -192,6 +192,13 @@ export const BuilderProvider = ({ children }) => {
         setBlocks(prevBlocks => {
             // Find block to delete and its parent
             const blockToDelete = prevBlocks.find(bl => bl.id === blockId);
+
+            // If block doesn't exist, return unchanged blocks
+            if (!blockToDelete) {
+                console.warn(`Block with id ${blockId} not found for deletion`);
+                return prevBlocks;
+            }
+
             const parentId = blockToDelete.parentId;
 
             // Get all IDs to delete (including children)

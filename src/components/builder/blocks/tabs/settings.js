@@ -50,9 +50,7 @@ const TabsBlockSettings = ({
         const allValues = form.getFieldsValue();
         allValues.tabs = newTabs;
         handleValuesChange({ tabs: newTabs }, allValues);
-    };
-
-    // Delete tab
+    };    // Delete tab
     const handleDeleteTab = (index) => {
         const currentTabs = form.getFieldValue('tabs') || tabs;
         if (currentTabs.length <= 1) return; // Don't delete if it's the last tab
@@ -67,8 +65,10 @@ const TabsBlockSettings = ({
             newActiveTab = newTabs[0]?.id || '';
         }
 
-        // Also update tabIds array to remove the corresponding container ID
-        // The container deletion will be handled by the view's useEffect
+        // Also handle the tabIds array - remove the container ID at the same index
+        const currentTabIds = element.props?.tabIds || [];
+        const newTabIds = currentTabIds.filter((_, i) => i !== index);
+
         form.setFieldsValue({
             tabs: newTabs,
             activeTabId: newActiveTab
@@ -78,9 +78,12 @@ const TabsBlockSettings = ({
         allValues.tabs = newTabs;
         allValues.activeTabId = newActiveTab;
 
-        // Force the tabIds to be recalculated by the view
-        // by not including it in the update, the view will detect the mismatch and fix it
-        handleValuesChange({ tabs: newTabs, activeTabId: newActiveTab }, allValues);
+        // Include the updated tabIds in the update to trigger proper cleanup
+        handleValuesChange({
+            tabs: newTabs,
+            activeTabId: newActiveTab,
+            tabIds: newTabIds
+        }, allValues);
     };
 
     // Update tab title

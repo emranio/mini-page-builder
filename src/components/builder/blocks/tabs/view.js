@@ -47,12 +47,21 @@ const TabsBlockView = ({
                     newTabIds.push(tabContainerId);
                 }
             }
-            // If we need fewer containers, truncate the array
+            // If we need fewer containers, clean up extra ones
             else if (currentTabIds.length > currentTabs.length) {
-                // Delete the extra tab containers
+                // Delete the extra tab containers safely
                 for (let i = currentTabs.length; i < currentTabIds.length; i++) {
-                    if (currentTabIds[i]) {
-                        deleteBlock(currentTabIds[i]);
+                    const containerIdToDelete = currentTabIds[i];
+                    if (containerIdToDelete) {
+                        // Check if the container still exists before trying to delete it
+                        const containerExists = getBlockById(containerIdToDelete);
+                        if (containerExists) {
+                            try {
+                                deleteBlock(containerIdToDelete);
+                            } catch (error) {
+                                console.warn('Failed to delete tab container:', containerIdToDelete, error);
+                            }
+                        }
                     }
                 }
                 newTabIds.splice(currentTabs.length);
@@ -63,7 +72,7 @@ const TabsBlockView = ({
                 tabIds: newTabIds
             });
         }
-    }, [id, tabs.length, createBlock, updateBlock, getBlockById, deleteBlock]);
+    }, [id, tabs.length, JSON.stringify(tabIds), createBlock, updateBlock, getBlockById, deleteBlock]);
 
     // Handle tab change
     const handleTabChange = (activeKey) => {
