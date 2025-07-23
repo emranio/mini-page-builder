@@ -127,7 +127,8 @@ const TabsBlockSettings = ({
 
     const handleValuesChange = (changedValues, allValues) => {
         // Live update the element as user changes settings
-        throttledUpdate(element.id, allValues);
+        // console.log(allValues, changedValues);
+        throttledUpdate(element.id, changedValues);
     };
 
     // Handle drag end
