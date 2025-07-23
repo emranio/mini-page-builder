@@ -471,3 +471,31 @@
         }
     }
 }
+
+/* Sortable Tabs Styles */
+.sortable-tab-item {
+    transition: all 0.2s ease;
+
+    &:hover {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transform: translateY(-1px);
+    }
+
+    .ant-list-item {
+        cursor: grab;
+
+        &:active {
+            cursor: grabbing;
+        }
+    }
+}
+
+/* Drag handle styles */
+.sortable-tab-item [role="button"] {
+    color: #8c8c8c;
+    transition: color 0.2s ease;
+
+    &:hover {
+        color: #1890ff;
+    }
+}
