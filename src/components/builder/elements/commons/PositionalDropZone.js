@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useDrop } from 'react-dnd';
-import { useBuilder } from '../../../contexts/BuilderContext';
-import { ItemTypes } from '../../../utils/DragTypes';
+import { useBuilder } from '../../../../contexts/BuilderContext';
+import { ItemTypes } from '../../../../utils/DragTypes';
 
 const PositionalDropZone = ({ parentId, index, position = 'between' }) => {
     const { createElement, moveElement, getElements, isDragging } = useBuilder();

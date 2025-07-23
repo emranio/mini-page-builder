@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import TextElement from '../components/elements/text';
-import ImageElement from '../components/elements/image';
-import FlexboxElement from '../components/elements/flexbox';
-import ColumnElement from '../components/elements/column';
+import TextElement from '../components/builder/elements/text';
+import ImageElement from '../components/builder/elements/image';
+import FlexboxElement from '../components/builder/elements/flexbox';
+import ColumnElement from '../components/builder/elements/column';
 
 const BuilderContext = createContext();
 

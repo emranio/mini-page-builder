@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image } from 'antd';
 import { withBaseElement } from '../base';
-import { useBuilder } from '../../../contexts/BuilderContext';
+import { useBuilder } from '../../../../contexts/BuilderContext';
 
 const ImageElementView = ({
     id,

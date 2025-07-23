@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Layout } from 'antd';
-import LeftPanel from './components/panels/LeftPanel';
-import RightPanel from './components/panels/RightPanel';
+import LeftPanel from './components/builder/panels/LeftPanel';
+import RightPanel from './components/builder/panels/RightPanel';
 import { BuilderProvider } from './contexts/BuilderContext';
 import './scss/builder/App.scss';
 

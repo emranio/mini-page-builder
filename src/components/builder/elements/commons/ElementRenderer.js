@@ -3,9 +3,9 @@ import TextElement from '../text';
 import ImageElement from '../image';
 import FlexboxElement from '../flexbox';
 import ColumnElement from '../column';
-import { ItemTypes } from '../../../utils/DragTypes';
+import { ItemTypes } from '../../../../utils/DragTypes';
 import DraggableElement from './DraggableElement';
-import { useBuilder } from '../../../contexts/BuilderContext';
+import { useBuilder } from '../../../../contexts/BuilderContext';
 
 const ElementRenderer = ({ element }) => {
     const { isDragging } = useBuilder();

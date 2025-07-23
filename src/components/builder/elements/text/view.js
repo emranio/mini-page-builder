@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Input, Typography } from 'antd';
 import { withBaseElement } from '../base';
-import { useBuilder } from '../../../contexts/BuilderContext';
+import { useBuilder } from '../../../../contexts/BuilderContext';
 
 const { Paragraph } = Typography;
 const { TextArea } = Input;

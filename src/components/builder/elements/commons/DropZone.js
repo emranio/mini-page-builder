@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useDrop } from 'react-dnd';
-import { useBuilder } from '../../../contexts/BuilderContext';
-import { ItemTypes } from '../../../utils/DragTypes';
+import { useBuilder } from '../../../../contexts/BuilderContext';
+import { ItemTypes } from '../../../../utils/DragTypes';
 import { ElementRenderer } from './index';
 import PositionalDropZone from './PositionalDropZone';
 

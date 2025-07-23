@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useBuilder } from '../../../contexts/BuilderContext';
+import { useBuilder } from '../../../../contexts/BuilderContext';
 import { DropZone } from '../commons';
 import { withBaseElement } from '../base';
 import ResizeBar from './ResizeBar';
