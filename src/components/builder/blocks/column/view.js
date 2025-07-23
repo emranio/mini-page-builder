@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useBuilder } from '../../../../contexts/BuilderContext';
-import { DropZone } from '../commons';
-import { withBaseBlock } from '../base';
+import { DropZone } from '../../commons';
+import { withBaseBlock } from '../../commons/base';
 import ResizeBar from './ResizeBar';
 import ColumnBlockSettings from './settings';
 

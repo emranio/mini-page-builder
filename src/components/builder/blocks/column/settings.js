@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { Form, Slider, InputNumber, Space, Select } from 'antd';
-import { BaseSettings } from '../base';
+import { BaseSettings } from '../../commons/base';
 
 const { Option } = Select;
 

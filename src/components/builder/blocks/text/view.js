@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Input, Typography } from 'antd';
-import { withBaseBlock } from '../base';
+import { withBaseBlock } from '../../commons/base';
 import { useBuilder } from '../../../../contexts/BuilderContext';
 
 const { Paragraph } = Typography;

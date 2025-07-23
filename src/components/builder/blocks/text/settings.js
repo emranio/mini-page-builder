@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Form, Input, InputNumber, Select, Space } from 'antd';
-import { BaseSettings } from '../base';
+import { BaseSettings } from '../../commons/base';
 
 const { TextArea } = Input;
 const { Option } = Select;

@@ -1,12 +1,12 @@
 import React from 'react';
-import TextBlock from '../text';
-import ImageBlock from '../image';
-import FlexboxBlock from '../flexbox';
-import ColumnBlock from '../column';
-import TabsBlock from '../tabs';
-import { ItemTypes } from '../../../../utils/DragTypes';
+import TextBlock from '../blocks/text';
+import ImageBlock from '../blocks/image';
+import FlexboxBlock from '../blocks/flexbox';
+import ColumnBlock from '../blocks/column';
+import TabsBlock from '../blocks/tabs';
+import { ItemTypes } from '../../../utils/DragTypes';
 import DraggableElement from './DraggableElement';
-import { useBuilder } from '../../../../contexts/BuilderContext';
+import { useBuilder } from '../../../contexts/BuilderContext';
 
 const BlockRenderer = ({ element }) => {
     const { isDragging } = useBuilder();
