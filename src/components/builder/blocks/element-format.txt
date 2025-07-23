@@ -1,6 +1,0 @@
-example format for Text element: 
-
-text
--- index.js >> here developers will set the element's name, category, icon (shown in the left panel).
--- view.js >> this will be rendered into the right panel.
--- settings.js >> here the settings fields will be added for the element.
