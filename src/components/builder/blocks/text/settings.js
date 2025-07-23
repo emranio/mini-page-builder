@@ -28,7 +28,6 @@ const TextBlockSettings = ({
 
     const handleValuesChange = (changedValues, allValues) => {
         // Live update the element as user changes settings
-        console.log("Settings form changed:", changedValues, "source=settings");
 
         // If we're editing content in the settings panel, use a separate update method
         // to avoid triggering UI changes in the canvas view

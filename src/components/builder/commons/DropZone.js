@@ -26,13 +26,11 @@ const DropZone = ({ parentId, layoutClass = 'vertical-layout' }) => {
 
             // If it's a new block, create it at the end (fallback for direct drops on container)
             if (!item.id) {
-                console.log("Creating new block:", item.type, "in parent:", parentId);
                 const targetChildren = getBlocks(parentId);
                 createBlock(item.type, parentId, {}, targetChildren.length);
             }
             // If it's an existing block being moved, move it to the end
             else if (item.id) {
-                console.log("Moving block:", item.id, "to parent:", parentId);
                 const targetChildren = getBlocks(parentId);
                 moveBlock(item.id, parentId, targetChildren.length);
             }

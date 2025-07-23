@@ -19,10 +19,6 @@ const BlockItem = ({ type, icon, label }) => {
         end: (item, monitor) => {
             setIsDragging(false);
             const didDrop = monitor.didDrop();
-            console.log("Drag ended. Did drop:", didDrop, "Item:", item);
-            if (!didDrop) {
-                console.log("Item was not dropped on a target");
-            }
         }
     }));
 

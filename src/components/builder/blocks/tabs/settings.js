@@ -127,7 +127,6 @@ const TabsBlockSettings = ({
 
     const handleValuesChange = (changedValues, allValues) => {
         // Live update the element as user changes settings
-        // console.log(allValues, changedValues);
         throttledUpdate(element.id, changedValues);
     };
 

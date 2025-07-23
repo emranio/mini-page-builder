@@ -17,12 +17,10 @@ const PositionalDropZone = ({ parentId, index, position = 'between' }) => {
 
             // If it's a new block, create it at the specified index
             if (!item.id) {
-                console.log("Creating new block:", item.type, "in parent:", parentId, "at index:", index);
                 createBlock(item.type, parentId, {}, index);
             }
             // If it's an existing block being moved
             else if (item.id) {
-                console.log("Moving block:", item.id, "to parent:", parentId, "at index:", index);
 
                 // Prevent dropping into itself or same position
                 if (item.id && item.parentId === parentId) {

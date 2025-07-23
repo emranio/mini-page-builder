@@ -163,25 +163,17 @@ export const BuilderProvider = ({ children }) => {
 
     // Update block properties
     const updateBlock = useCallback((blockId, newProps) => {
-        console.log(`Updating block ${blockId} with props:`, newProps);
-
         setBlocks(prevBlocks => {
             const blockToUpdate = prevBlocks.find(bl => bl.id === blockId);
             if (!blockToUpdate) {
-                console.warn(`Block ${blockId} not found, cannot update`);
                 return prevBlocks;
             }
-
-            console.log(`Before update - block props:`, blockToUpdate.props);
 
             const updatedBlocks = prevBlocks.map(block =>
                 block.id === blockId
                     ? { ...block, props: { ...block.props, ...newProps } }
                     : block
             );
-
-            const updatedBlock = updatedBlocks.find(bl => bl.id === blockId);
-            console.log(`After update - block props:`, updatedBlock.props);
 
             return updatedBlocks;
         });
@@ -195,7 +187,6 @@ export const BuilderProvider = ({ children }) => {
 
             // If block doesn't exist, return unchanged blocks
             if (!blockToDelete) {
-                console.warn(`Block with id ${blockId} not found for deletion`);
                 return prevBlocks;
             }
 

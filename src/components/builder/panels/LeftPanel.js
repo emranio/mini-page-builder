@@ -73,7 +73,6 @@ const LeftPanel = ({ width = 300, collapsed = false, onWidthChange, onToggleColl
 
     // Direct update for settings without throttling to ensure changes appear instantly
     const throttledUpdate = (blockId, newProps) => {
-        console.log("Updating block from settings panel:", blockId, newProps);
         updateBlock(blockId, newProps);
     };
 

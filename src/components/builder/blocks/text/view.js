@@ -80,9 +80,6 @@ const TextBlockView = ({
         margin: 0
     };
 
-    // For debugging
-    console.log(`TextBlockView render: id=${id}, content="${content}", isEditing=${isEditing}, editingContent="${editingContent}", source="view"`);
-
     return isEditing ? (
         <TextArea
             autoSize

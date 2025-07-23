@@ -48,8 +48,6 @@ export const withBaseBlock = (WrappedComponent) => {
                 clearTimeout(throttleTimeout);
             }
 
-            console.log("BaseBlock throttledUpdate called for", elementId, newProps);
-
             const newTimeout = setTimeout(() => {
                 updateBlock(elementId, newProps);
             }, 300); // 300ms throttle

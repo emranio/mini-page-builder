@@ -18,11 +18,6 @@ const BlockRenderer = ({ element }) => {
 
     // Wrap the block content in a draggable wrapper
     const renderBlockContent = () => {
-        // Only log when not dragging to avoid performance issues
-        if (!isDragging) {
-            console.log(`Rendering block ${element.id} with props:`, element.props);
-        }
-
         switch (element.type) {
             case ItemTypes.TEXT:
                 const TextComponent = TextBlock.view;
