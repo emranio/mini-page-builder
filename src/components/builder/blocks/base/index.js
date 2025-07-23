@@ -1,2 +1,2 @@
-export { default as BaseElement, withBaseElement } from './BaseElement';
+export { default as BaseBlock, withBaseBlock } from './BaseBlock';
 export { default as BaseSettings } from './BaseSettings';

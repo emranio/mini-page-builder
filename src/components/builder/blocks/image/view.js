@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image } from 'antd';
-import { withBaseElement } from '../base';
+import { withBaseBlock } from '../base';
 import { useBuilder } from '../../../../contexts/BuilderContext';
 
 const ImageBlockView = ({
@@ -41,4 +41,4 @@ const ImageBlockView = ({
     );
 };
 
-export default withBaseElement(ImageBlockView);
+export default withBaseBlock(ImageBlockView);

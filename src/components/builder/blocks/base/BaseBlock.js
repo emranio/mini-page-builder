@@ -2,10 +2,10 @@ import React, { useState, useCallback } from 'react';
 import { useBuilder } from '../../../../contexts/BuilderContext';
 
 /**
- * Abstract base class for all elements
+ * Abstract base class for all blocks
  * Provides common functionality like live updates with throttling
  */
-class BaseElement extends React.Component {
+class BaseBlock extends React.Component {
     constructor(props) {
         super(props);
         this.throttleTimeout = null;
@@ -36,9 +36,9 @@ class BaseElement extends React.Component {
 }
 
 /**
- * HOC for wrapping functional components with base element functionality
+ * HOC for wrapping functional components with base block functionality
  */
-export const withBaseElement = (WrappedComponent) => {
+export const withBaseBlock = (WrappedComponent) => {
     return React.forwardRef((props, ref) => {
         const { updateBlock } = useBuilder();
         const [throttleTimeout, setThrottleTimeout] = useState(null);
@@ -48,7 +48,7 @@ export const withBaseElement = (WrappedComponent) => {
                 clearTimeout(throttleTimeout);
             }
 
-            console.log("BaseElement throttledUpdate called for", elementId, newProps);
+            console.log("BaseBlock throttledUpdate called for", elementId, newProps);
 
             const newTimeout = setTimeout(() => {
                 updateBlock(elementId, newProps);
@@ -76,4 +76,4 @@ export const withBaseElement = (WrappedComponent) => {
     });
 };
 
-export default BaseElement;
+export default BaseBlock;

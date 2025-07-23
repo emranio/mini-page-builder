@@ -3,7 +3,7 @@ import { useBuilder } from '../../../../contexts/BuilderContext';
 import { DropZone } from '../commons';
 import { Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { withBaseElement } from '../base';
+import { withBaseBlock } from '../base';
 
 const FlexboxBlockView = ({
     id,
@@ -68,4 +68,4 @@ const FlexboxBlockView = ({
     );
 };
 
-export default withBaseElement(FlexboxBlockView);
+export default withBaseBlock(FlexboxBlockView);

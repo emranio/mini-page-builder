@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Tabs } from 'antd';
 import { useBuilder } from '../../../../contexts/BuilderContext';
 import { DropZone } from '../commons';
-import { withBaseElement } from '../base';
+import { withBaseBlock } from '../base';
 
 const TabsBlockView = ({
     id,
@@ -133,4 +133,4 @@ const TabsBlockView = ({
     );
 };
 
-export default withBaseElement(TabsBlockView);
+export default withBaseBlock(TabsBlockView);

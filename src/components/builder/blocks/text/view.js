@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Input, Typography } from 'antd';
-import { withBaseElement } from '../base';
+import { withBaseBlock } from '../base';
 import { useBuilder } from '../../../../contexts/BuilderContext';
 
 const { Paragraph } = Typography;
@@ -106,4 +106,4 @@ const TextBlockView = ({
     );
 };
 
-export default withBaseElement(TextBlockView);
+export default withBaseBlock(TextBlockView);

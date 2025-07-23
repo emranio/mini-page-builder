@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useBuilder } from '../../../../contexts/BuilderContext';
 import { DropZone } from '../commons';
-import { withBaseElement } from '../base';
+import { withBaseBlock } from '../base';
 import ResizeBar from './ResizeBar';
 import ColumnBlockSettings from './settings';
 
@@ -289,4 +289,4 @@ const ColumnBlockView = ({
     );
 };
 
-export default withBaseElement(ColumnBlockView);
+export default withBaseBlock(ColumnBlockView);
