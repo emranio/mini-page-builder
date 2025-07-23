@@ -12,7 +12,7 @@ const DropZone = ({ parentId, layoutClass = 'vertical-layout' }) => {
     const blocks = getBlocks(parentId);
 
     const [{ isOver }, drop] = useDrop(() => ({
-        accept: [ItemTypes.TEXT, ItemTypes.IMAGE, ItemTypes.FLEXBOX, ItemTypes.COLUMN, ItemTypes.CONTAINER_ITEM],
+        accept: [ItemTypes.TEXT, ItemTypes.IMAGE, ItemTypes.FLEXBOX, ItemTypes.COLUMN, ItemTypes.TABS, ItemTypes.CONTAINER_ITEM],
         drop: (item, monitor) => {
             // Prevent dropping if this is a child of the event path (prevents duplicate drops)
             if (monitor.didDrop()) {

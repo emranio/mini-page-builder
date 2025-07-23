@@ -3,6 +3,7 @@ import TextBlock from '../text';
 import ImageBlock from '../image';
 import FlexboxBlock from '../flexbox';
 import ColumnBlock from '../column';
+import TabsBlock from '../tabs';
 import { ItemTypes } from '../../../../utils/DragTypes';
 import DraggableElement from './DraggableElement';
 import { useBuilder } from '../../../../contexts/BuilderContext';
@@ -35,6 +36,9 @@ const BlockRenderer = ({ element }) => {
             case ItemTypes.COLUMN:
                 const ColumnComponent = ColumnBlock.view;
                 return <ColumnComponent key={blockKey} id={element.id} {...element.props} />;
+            case ItemTypes.TABS:
+                const TabsComponent = TabsBlock.view;
+                return <TabsComponent key={blockKey} id={element.id} {...element.props} />;
             default:
                 return <div>Unknown Block Type</div>;
         }

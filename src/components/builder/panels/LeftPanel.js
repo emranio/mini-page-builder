@@ -9,6 +9,7 @@ import TextBlock from '../blocks/text';
 import ImageBlock from '../blocks/image';
 import FlexboxBlock from '../blocks/flexbox';
 import ColumnBlock from '../blocks/column';
+import TabsBlock from '../blocks/tabs';
 
 const { Sider } = Layout;
 const { Title } = Typography;
@@ -50,6 +51,11 @@ const LeftPanel = ({ width = 300, collapsed = false, onWidthChange, onToggleColl
             icon: ColumnBlock.icon,
             label: ColumnBlock.name
         },
+        {
+            type: ItemTypes.TABS,
+            icon: TabsBlock.icon,
+            label: TabsBlock.name
+        },
     ];
 
     // Block registry for getting settings components
@@ -57,7 +63,8 @@ const LeftPanel = ({ width = 300, collapsed = false, onWidthChange, onToggleColl
         text: TextBlock,
         image: ImageBlock,
         flexbox: FlexboxBlock,
-        column: ColumnBlock
+        column: ColumnBlock,
+        tabs: TabsBlock
     };
 
     const selectedBlock = selectedBlockId ? getBlockById(selectedBlockId) : null;

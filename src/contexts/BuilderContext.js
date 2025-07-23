@@ -4,6 +4,7 @@ import TextBlock from '../components/builder/blocks/text';
 import ImageBlock from '../components/builder/blocks/image';
 import FlexboxBlock from '../components/builder/blocks/flexbox';
 import ColumnBlock from '../components/builder/blocks/column';
+import TabsBlock from '../components/builder/blocks/tabs';
 
 const BuilderContext = createContext();
 
@@ -14,7 +15,8 @@ const blockRegistry = {
     text: TextBlock,
     image: ImageBlock,
     flexbox: FlexboxBlock,
-    column: ColumnBlock
+    column: ColumnBlock,
+    tabs: TabsBlock
 };
 
 export const BuilderProvider = ({ children }) => {
