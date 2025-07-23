@@ -366,11 +366,6 @@ const TabsBlockSettings = ({
                                 border: '1px solid #d9d9d9',
                                 borderLeft: 'none'
                             }}
-                            onChange={(e) => {
-                                form.setFieldsValue({ backgroundColor: e.target.value });
-                                const allValues = form.getFieldsValue();
-                                handleValuesChange({ backgroundColor: e.target.value }, allValues);
-                            }}
                         />
                     </Form.Item>
                 </Space.Compact>
@@ -416,11 +411,6 @@ const TabsBlockSettings = ({
                             width: '100%',
                             height: 32,
                             border: '1px solid #d9d9d9'
-                        }}
-                        onChange={(e) => {
-                            form.setFieldsValue({ borderColor: e.target.value });
-                            const allValues = form.getFieldsValue();
-                            handleValuesChange({ borderColor: e.target.value }, allValues);
                         }}
                     />
                 </Form.Item>
