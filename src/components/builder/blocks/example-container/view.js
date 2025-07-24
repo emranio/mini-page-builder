@@ -33,15 +33,6 @@ const ExampleContainerBlockView = memo(({
         createBlock('example-container', id);
     }, [createBlock, id]);
 
-    const containerStyle = React.useMemo(() => ({
-        padding: `${padding}px`,
-        margin: `${margin}px`,
-        backgroundColor,
-        border: `${borderWidth}px ${borderStyle} ${borderColor}`,
-        borderRadius: `${borderRadius}px`,
-        minHeight: '100px'
-    }), [padding, margin, backgroundColor, borderStyle, borderWidth, borderColor, borderRadius]);
-
     return (
         <div
             id={uniqueBlockId}
@@ -49,7 +40,6 @@ const ExampleContainerBlockView = memo(({
             className={`example-container ${isDragging ? 'during-drag' : ''}`}
             data-id={id}
             onClick={handleClick}
-            style={containerStyle}
         >
             {/* Use dedicated DropZone for container contents */}
             <div className="example-container-content">
