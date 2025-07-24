@@ -56,71 +56,76 @@ const findAllChildrenIds = (blocks, blockId) => {
 };
 
 // Selector functions - moved outside component for better performance
-const createSelectors = (state) => ({
-    // Get all blocks at the root level or children of a specific parent
-    getBlocks: (parentId = null) => {
-        if (parentId === null) {
-            // For root level, return blocks in the order defined by rootBlocksOrder
-            return state.rootBlocksOrder.map(blockId =>
-                state.blocks.find(bl => bl.id === blockId)
-            ).filter(Boolean);
+const createSelectors = (state) => {
+    // Create a blocks lookup map for O(1) access
+    const blocksMap = new Map(state.blocks.map(block => [block.id, block]));
+
+    return {
+        // Get all blocks at the root level or children of a specific parent
+        getBlocks: (parentId = null) => {
+            if (parentId === null) {
+                // For root level, return blocks in the order defined by rootBlocksOrder
+                return state.rootBlocksOrder
+                    .map(blockId => blocksMap.get(blockId))
+                    .filter(Boolean);
+            }
+
+            // For children, get them in the order specified by parent's children array
+            const parent = blocksMap.get(parentId);
+            if (!parent || !parent.children) {
+                return state.blocks.filter(block => block.parentId === parentId);
+            }
+
+            // Return children in the correct order
+            return parent.children
+                .map(childId => blocksMap.get(childId))
+                .filter(Boolean);
+        },
+
+        // Get a specific block by ID
+        getBlockById: (id) => {
+            return blocksMap.get(id);
+        },
+
+        // Get all children of a block
+        getChildrenOfBlock: (blockId) => {
+            const block = blocksMap.get(blockId);
+            if (!block || !block.children || block.children.length === 0) {
+                return [];
+            }
+
+            return block.children
+                .map(childId => blocksMap.get(childId))
+                .filter(Boolean);
+        },
+
+        // Check if container has only container children
+        hasOnlyContainerChildren: (blockId) => {
+            const block = blocksMap.get(blockId);
+            if (!block || !block.children || block.children.length === 0) return false;
+
+            const children = block.children
+                .map(childId => blocksMap.get(childId))
+                .filter(Boolean);
+
+            return children.every(child => child.type === 'flexbox');
+        },
+
+        // Check if container has mixed children (blocks and containers)
+        hasMixedChildren: (blockId) => {
+            const block = blocksMap.get(blockId);
+            if (!block || !block.children || block.children.length <= 1) return false;
+
+            const children = block.children
+                .map(childId => blocksMap.get(childId))
+                .filter(Boolean);
+
+            const hasContainers = children.some(child => child.type === 'flexbox');
+            const hasBlocks = children.some(child => child.type !== 'flexbox');
+            return hasContainers && hasBlocks;
         }
-
-        // For children, get them in the order specified by parent's children array
-        const parent = state.blocks.find(bl => bl.id === parentId);
-        if (!parent || !parent.children) {
-            return state.blocks.filter(block => block.parentId === parentId);
-        }
-
-        // Return children in the correct order
-        return parent.children.map(childId =>
-            state.blocks.find(bl => bl.id === childId)
-        ).filter(Boolean);
-    },
-
-    // Get a specific block by ID
-    getBlockById: (id) => {
-        return state.blocks.find(block => block.id === id);
-    },
-
-    // Get all children of a block
-    getChildrenOfBlock: (blockId) => {
-        const block = state.blocks.find(bl => bl.id === blockId);
-        if (!block || !block.children || block.children.length === 0) {
-            return [];
-        }
-
-        return block.children.map(childId =>
-            state.blocks.find(bl => bl.id === childId)
-        ).filter(Boolean);
-    },
-
-    // Check if container has only container children
-    hasOnlyContainerChildren: (blockId) => {
-        const block = state.blocks.find(bl => bl.id === blockId);
-        if (!block || !block.children || block.children.length === 0) return false;
-
-        const children = block.children.map(childId =>
-            state.blocks.find(bl => bl.id === childId)
-        ).filter(Boolean);
-
-        return children.every(child => child.type === 'flexbox');
-    },
-
-    // Check if container has mixed children (blocks and containers)
-    hasMixedChildren: (blockId) => {
-        const block = state.blocks.find(bl => bl.id === blockId);
-        if (!block || !block.children || block.children.length <= 1) return false;
-
-        const children = block.children.map(childId =>
-            state.blocks.find(bl => bl.id === childId)
-        ).filter(Boolean);
-
-        const hasContainers = children.some(child => child.type === 'flexbox');
-        const hasBlocks = children.some(child => child.type !== 'flexbox');
-        return hasContainers && hasBlocks;
-    }
-});
+    };
+};
 
 // Reducer function
 const builderReducer = (state, action) => {

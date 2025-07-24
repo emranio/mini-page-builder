@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useRef, useCallback } from 'react';
 import { useBuilder } from '../../../../contexts/BuilderReducer';
 
 /**
@@ -41,28 +41,27 @@ class BaseBlock extends React.Component {
 export const withBaseBlock = (WrappedComponent) => {
     return React.forwardRef((props, ref) => {
         const { updateBlock } = useBuilder();
-        const [throttleTimeout, setThrottleTimeout] = useState(null);
+        const throttleTimeoutRef = useRef(null);
 
         const throttledUpdate = useCallback((elementId, newProps) => {
-            if (throttleTimeout) {
-                clearTimeout(throttleTimeout);
+            if (throttleTimeoutRef.current) {
+                clearTimeout(throttleTimeoutRef.current);
             }
 
-            const newTimeout = setTimeout(() => {
+            throttleTimeoutRef.current = setTimeout(() => {
                 updateBlock(elementId, newProps);
+                throttleTimeoutRef.current = null;
             }, 300); // 300ms throttle
-
-            setThrottleTimeout(newTimeout);
-        }, [updateBlock, throttleTimeout]);
+        }, [updateBlock]);
 
         // Cleanup on unmount
         React.useEffect(() => {
             return () => {
-                if (throttleTimeout) {
-                    clearTimeout(throttleTimeout);
+                if (throttleTimeoutRef.current) {
+                    clearTimeout(throttleTimeoutRef.current);
                 }
             };
-        }, [throttleTimeout]);
+        }, []);
 
         return (
             <WrappedComponent

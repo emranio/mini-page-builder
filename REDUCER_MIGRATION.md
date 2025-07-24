@@ -24,22 +24,27 @@ All import statements have been updated across the codebase to use the new file 
 - **After**: Single state object managed by reducer
 - **Benefit**: Atomic state updates, predictable state transitions
 
-### 2. **Memoized Selectors**
-- **Before**: `useCallback` selectors that recreated on every state dependency change
-- **After**: `useMemo` selectors that only recalculate when `state.blocks` or `state.rootBlocksOrder` changes
-- **Benefit**: Fewer unnecessary recalculations
+### 2. **Memoized Selectors with Optimized Lookups**
+- **Before**: `useCallback` selectors that recreated on every state dependency change, using `Array.find()` for lookups
+- **After**: `useMemo` selectors with `Map` for O(1) block lookups instead of O(n) array searches
+- **Benefit**: Fewer unnecessary recalculations and much faster block access
 
-### 3. **Stable Action References**
+### 3. **Fixed Throttling Mechanism**
+- **Before**: `useCallback` with `throttleTimeout` dependency causing infinite re-render loops
+- **After**: `useRef` to store timeout reference, eliminating problematic dependencies
+- **Benefit**: Prevents "Maximum update depth exceeded" errors, especially with rapid color picker changes
+
+### 4. **Stable Action References**
 - **Before**: Individual `useCallback` for each action
 - **After**: Single `useMemo` object containing all actions
 - **Benefit**: Prevents child component re-renders due to new function references
 
-### 4. **Memoized Context Value**
+### 5. **Memoized Context Value**
 - **Before**: Plain object created on every render
 - **After**: `useMemo` context value
 - **Benefit**: Prevents unnecessary provider re-renders
 
-### 5. **Optimized State Updates**
+### 6. **Optimized State Updates**
 - **Before**: Multiple state setters could cause multiple re-renders
 - **After**: Single dispatch with atomic state updates
 - **Benefit**: Fewer re-renders, more predictable state
@@ -68,6 +73,16 @@ const ACTION_TYPES = {
 - Moved outside component scope
 - Memoized based on relevant state slices
 - No dependencies on React hooks
+
+## Bug Fixes
+
+### **Color Picker Infinite Loop Fix**
+- **Problem**: "Maximum update depth exceeded" error when using color picker with fast mouse movements
+- **Root Cause**: `useCallback` dependency on `throttleTimeout` state caused function recreation on every timeout change
+- **Solution**: Replaced `useState` with `useRef` for timeout storage, eliminating problematic dependencies
+- **Files Modified**: 
+  - `BaseBlock.js` - Fixed throttling mechanism
+  - `tabs/settings.js` - Improved color picker form integration
 
 ## Benefits
 

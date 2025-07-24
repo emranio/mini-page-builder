@@ -346,12 +346,25 @@ const TabsBlockSettings = ({
                 label="Background Color"
                 name="backgroundColor"
             >
-                <Select style={{ width: '100%' }}>
-                    <Option value="transparent">Transparent</Option>
-                    <Option value="#ffffff">White</Option>
-                    <Option value="#f0f0f0">Light Gray</Option>
-                    <Option value="#e8e8e8">Gray</Option>
-                </Select>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                    <Select style={{ flex: 1 }}>
+                        <Option value="transparent">Transparent</Option>
+                        <Option value="#ffffff">White</Option>
+                        <Option value="#f0f0f0">Light Gray</Option>
+                        <Option value="#e8e8e8">Gray</Option>
+                        <Option value="custom">Custom Color</Option>
+                    </Select>
+                    <Input
+                        type="color"
+                        style={{
+                            width: 50,
+                            height: 32,
+                            border: '1px solid #d9d9d9',
+                            padding: 0
+                        }}
+                        placeholder="Custom"
+                    />
+                </div>
             </Form.Item>
 
             <Form.Item
@@ -382,12 +395,13 @@ const TabsBlockSettings = ({
                 label="Border Color"
                 name="borderColor"
             >
-                <input
+                <Input
                     type="color"
                     style={{
                         width: '100%',
                         height: 32,
-                        border: '1px solid #d9d9d9'
+                        border: '1px solid #d9d9d9',
+                        padding: 0
                     }}
                 />
             </Form.Item>
