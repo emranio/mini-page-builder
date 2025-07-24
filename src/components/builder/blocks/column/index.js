@@ -1,6 +1,11 @@
 import { ColumnWidthOutlined } from '@ant-design/icons';
 import ColumnBlockView from './view';
 import ColumnBlockSettings from './settings';
+import ColumnBlockStyles from './style';
+import styleManager from '../../../../utils/StyleManager';
+
+// Register the style function
+styleManager.registerBlockStyle('column', ColumnBlockStyles);
 
 const ColumnBlock = {
     name: 'Columns',
@@ -8,6 +13,7 @@ const ColumnBlock = {
     icon: <ColumnWidthOutlined />,
     view: ColumnBlockView,
     settings: ColumnBlockSettings,
+    style: ColumnBlockStyles,
     defaultProps: {
         columns: 2,
         columnWidths: [50, 50],

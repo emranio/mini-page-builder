@@ -15,7 +15,8 @@ const ColumnBlockView = ({
     borderStyle = 'dashed',
     borderWidth = 1,
     borderColor = '#d9d9d9',
-    throttledUpdate
+    throttledUpdate,
+    uniqueBlockId
 }) => {
     const { updateBlock, createBlock, getBlockById, isDragging, setSelectedBlockId } = useBuilder();
     const [isSettingsVisible, setIsSettingsVisible] = useState(false);
@@ -195,18 +196,8 @@ const ColumnBlockView = ({
 
             // Create the column
             const columnContent = (
-                <div
-                    style={{
-                        flex: '1 1 auto',
-                        width: '100%',
-                        minHeight: '180px',
-                        display: 'flex'
-                    }}
-                    className="column-content"
-                >
-                    <div className={`column-drop-area ${isDragging ? 'during-drag' : ''}`}>
-                        {columnId ? <DropZone parentId={columnId} /> : <div className="loading">Loading column...</div>}
-                    </div>
+                <div className={`column-drop-area ${isDragging ? 'during-drag' : ''}`}>
+                    {columnId ? <DropZone parentId={columnId} /> : <div className="loading">Loading column...</div>}
                 </div>
             );
 
@@ -224,14 +215,7 @@ const ColumnBlockView = ({
             return (
                 <div
                     key={`col-wrapper-${id}-${index}`}
-                    style={{
-                        flex: `0 0 ${flexBasis}`,
-                        maxWidth: flexBasis,
-                        boxSizing: 'border-box',
-                        display: 'flex',
-                        position: 'relative',
-                        overflow: 'visible'
-                    }}
+                    style={{ flex: `0 0 ${flexBasis}`, maxWidth: flexBasis }}
                     className="column-wrapper"
                 >
                     {columnContent}
@@ -241,29 +225,11 @@ const ColumnBlockView = ({
         });
     };
 
-    const containerStyle = {
-        margin: '10px 0',
-        minHeight: '200px',
-        border: `${borderWidth}px ${borderStyle} ${borderColor}`,
-        padding: '10px',
-        width: '100%',
-        overflow: 'hidden',
-        position: 'relative',
-        display: 'flex',
-        flexDirection: 'row',
-        flexWrap: 'nowrap',
-        gap: `${gap}px`,
-        alignItems: 'stretch',
-        justifyContent: 'space-between',
-        backgroundColor: backgroundColor === 'transparent' ? 'transparent' : backgroundColor
-    };
-
     return (
-        <div className="column-element column-element-container" onClick={handleClick}>
+        <div id={uniqueBlockId} onClick={handleClick}>
             <div
                 className={`column-element-row ${isDragging ? 'during-drag' : ''}`}
                 data-id={id}
-                style={containerStyle}
             >
                 {renderColumns()}
             </div>
@@ -289,4 +255,4 @@ const ColumnBlockView = ({
     );
 };
 
-export default withBaseBlock(ColumnBlockView);
+export default withBaseBlock(ColumnBlockView, 'column');

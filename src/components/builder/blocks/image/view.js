@@ -10,7 +10,8 @@ const ImageBlockView = ({
     width = '100%',
     height = 'auto',
     borderRadius = 0,
-    throttledUpdate
+    throttledUpdate,
+    uniqueBlockId
 }) => {
     const { setSelectedBlockId } = useBuilder();
 
@@ -19,21 +20,14 @@ const ImageBlockView = ({
         setSelectedBlockId(id);
     };
 
-    const imageStyle = {
-        width,
-        height,
-        borderRadius: `${borderRadius}px`
-    };
-
     return (
-        <div className="image-block" onClick={handleClick}>
+        <div id={uniqueBlockId} className="image-block" onClick={handleClick}>
             <div className="image-container">
                 <Image
                     src={src}
                     alt={alt}
                     preview={false}
                     width="100%"
-                    style={imageStyle}
                     className="newsletter-image"
                 />
             </div>
@@ -41,4 +35,4 @@ const ImageBlockView = ({
     );
 };
 
-export default withBaseBlock(ImageBlockView);
+export default withBaseBlock(ImageBlockView, 'image');

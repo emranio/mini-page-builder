@@ -1,6 +1,11 @@
 import { PictureOutlined } from '@ant-design/icons';
 import ImageBlockView from './view';
 import ImageBlockSettings from './settings';
+import ImageBlockStyles from './style';
+import styleManager from '../../../../utils/StyleManager';
+
+// Register the style function
+styleManager.registerBlockStyle('image', ImageBlockStyles);
 
 const ImageBlock = {
     name: 'Image',
@@ -8,6 +13,7 @@ const ImageBlock = {
     icon: <PictureOutlined />,
     view: ImageBlockView,
     settings: ImageBlockSettings,
+    style: ImageBlockStyles,
     defaultProps: {
         src: 'https://placehold.co/200x50?text=click+to+edit&font=roboto',
         alt: 'Image',

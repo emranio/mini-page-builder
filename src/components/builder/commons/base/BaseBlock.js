@@ -1,5 +1,6 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useEffect } from 'react';
 import { useBuilder } from '../../../../contexts/BuilderReducer';
+import styleManager from '../../../../utils/StyleManager';
 
 /**
  * Abstract base class for all blocks
@@ -38,10 +39,11 @@ class BaseBlock extends React.Component {
 /**
  * HOC for wrapping functional components with base block functionality
  */
-export const withBaseBlock = (WrappedComponent) => {
+export const withBaseBlock = (WrappedComponent, blockType = null) => {
     return React.forwardRef((props, ref) => {
         const { updateBlock } = useBuilder();
         const throttleTimeoutRef = useRef(null);
+        const { id } = props;
 
         const throttledUpdate = useCallback((elementId, newProps) => {
             if (throttleTimeoutRef.current) {
@@ -54,20 +56,34 @@ export const withBaseBlock = (WrappedComponent) => {
             }, 300); // 300ms throttle
         }, [updateBlock]);
 
-        // Cleanup on unmount
-        React.useEffect(() => {
+        // Generate unique block ID
+        const uniqueBlockId = styleManager.generateBlockId(id);
+
+        // Update styles when props change
+        useEffect(() => {
+            if (blockType && id) {
+                styleManager.updateBlockStyles(id, blockType, props);
+            }
+        }, [props, blockType, id]);
+
+        // Cleanup styles on unmount
+        useEffect(() => {
             return () => {
                 if (throttleTimeoutRef.current) {
                     clearTimeout(throttleTimeoutRef.current);
                 }
+                if (id) {
+                    styleManager.removeBlockStyles(id);
+                }
             };
-        }, []);
+        }, [id]);
 
         return (
             <WrappedComponent
                 ref={ref}
                 {...props}
                 throttledUpdate={throttledUpdate}
+                uniqueBlockId={uniqueBlockId}
             />
         );
     });

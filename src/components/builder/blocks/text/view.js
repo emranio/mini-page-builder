@@ -13,7 +13,8 @@ const TextBlockView = ({
     fontWeight = 'normal',
     color = '#000000',
     textAlign = 'left',
-    throttledUpdate
+    throttledUpdate,
+    uniqueBlockId
 }) => {
     const [isEditing, setIsEditing] = useState(false);
 
@@ -72,35 +73,29 @@ const TextBlockView = ({
         }
     };
 
-    const textStyle = {
-        fontSize: `${fontSize}px`,
-        fontWeight,
-        color,
-        textAlign,
-        margin: 0
-    };
-
-    return isEditing ? (
-        <TextArea
-            autoSize
-            autoFocus
-            value={editingContent}
-            onChange={(e) => handleChange(e.target.value)}
-            onBlur={handleBlur}
-            onKeyDown={handleKeyDown}
-            className="text-block-editor"
-            style={textStyle}
-        />
-    ) : (
-        <Paragraph
-            className="text-block"
-            onClick={handleClick}
-            onDoubleClick={handleDoubleClick}
-            style={textStyle}
-        >
-            {content || 'Click to edit text'}
-        </Paragraph>
+    return (
+        <div id={uniqueBlockId}>
+            {isEditing ? (
+                <TextArea
+                    autoSize
+                    autoFocus
+                    value={editingContent}
+                    onChange={(e) => handleChange(e.target.value)}
+                    onBlur={handleBlur}
+                    onKeyDown={handleKeyDown}
+                    className="text-block-editor"
+                />
+            ) : (
+                <Paragraph
+                    className="text-block"
+                    onClick={handleClick}
+                    onDoubleClick={handleDoubleClick}
+                >
+                    {content || 'Click to edit text'}
+                </Paragraph>
+            )}
+        </div>
     );
 };
 
-export default withBaseBlock(TextBlockView);
+export default withBaseBlock(TextBlockView, 'text');

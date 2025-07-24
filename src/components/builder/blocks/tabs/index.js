@@ -1,6 +1,11 @@
 import { FileTextOutlined } from '@ant-design/icons';
 import TabsBlockView from './view';
 import TabsBlockSettings from './settings';
+import TabsBlockStyles from './style';
+import styleManager from '../../../../utils/StyleManager';
+
+// Register the style function
+styleManager.registerBlockStyle('tabs', TabsBlockStyles);
 
 const TabsBlock = {
     name: 'Tabs',
@@ -8,6 +13,7 @@ const TabsBlock = {
     icon: <FileTextOutlined />,
     view: TabsBlockView,
     settings: TabsBlockSettings,
+    style: TabsBlockStyles,
     defaultProps: {
         tabs: [
             { id: 'tab1', title: 'Tab 1' },

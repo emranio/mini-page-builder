@@ -20,7 +20,8 @@ const TabsBlockView = ({
     padding = 10,
     tabStyle = 'default',
     tabPosition = 'top',
-    throttledUpdate
+    throttledUpdate,
+    uniqueBlockId
 }) => {
     const { updateBlock, createBlock, getBlockById, isDragging, setSelectedBlockId, deleteBlock } = useBuilder();
     const [currentActiveTab, setCurrentActiveTab] = useState(activeTabId);
@@ -87,39 +88,19 @@ const TabsBlockView = ({
         return {
             key: tab.id,
             label: tab.title,
-            children: (
-                <div
-                    className={`tab-content ${isDragging ? 'during-drag' : ''}`}
-                    style={{
-                        minHeight: '200px',
-                        padding: '10px'
-                    }}
-                >
-                    {tabContainerId ? (
-                        <DropZone parentId={tabContainerId} />
-                    ) : (
-                        <div className="loading">Loading tab content...</div>
-                    )}
-                </div>
+            children: tabContainerId ? (
+                <DropZone parentId={tabContainerId} />
+            ) : (
+                <div className="loading">Loading tab content...</div>
             )
         };
     });
 
-    const containerStyle = {
-        backgroundColor: backgroundColor === 'transparent' ? 'transparent' : backgroundColor,
-        border: `${borderWidth}px ${borderStyle} ${borderColor}`,
-        borderRadius: `${borderRadius}px`,
-        padding: `${padding}px`,
-        position: 'relative',
-        width: '100%',
-        minHeight: '300px'
-    };
-
     return (
         <div
+            id={uniqueBlockId}
             className={`tabs-container ${isDragging ? 'during-drag' : ''}`}
             data-id={id}
-            style={containerStyle}
             onClick={handleClick}
         >
             <Tabs
@@ -133,4 +114,4 @@ const TabsBlockView = ({
     );
 };
 
-export default withBaseBlock(TabsBlockView);
+export default withBaseBlock(TabsBlockView, 'tabs');
