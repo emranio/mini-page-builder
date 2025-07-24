@@ -90,15 +90,16 @@ const TabsBlockSettings = ({
     const [form] = Form.useForm();
     const [tabItems, setTabItems] = useState([]);
 
-    const tabs = element.props?.tabs || [
+    // Use useMemo to prevent the tabs dependency from changing on every render
+    const tabs = React.useMemo(() => element.props?.tabs || [
         { id: 'tab1', title: 'Tab 1' },
         { id: 'tab2', title: 'Tab 2' }
-    ];
+    ], [element.props?.tabs]);
 
     // Initialize tab items state
     useEffect(() => {
         setTabItems(tabs);
-    }, [element.props?.tabs, tabs]);
+    }, [tabs]);
 
     // Sensors for drag and drop
     const sensors = useSensors(
