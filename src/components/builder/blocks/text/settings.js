@@ -3,6 +3,7 @@ import { Form, Input, InputNumber, Select } from 'antd';
 import { BaseSettings } from '../../commons/base';
 
 const { Option } = Select;
+const { TextArea } = Input;
 
 const TextBlockSettings = ({
     open,
@@ -16,6 +17,7 @@ const TextBlockSettings = ({
     // Update form values when element props change
     useEffect(() => {
         const newValues = {
+            content: element.props?.content || 'Simple text block',
             fontSize: element.props?.fontSize || 14,
             fontWeight: element.props?.fontWeight || 'normal',
             color: element.props?.color || '#000000',
@@ -36,6 +38,7 @@ const TextBlockSettings = ({
             onCancel={onClose}
             form={form}
             initialValues={{
+                content: element.props?.content || 'Simple text block',
                 fontSize: element.props?.fontSize || 14,
                 fontWeight: element.props?.fontWeight || 'normal',
                 color: element.props?.color || '#000000',
@@ -45,6 +48,19 @@ const TextBlockSettings = ({
             width={500}
             inline={inline}
         >
+            {/* Only show content editing in the left panel (inline) */}
+            {inline && (
+                <Form.Item
+                    label="Content"
+                    name="content"
+                    rules={[{ required: true, message: 'Please enter text content' }]}
+                >
+                    <TextArea
+                        rows={4}
+                        placeholder="Enter your text content"
+                    />
+                </Form.Item>
+            )}
 
             <Form.Item
                 label="Font Size"
@@ -91,9 +107,11 @@ const TextBlockSettings = ({
                 </Select>
             </Form.Item>
 
-            <div style={{ marginTop: '10px', padding: '10px', backgroundColor: '#f5f5f5', borderRadius: '4px' }}>
-                <p>This is a simplified text block. Content is not editable in the settings panel.</p>
-            </div>
+            {!inline && (
+                <div style={{ marginTop: '10px', padding: '10px', backgroundColor: '#f5f5f5', borderRadius: '4px' }}>
+                    <p>Content can be edited from the left panel settings.</p>
+                </div>
+            )}
         </BaseSettings>
     );
 };
