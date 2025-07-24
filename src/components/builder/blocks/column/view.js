@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useBuilder } from '../../../../contexts/BuilderReducer';
 import { DropZone } from '../../commons';
-import { withBaseBlock } from '../../commons/base';
+import { withBaseBlock } from '../../commons/block';
 import ResizeBar from './ResizeBar';
 import ColumnBlockSettings from './settings';
 // styleManager import removed as it's not used

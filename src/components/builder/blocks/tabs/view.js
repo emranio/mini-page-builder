@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Tabs } from 'antd';
 import { useBuilder } from '../../../../contexts/BuilderReducer';
 import { DropZone } from '../../commons';
-import { withBaseBlock } from '../../commons/base';
+import { withBaseBlock } from '../../commons/block';
 
 const TabsBlockView = ({
     id,

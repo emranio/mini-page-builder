@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Form, Input, InputNumber, Image } from 'antd';
-import { BaseSettings } from '../../commons/base';
+import { BaseSettings } from '../../commons/block';
 
 const ImageBlockSettings = ({
     open,

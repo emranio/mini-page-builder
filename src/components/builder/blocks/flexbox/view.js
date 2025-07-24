@@ -3,7 +3,7 @@ import { useBuilder } from '../../../../contexts/BuilderReducer';
 import { DropZone } from '../../commons';
 import { Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { withBaseBlock } from '../../commons/base';
+import { withBaseBlock } from '../../commons/block';
 
 const FlexboxBlockView = ({
     id,

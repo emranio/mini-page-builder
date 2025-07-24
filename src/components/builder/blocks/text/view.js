@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography } from 'antd';
-import { withBaseBlock } from '../../commons/base';
+import { withBaseBlock } from '../../commons/block';
 import { useBuilder } from '../../../../contexts/BuilderReducer';
 
 const { Paragraph } = Typography;
