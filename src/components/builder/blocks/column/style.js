@@ -1,6 +1,6 @@
 /**
- * Column Block Styles
- * Generates dynamic CSS for column blocks
+ * Column Block Styles - Updated for new structure with wrapper in BlockFactory
+ * Targets the fildora-builder-column-block class instead of unique ID
  */
 
 const ColumnBlockStyles = (props, uniqueId) => {
@@ -19,17 +19,17 @@ const ColumnBlockStyles = (props, uniqueId) => {
         : backgroundColor;
 
     return `
-        #${uniqueId} {
+        .fildora-builder-column-block {
             margin: 10px 0;
             cursor: pointer;
         }
 
-        #${uniqueId}:hover {
+        .fildora-builder-column-block:hover {
             outline: 1px dashed rgba(24, 144, 255, 0.3);
             outline-offset: 2px;
         }
 
-        #${uniqueId} .column-element-row {
+        .fildora-builder-column-block .column-element-row {
             border: ${borderWidth}px ${borderStyle} ${borderColor};
             padding: 10px;
             width: 100%;
@@ -46,16 +46,16 @@ const ColumnBlockStyles = (props, uniqueId) => {
             transition: border-color 0.2s ease, background-color 0.2s ease;
         }
 
-        #${uniqueId} .column-element-row:hover {
+        .fildora-builder-column-block .column-element-row:hover {
             border-color: rgba(24, 144, 255, 0.6);
             background-color: ${backgroundColor === 'transparent' ? 'rgba(24, 144, 255, 0.02)' : backgroundColorValue};
         }
 
-        #${uniqueId} .column-element-row.during-drag {
+        .fildora-builder-column-block .column-element-row.during-drag {
             opacity: 0.8;
         }
 
-        #${uniqueId} .column-wrapper {
+        .fildora-builder-column-block .column-wrapper {
             box-sizing: border-box;
             display: flex;
             position: relative;
@@ -63,14 +63,14 @@ const ColumnBlockStyles = (props, uniqueId) => {
             will-change: flex-basis, max-width;
         }
 
-        #${uniqueId} .column-content {
+        .fildora-builder-column-block .column-content {
             flex: 1 1 auto;
             width: 100%;
             min-height: 180px;
             display: flex;
         }
 
-        #${uniqueId} .column-drop-area {
+        .fildora-builder-column-block .column-drop-area {
             flex: 1;
             min-height: 180px;
             border: 1px dashed rgba(0, 0, 0, 0.1);
@@ -80,17 +80,17 @@ const ColumnBlockStyles = (props, uniqueId) => {
             width: 100%;
         }
 
-        #${uniqueId} .column-drop-area:hover {
+        .fildora-builder-column-block .column-drop-area:hover {
             border-color: rgba(24, 144, 255, 0.4);
             background-color: rgba(24, 144, 255, 0.02);
         }
 
-        #${uniqueId} .column-drop-area.during-drag {
+        .fildora-builder-column-block .column-drop-area.during-drag {
             border-color: #1890ff;
             background-color: rgba(24, 144, 255, 0.05);
         }
 
-        #${uniqueId} .loading {
+        .fildora-builder-column-block .loading {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -100,7 +100,7 @@ const ColumnBlockStyles = (props, uniqueId) => {
         }
 
         /* Resize bar styles */
-        #${uniqueId} .resize-bar {
+        .fildora-builder-column-block .resize-bar {
             position: absolute;
             top: 0;
             right: calc(-${gap / 2}px);
@@ -115,19 +115,19 @@ const ColumnBlockStyles = (props, uniqueId) => {
             transition: opacity 0.2s ease;
         }
 
-        #${uniqueId} .column-element-row:hover .resize-bar {
+        .fildora-builder-column-block .column-element-row:hover .resize-bar {
             opacity: 0.6;
         }
         
-        #${uniqueId} .column-wrapper:hover .resize-bar {
+        .fildora-builder-column-block .column-wrapper:hover .resize-bar {
             opacity: 1;
         }
         
-        #${uniqueId} .resize-bar:hover {
+        .fildora-builder-column-block .resize-bar:hover {
             opacity: 1;
         }
 
-        #${uniqueId} .resize-bar-handle {
+        .fildora-builder-column-block .resize-bar-handle {
             width: 4px;
             height: 60%;
             background-color: #1890ff;
@@ -138,13 +138,13 @@ const ColumnBlockStyles = (props, uniqueId) => {
             transform: translateX(-50%);
         }
 
-        #${uniqueId} .resize-bar:hover .resize-bar-handle {
+        .fildora-builder-column-block .resize-bar:hover .resize-bar-handle {
             width: 4px;
             background-color: #40a9ff;
             box-shadow: 0 0 6px rgba(24, 144, 255, 0.5);
         }
 
-        #${uniqueId} .resize-bar.resizing .resize-bar-handle {
+        .fildora-builder-column-block .resize-bar.resizing .resize-bar-handle {
             width: 4px;
             background-color: #1890ff;
             box-shadow: 0 0 8px rgba(24, 144, 255, 0.8);

@@ -2,10 +2,10 @@ import { ColumnWidthOutlined } from '@ant-design/icons';
 import ColumnBlockView from './view';
 import ColumnBlockSettings from './settings';
 import ColumnBlockStyles from './style';
-import { makeBlock } from '../../commons/block';
+import { createBlock } from '../../commons/block';
 
-// Create and register the block using makeBlock
-const ColumnBlock = makeBlock({
+// Create and register the block using the new createBlock factory
+const ColumnBlock = createBlock({
     type: 'column',
     name: 'Columns',
     category: 'layout',

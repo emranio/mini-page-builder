@@ -1,22 +1,16 @@
 import React, { useEffect, useMemo } from 'react';
 import { Form, Slider, InputNumber, Select } from 'antd';
-import { BaseSettings } from '../../commons/block';
 
 const { Option } = Select;
 
-const ColumnBlockSettings = ({
-    open,
-    onClose,
-    element,
-    throttledUpdate,
-    inline = false
-}) => {
-    const [form] = Form.useForm();
+const ColumnBlockSettings = ({ form, element, initialValues, throttledUpdate }) => {
     const columns = element.props?.columns || 2;
     const columnWidths = useMemo(() => element.props?.columnWidths || [], [element.props?.columnWidths]);
 
     // Update form values when element props change (e.g., when resizing from right panel)
     useEffect(() => {
+        if (!form) return;
+
         const newValues = {
             columns: columns,
             columnWidths: columnWidths.length > 0 ? columnWidths : Array(columns).fill(Math.round((100 / columns) * 100) / 100),
@@ -58,24 +52,7 @@ const ColumnBlockSettings = ({
     };
 
     return (
-        <BaseSettings
-            title="Column Settings"
-            open={open}
-            onCancel={onClose}
-            form={form}
-            initialValues={{
-                columns: columns,
-                columnWidths: columnWidths.length > 0 ? columnWidths : Array(columns).fill(Math.round((100 / columns) * 100) / 100),
-                gap: element.props?.gap || 10,
-                backgroundColor: element.props?.backgroundColor || 'transparent',
-                borderStyle: element.props?.borderStyle || 'dashed',
-                borderWidth: element.props?.borderWidth || 1,
-                borderColor: element.props?.borderColor || '#d9d9d9'
-            }}
-            onValuesChange={handleValuesChange}
-            width={600}
-            inline={inline}
-        >
+        <>
             <Form.Item
                 name="columns"
                 label="Number of Columns"
@@ -95,11 +72,11 @@ const ColumnBlockSettings = ({
                     onChange={(value) => {
                         // When column count changes, immediately update column widths
                         const equalWidth = Math.floor(100 / value);
-                        form.setFieldsValue({
+                        form?.setFieldsValue({
                             columnWidths: Array(value).fill(equalWidth)
                         });
                         // Trigger live update
-                        const allValues = form.getFieldsValue();
+                        const allValues = form?.getFieldsValue() || {};
                         allValues.columnWidths = Array(value).fill(equalWidth);
                         handleValuesChange({ columns: value, columnWidths: allValues.columnWidths }, allValues);
                     }}
@@ -108,7 +85,7 @@ const ColumnBlockSettings = ({
 
             <Form.Item shouldUpdate={(prevValues, currentValues) => prevValues.columns !== currentValues.columns}>
                 {() => {
-                    const formColumnCount = form.getFieldValue('columns') || columns;
+                    const formColumnCount = form?.getFieldValue('columns') || columns;
                     return (
                         <div className="column-widths-container">
                             {renderColumnWidthFields(formColumnCount)}
@@ -122,14 +99,14 @@ const ColumnBlockSettings = ({
                     type="button"
                     onClick={() => {
                         // Distribute column widths evenly
-                        const count = form.getFieldValue('columns');
+                        const count = form?.getFieldValue('columns') || columns;
                         const equalWidth = Math.floor(100 / count);
                         const newWidths = Array(count).fill(equalWidth);
-                        form.setFieldsValue({
+                        form?.setFieldsValue({
                             columnWidths: newWidths
                         });
                         // Trigger live update
-                        const allValues = form.getFieldsValue();
+                        const allValues = form?.getFieldsValue() || {};
                         allValues.columnWidths = newWidths;
                         handleValuesChange({ columnWidths: newWidths }, allValues);
                     }}
@@ -205,13 +182,13 @@ const ColumnBlockSettings = ({
                         border: '1px solid #d9d9d9'
                     }}
                     onChange={(e) => {
-                        form.setFieldsValue({ borderColor: e.target.value });
-                        const allValues = form.getFieldsValue();
+                        form?.setFieldsValue({ borderColor: e.target.value });
+                        const allValues = form?.getFieldsValue() || {};
                         handleValuesChange({ borderColor: e.target.value }, allValues);
                     }}
                 />
             </Form.Item>
-        </BaseSettings>
+        </>
     );
 };
 

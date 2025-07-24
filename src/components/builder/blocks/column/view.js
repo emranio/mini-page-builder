@@ -1,29 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useBuilder } from '../../../../data/BuilderReducer';
 import { DropZone } from '../../commons';
-import { withBaseBlock } from '../../commons/block';
 import ResizeBar from './ResizeBar';
-import ColumnBlockSettings from './settings';
 
 const ColumnBlockView = ({
     id,
-    columns = 2,
-    columnWidths = [],
-    gap = 10,
-    throttledUpdate,
+    columns,
+    columnWidths,
     uniqueBlockId
 }) => {
-    const { updateBlock, createBlock, getBlockById, isDragging, setSelectedBlockId } = useBuilder();
-    const [isSettingsVisible, setIsSettingsVisible] = useState(false);
+    const { updateBlock, createBlock, getBlockById, isDragging } = useBuilder();
     const [currentWidths, setCurrentWidths] = useState([]);
     const isResizingRef = useRef(false);
     const latestWidthsRef = useRef(currentWidths);
     const deferredUpdateRef = useRef(null);
-
-    const handleClick = (e) => {
-        e.stopPropagation();
-        setSelectedBlockId(id);
-    };
 
     // Initialize current widths only when columns change
     useEffect(() => {
@@ -115,6 +105,7 @@ const ColumnBlockView = ({
 
     // Update column widths in the DOM directly for immediate visual feedback
     const updateColumnsInDOM = (newWidths) => {
+        // Since BlockFactory creates wrapper with uniqueBlockId, we can still use it
         const blockElement = document.getElementById(uniqueBlockId);
         if (!blockElement) return;
 
@@ -276,29 +267,15 @@ const ColumnBlockView = ({
     };
 
     return (
-        <div id={uniqueBlockId} onClick={handleClick}>
+        <>
             <div
                 className={`column-element-row ${isDragging ? 'during-drag' : ''}`}
                 data-id={id}
             >
                 {renderColumns()}
             </div>
-
-            <ColumnBlockSettings
-                open={isSettingsVisible}
-                onClose={() => setIsSettingsVisible(false)}
-                element={{
-                    id,
-                    props: {
-                        columns,
-                        columnWidths: currentWidths,
-                        gap
-                    }
-                }}
-                throttledUpdate={throttledUpdate}
-            />
-        </div>
+        </>
     );
 };
 
-export default withBaseBlock(ColumnBlockView, 'column');
+export default ColumnBlockView;
