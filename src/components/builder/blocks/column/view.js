@@ -4,6 +4,7 @@ import { DropZone } from '../../commons';
 import { withBaseBlock } from '../../commons/base';
 import ResizeBar from './ResizeBar';
 import ColumnBlockSettings from './settings';
+import styleManager from '../../../../utils/StyleManager';
 
 const ColumnBlockView = ({
     id,
@@ -22,6 +23,8 @@ const ColumnBlockView = ({
     const [isSettingsVisible, setIsSettingsVisible] = useState(false);
     const [currentWidths, setCurrentWidths] = useState([]);
     const isResizingRef = useRef(false);
+    const latestWidthsRef = useRef(currentWidths);
+    const deferredUpdateRef = useRef(null);
 
     const handleClick = (e) => {
         e.stopPropagation();
@@ -39,19 +42,30 @@ const ColumnBlockView = ({
             );
 
             if (validWidths) {
-                setCurrentWidths([...columnWidths]);
+                const newWidths = [...columnWidths];
+                setCurrentWidths(newWidths);
+                latestWidthsRef.current = newWidths;
             } else {
                 // Create equal width columns if any value is invalid
                 const equalWidth = Math.round((100 / columns) * 100) / 100;
-                setCurrentWidths(Array(columns).fill(equalWidth));
+                const newWidths = Array(columns).fill(equalWidth);
+                setCurrentWidths(newWidths);
+                latestWidthsRef.current = newWidths;
             }
         } else {
             // Create equal width columns
             const equalWidth = Math.round((100 / columns) * 100) / 100;
-            setCurrentWidths(Array(columns).fill(equalWidth));
+            const newWidths = Array(columns).fill(equalWidth);
+            setCurrentWidths(newWidths);
+            latestWidthsRef.current = newWidths;
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [columns]); // Intentionally excluding columnWidths to prevent re-render loops
+
+    // Keep the ref in sync with state
+    useEffect(() => {
+        latestWidthsRef.current = currentWidths;
+    }, [currentWidths]);
 
     // Separate effect to handle prop changes when not resizing
     useEffect(() => {
@@ -64,11 +78,18 @@ const ColumnBlockView = ({
             );
 
             if (validWidths) {
-                setCurrentWidths([...columnWidths]);
+                // Check if the widths are actually different before updating
+                const currentWidthsString = JSON.stringify(currentWidths.map(w => Math.round(w * 100) / 100));
+                const newWidthsString = JSON.stringify(columnWidths.map(w => Math.round(w * 100) / 100));
+
+                if (currentWidthsString !== newWidthsString) {
+                    setCurrentWidths([...columnWidths]);
+                    latestWidthsRef.current = [...columnWidths];
+                }
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [columnWidths.length, columns]); // Intentionally simplified dependencies
+    }, [JSON.stringify(columnWidths), columns]); // Listen to actual values
 
     // Initialize column sub-elements if they don't exist
     useEffect(() => {
@@ -98,6 +119,21 @@ const ColumnBlockView = ({
         }
     }, [id, columns, createBlock, updateBlock, getBlockById]);
 
+    // Update column widths in the DOM directly for immediate visual feedback
+    const updateColumnsInDOM = (newWidths) => {
+        const blockElement = document.getElementById(uniqueBlockId);
+        if (!blockElement) return;
+
+        const columnWrappers = blockElement.querySelectorAll('.column-wrapper');
+        columnWrappers.forEach((wrapper, idx) => {
+            if (newWidths[idx]) {
+                const flexBasis = `${newWidths[idx]}%`;
+                wrapper.style.flex = `0 0 ${flexBasis}`;
+                wrapper.style.maxWidth = flexBasis;
+            }
+        });
+    };
+
     // Handle resizing between columns
     const handleColumnResize = (index, deltaX) => {
         const rowElement = document.querySelector(`.column-element-row[data-id="${id}"]`);
@@ -107,72 +143,90 @@ const ColumnBlockView = ({
         const deltaPercentage = (deltaX / rowWidth) * 100;
         const minColumnWidth = 5;
 
-        setCurrentWidths(prevWidths => {
-            let newWidths = [...prevWidths];
+        // Use the latest widths from ref as a starting point
+        let prevWidths = latestWidthsRef.current.length > 0 ?
+            latestWidthsRef.current :
+            currentWidths;
 
-            // Validate array length and fill with equal widths if needed
-            if (newWidths.length !== columns) {
-                const equalWidth = Math.round((100 / columns) * 100) / 100;
-                newWidths = Array(columns).fill(equalWidth);
+        let newWidths = [...prevWidths];
+
+        // Validate array length and fill with equal widths if needed
+        if (newWidths.length !== columns) {
+            const equalWidth = Math.round((100 / columns) * 100) / 100;
+            newWidths = Array(columns).fill(equalWidth);
+        }
+
+        // Ensure all values are numbers
+        newWidths = newWidths.map((width, idx) => {
+            if (typeof width !== 'number' || isNaN(width) || width === null || width === undefined) {
+                return Math.round((100 / columns) * 100) / 100;
             }
-
-            // Ensure all values are numbers
-            newWidths = newWidths.map((width, idx) => {
-                if (typeof width !== 'number' || isNaN(width) || width === null || width === undefined) {
-                    return Math.round((100 / columns) * 100) / 100;
-                }
-                return width;
-            });
-
-            // Validate that both columns exist
-            if (index >= newWidths.length - 1 || index < 0) {
-                return newWidths; // Return unchanged if invalid index
-            }
-
-            let leftColNewWidth = newWidths[index] + deltaPercentage;
-            let rightColNewWidth = newWidths[index + 1] - deltaPercentage;
-
-            // Enforce minimum width constraints
-            if (leftColNewWidth < minColumnWidth) {
-                leftColNewWidth = minColumnWidth;
-                rightColNewWidth = newWidths[index] + newWidths[index + 1] - minColumnWidth;
-            } else if (rightColNewWidth < minColumnWidth) {
-                rightColNewWidth = minColumnWidth;
-                leftColNewWidth = newWidths[index] + newWidths[index + 1] - minColumnWidth;
-            }
-
-            newWidths[index] = Math.round(Math.max(minColumnWidth, leftColNewWidth) * 100) / 100;
-            newWidths[index + 1] = Math.round(Math.max(minColumnWidth, rightColNewWidth) * 100) / 100;
-
-            return newWidths;
+            return width;
         });
+
+        // Validate that both columns exist
+        if (index >= newWidths.length - 1 || index < 0) {
+            return; // Exit if invalid index
+        }
+
+        let leftColNewWidth = newWidths[index] + deltaPercentage;
+        let rightColNewWidth = newWidths[index + 1] - deltaPercentage;
+
+        // Enforce minimum width constraints
+        if (leftColNewWidth < minColumnWidth) {
+            leftColNewWidth = minColumnWidth;
+            rightColNewWidth = newWidths[index] + newWidths[index + 1] - minColumnWidth;
+        } else if (rightColNewWidth < minColumnWidth) {
+            rightColNewWidth = minColumnWidth;
+            leftColNewWidth = newWidths[index] + newWidths[index + 1] - minColumnWidth;
+        }
+
+        newWidths[index] = Math.round(Math.max(minColumnWidth, leftColNewWidth) * 100) / 100;
+        newWidths[index + 1] = Math.round(Math.max(minColumnWidth, rightColNewWidth) * 100) / 100;
+
+        // Update our ref for the latest widths
+        latestWidthsRef.current = newWidths;
+
+        // During resizing, only update the DOM directly for performance
+        updateColumnsInDOM(newWidths);
+
+        // Cancel any pending state update
+        if (deferredUpdateRef.current) {
+            clearTimeout(deferredUpdateRef.current);
+        }
+
+        // Schedule a low-priority state update
+        deferredUpdateRef.current = setTimeout(() => {
+            if (!isResizingRef.current) {
+                setCurrentWidths([...newWidths]);
+            }
+        }, 100);
     };
 
     // Handle resize start
     const handleResizeStart = () => {
         isResizingRef.current = true;
+
+        // Cancel any pending updates
+        if (deferredUpdateRef.current) {
+            clearTimeout(deferredUpdateRef.current);
+            deferredUpdateRef.current = null;
+        }
     };
 
     // Handle resize end - save to global state
     const handleResizeEnd = () => {
+        // Use our ref for the latest widths
+        const roundedWidths = latestWidthsRef.current.map(width => Math.round(width * 100) / 100);
+
+        // Always update the block with the current widths after resize
+        updateBlock(id, { columnWidths: [...roundedWidths] });
+
+        // Update the React state after a short delay to avoid flickering
         setTimeout(() => {
             isResizingRef.current = false;
-        }, 100);
-
-        // Only update if values actually changed
-        const element = getBlockById(id);
-        const currentColumnWidths = element?.props?.columnWidths || [];
-
-        // Round the current widths to 2 decimal places
-        const roundedWidths = currentWidths.map(width => Math.round(width * 100) / 100);
-
-        const hasChanged = roundedWidths.some((width, index) =>
-            Math.abs(width - (currentColumnWidths[index] || 0)) > 0.1
-        );
-
-        if (hasChanged) {
-            updateBlock(id, { columnWidths: [...roundedWidths] });
-        }
+            setCurrentWidths([...roundedWidths]);
+        }, 50);
     };
 
     // Generate columns based on the current settings

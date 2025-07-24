@@ -42,7 +42,7 @@ const ColumnBlockStyles = (props, uniqueId) => {
             justify-content: space-between;
             background-color: ${backgroundColorValue};
             min-height: 200px;
-            transition: all 0.2s ease;
+            transition: border-color 0.2s ease, background-color 0.2s ease;
         }
 
         #${uniqueId} .column-element-row:hover {
@@ -59,6 +59,7 @@ const ColumnBlockStyles = (props, uniqueId) => {
             display: flex;
             position: relative;
             overflow: visible;
+            will-change: flex-basis, max-width;
         }
 
         #${uniqueId} .column-content {
