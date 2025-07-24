@@ -1,8 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { Layout, Card, Typography, Row, Col, Button } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
-import { BlockItem } from '../commons';
-import { ResizeHandle } from './partials';
+import { ResizeHandle, BlockItem } from './partials';
 import { useBuilder } from '../../../contexts/BuilderReducer';
 import blockManager from '../../../utils/BlockManager';
 
