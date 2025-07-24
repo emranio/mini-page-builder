@@ -14,7 +14,7 @@ const TextBlock = makeBlock({
     settings: TextBlockSettings,
     style: TextBlockStyles,
     defaultProps: {
-        content: 'Click to edit text',
+        content: 'Simple text block',
         fontSize: 14,
         fontWeight: 'normal',
         color: '#000000',

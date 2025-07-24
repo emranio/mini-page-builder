@@ -1,99 +1,34 @@
-import React, { useState } from 'react';
-import { Input, Typography } from 'antd';
+import React from 'react';
+import { Typography } from 'antd';
 import { withBaseBlock } from '../../commons/base';
 import { useBuilder } from '../../../../contexts/BuilderReducer';
 
 const { Paragraph } = Typography;
-const { TextArea } = Input;
 
 const TextBlockView = ({
     id,
-    content = 'Click to edit text',
+    content = 'Simple text block',
     fontSize = 14,
     fontWeight = 'normal',
     color = '#000000',
     textAlign = 'left',
-    throttledUpdate,
     uniqueBlockId
 }) => {
-    const [isEditing, setIsEditing] = useState(false);
-
-    // Don't use local state for content, instead use the prop directly
-    // and only track content changes during editing
-    const [editingContent, setEditingContent] = useState(null);
     const { setSelectedBlockId } = useBuilder();
-
-    // Reset editing content when exiting edit mode or when content prop changes
-    React.useEffect(() => {
-        if (!isEditing) {
-            setEditingContent(null);
-        } else {
-            // Update editing content when content changes while in edit mode
-            setEditingContent(content);
-        }
-    }, [isEditing, content]);
-
-    // Initialize editing content when entering edit mode
-    const startEditing = () => {
-        setEditingContent(content);
-        setIsEditing(true);
-    };
-
-    const handleChange = (value) => {
-        setEditingContent(value);
-        // Only update the element when actually editing in place
-        // Don't update the element props during editing to prevent re-rendering
-        // Changes will be applied on blur
-    };
-
-    const handleDoubleClick = () => {
-        startEditing();
-    };
 
     const handleClick = (e) => {
         e.stopPropagation();
         setSelectedBlockId(id);
     };
 
-    const handleBlur = () => {
-        // Finalize the edit
-        setIsEditing(false);
-        // Make sure the content is updated with our final value
-        if (editingContent !== null && editingContent !== content) {
-            throttledUpdate(id, { content: editingContent });
-        }
-    };
-
-    // Handle key presses during editing
-    const handleKeyDown = (e) => {
-        // Exit editing mode when Enter is pressed (without shift)
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            handleBlur();
-        }
-    };
-
     return (
         <div id={uniqueBlockId}>
-            {isEditing ? (
-                <TextArea
-                    autoSize
-                    autoFocus
-                    value={editingContent}
-                    onChange={(e) => handleChange(e.target.value)}
-                    onBlur={handleBlur}
-                    onKeyDown={handleKeyDown}
-                    className="text-block-editor"
-                />
-            ) : (
-                <Paragraph
-                    className="text-block"
-                    onClick={handleClick}
-                    onDoubleClick={handleDoubleClick}
-                >
-                    {content || 'Click to edit text'}
-                </Paragraph>
-            )}
+            <Paragraph
+                className="text-block"
+                onClick={handleClick}
+            >
+                {content || 'Simple text block'}
+            </Paragraph>
         </div>
     );
 };
