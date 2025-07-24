@@ -19,13 +19,9 @@ const ExampleContainerBlockStyles = (props, uniqueId) => {
         : backgroundColor;
 
     return `
+        /* Common styles for all example container blocks */
         .fildora-builder-example-container-block {
             width: 100%;
-            padding: ${padding}px;
-            margin: ${margin}px 0;
-            background-color: ${backgroundColorValue};
-            border: ${borderWidth}px ${borderStyle} ${borderColor};
-            border-radius: ${borderRadius}px;
             position: relative;
             box-sizing: border-box;
             transition: all 0.2s ease;
@@ -37,7 +33,6 @@ const ExampleContainerBlockStyles = (props, uniqueId) => {
 
         .fildora-builder-example-container-block:hover {
             border-color: rgba(24, 144, 255, 0.6);
-            background-color: ${backgroundColor === 'transparent' ? 'rgba(24, 144, 255, 0.02)' : backgroundColorValue};
         }
 
         .fildora-builder-example-container-block.during-drag {
@@ -69,9 +64,17 @@ const ExampleContainerBlockStyles = (props, uniqueId) => {
             background: rgba(24, 144, 255, 0.1);
         }
 
-        /* Keep unique ID styles for any specific targeting needs */
+        /* Instance-specific styles using unique ID */
         #${uniqueId} {
-            position: relative;
+            padding: ${padding}px;
+            margin: ${margin}px 0;
+            background-color: ${backgroundColorValue};
+            border: ${borderWidth}px ${borderStyle} ${borderColor};
+            border-radius: ${borderRadius}px;
+        }
+
+        #${uniqueId}:hover {
+            background-color: ${backgroundColor === 'transparent' ? 'rgba(24, 144, 255, 0.02)' : backgroundColorValue};
         }
     `;
 };

@@ -20,14 +20,11 @@ const TabsBlockStyles = (props, uniqueId) => {
         : backgroundColor;
 
     return `
+        /* Common styles for all tabs blocks */
         .fildora-builder-tabs-block {
             margin: 10px 0;
             cursor: pointer;
             transition: all 0.2s ease;
-            background-color: ${backgroundColorValue};
-            border: ${borderStyle === 'none' ? 'none' : `${borderWidth}px ${borderStyle} ${borderColor}`};
-            border-radius: ${borderRadius}px;
-            padding: ${padding}px;
             position: relative;
             min-height: 200px;
         }
@@ -35,8 +32,6 @@ const TabsBlockStyles = (props, uniqueId) => {
         .fildora-builder-tabs-block:hover {
             outline: 1px dashed rgba(24, 144, 255, 0.3);
             outline-offset: 2px;
-            ${borderStyle !== 'none' ? `border-color: rgba(24, 144, 255, 0.6);` : ''}
-            background-color: ${backgroundColor === 'transparent' ? 'rgba(24, 144, 255, 0.02)' : backgroundColorValue};
         }
 
         .fildora-builder-tabs-block.during-drag {
@@ -77,7 +72,6 @@ const TabsBlockStyles = (props, uniqueId) => {
             }
         ` : ''}
 
-        /* Tab content area */
         .fildora-builder-tabs-block .loading {
             display: flex;
             align-items: center;
@@ -110,9 +104,17 @@ const TabsBlockStyles = (props, uniqueId) => {
             color: #1890ff;
         }
 
-        /* Keep unique ID styles for any specific targeting needs */
+        /* Instance-specific styles using unique ID */
         #${uniqueId} {
-            position: relative;
+            background-color: ${backgroundColorValue};
+            border: ${borderStyle === 'none' ? 'none' : `${borderWidth}px ${borderStyle} ${borderColor}`};
+            border-radius: ${borderRadius}px;
+            padding: ${padding}px;
+        }
+
+        #${uniqueId}:hover {
+            ${borderStyle !== 'none' ? `border-color: rgba(24, 144, 255, 0.6);` : ''}
+            background-color: ${backgroundColor === 'transparent' ? 'rgba(24, 144, 255, 0.02)' : backgroundColorValue};
         }
     `;
 };

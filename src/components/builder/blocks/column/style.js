@@ -9,9 +9,7 @@ const ColumnBlockStyles = (props, uniqueId) => {
         backgroundColor = 'transparent',
         borderStyle = 'dashed',
         borderWidth = 1,
-        borderColor = '#d9d9d9',
-        // columnWidths is unused but might be needed in the future
-        // columnWidths = [50, 50]
+        borderColor = '#d9d9d9'
     } = props;
 
     const backgroundColorValue = backgroundColor === 'transparent'
@@ -19,6 +17,7 @@ const ColumnBlockStyles = (props, uniqueId) => {
         : backgroundColor;
 
     return `
+        /* Common styles for all column blocks */
         .fildora-builder-column-block {
             margin: 10px 0;
             cursor: pointer;
@@ -27,28 +26,6 @@ const ColumnBlockStyles = (props, uniqueId) => {
         .fildora-builder-column-block:hover {
             outline: 1px dashed rgba(24, 144, 255, 0.3);
             outline-offset: 2px;
-        }
-
-        .fildora-builder-column-block .column-element-row {
-            border: ${borderWidth}px ${borderStyle} ${borderColor};
-            padding: 10px;
-            width: 100%;
-            overflow: hidden;
-            position: relative;
-            display: flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
-            gap: ${gap}px;
-            align-items: stretch;
-            justify-content: space-between;
-            background-color: ${backgroundColorValue};
-            min-height: 200px;
-            transition: border-color 0.2s ease, background-color 0.2s ease;
-        }
-
-        .fildora-builder-column-block .column-element-row:hover {
-            border-color: rgba(24, 144, 255, 0.6);
-            background-color: ${backgroundColor === 'transparent' ? 'rgba(24, 144, 255, 0.02)' : backgroundColorValue};
         }
 
         .fildora-builder-column-block .column-element-row.during-drag {
@@ -148,6 +125,29 @@ const ColumnBlockStyles = (props, uniqueId) => {
             width: 4px;
             background-color: #1890ff;
             box-shadow: 0 0 8px rgba(24, 144, 255, 0.8);
+        }
+
+        /* Instance-specific styles using unique ID */
+        #${uniqueId} .column-element-row {
+            border: ${borderWidth}px ${borderStyle} ${borderColor};
+            padding: 10px;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            gap: ${gap}px;
+            align-items: stretch;
+            justify-content: space-between;
+            background-color: ${backgroundColorValue};
+            min-height: 200px;
+            transition: border-color 0.2s ease, background-color 0.2s ease;
+        }
+
+        #${uniqueId} .column-element-row:hover {
+            border-color: rgba(24, 144, 255, 0.6);
+            background-color: ${backgroundColor === 'transparent' ? 'rgba(24, 144, 255, 0.02)' : backgroundColorValue};
         }
     `;
 };

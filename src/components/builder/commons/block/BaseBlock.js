@@ -118,32 +118,4 @@ export const withBaseBlock = (WrappedComponent, blockType = null) => {
     return EnhancedComponent;
 };
 
-/**
- * Legacy class component for backward compatibility
- * @deprecated Use withBaseBlock HOC instead
- */
-class BaseBlock extends React.Component {
-    constructor(props) {
-        super(props);
-        this.throttleTimeout = null;
-        this.throttleDelay = 300;
-    }
-
-    throttledUpdate = (elementId, props, updateBlock) => {
-        if (this.throttleTimeout) {
-            clearTimeout(this.throttleTimeout);
-        }
-
-        this.throttleTimeout = setTimeout(() => {
-            updateBlock(elementId, props);
-        }, this.throttleDelay);
-    };
-
-    componentWillUnmount() {
-        if (this.throttleTimeout) {
-            clearTimeout(this.throttleTimeout);
-        }
-    }
-}
-
-export default BaseBlock;
+export default withBaseBlock;

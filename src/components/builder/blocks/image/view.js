@@ -8,7 +8,7 @@ import { Image } from 'antd';
  */
 const ImageBlockView = ({
     src,
-    alt,
+    alt
 }) => {
     return (
         <>

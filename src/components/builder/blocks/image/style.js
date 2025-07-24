@@ -11,6 +11,7 @@ const ImageBlockStyles = (props, uniqueId) => {
     } = props;
 
     return `
+        /* Common styles for all image blocks */
         .fildora-builder-image-block {
             cursor: pointer;
             display: block;
@@ -22,15 +23,6 @@ const ImageBlockStyles = (props, uniqueId) => {
             outline-offset: 2px;
         }
 
-        .fildora-builder-image-block .newsletter-image {
-            width: ${width};
-            height: ${height};
-            border-radius: ${borderRadius}px;
-            max-width: 100%;
-            object-fit: cover;
-            transition: all 0.2s ease;
-        }
-
         .fildora-builder-image-block .newsletter-image:hover {
             transform: scale(1.01);
         }
@@ -39,16 +31,21 @@ const ImageBlockStyles = (props, uniqueId) => {
             width: 100%;
         }
 
-        .fildora-builder-image-block .ant-image-img {
+        /* Instance-specific styles using unique ID */
+        #${uniqueId} .newsletter-image {
+            width: ${width};
+            height: ${height};
+            border-radius: ${borderRadius}px;
+            max-width: 100%;
+            object-fit: cover;
+            transition: all 0.2s ease;
+        }
+
+        #${uniqueId} .ant-image-img {
             width: ${width};
             height: ${height};
             border-radius: ${borderRadius}px;
             object-fit: cover;
-        }
-
-        /* Keep unique ID styles for any specific targeting needs */
-        #${uniqueId} {
-            position: relative;
         }
     `;
 };

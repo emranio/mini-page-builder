@@ -19,13 +19,6 @@ const TextBlockView = ({
         <>
             <Paragraph
                 className="text-block"
-                style={{
-                    fontSize: `${fontSize}px`,
-                    fontWeight,
-                    color,
-                    textAlign,
-                    margin: 0
-                }}
             >
                 {content}
             </Paragraph>

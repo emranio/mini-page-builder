@@ -6,14 +6,7 @@ import { DropZone } from '../../commons';
  * Wrapper div and click handling are handled by BlockFactory
  */
 const ExampleContainerBlockView = memo(({
-    id,
-    padding,
-    margin,
-    backgroundColor,
-    borderStyle,
-    borderWidth,
-    borderColor,
-    borderRadius
+    id
 }) => {
     const containerRef = useRef(null);
 
