@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { Form, Slider, InputNumber, Space, Select } from 'antd';
+import { Form, Slider, InputNumber, Select } from 'antd';
 import { BaseSettings } from '../../commons/base';
 
 const { Option } = Select;
@@ -118,33 +118,31 @@ const ColumnBlockSettings = ({
             </Form.Item>
 
             <Form.Item>
-                <Space>
-                    <button
-                        type="button"
-                        onClick={() => {
-                            // Distribute column widths evenly
-                            const count = form.getFieldValue('columns');
-                            const equalWidth = Math.floor(100 / count);
-                            const newWidths = Array(count).fill(equalWidth);
-                            form.setFieldsValue({
-                                columnWidths: newWidths
-                            });
-                            // Trigger live update
-                            const allValues = form.getFieldsValue();
-                            allValues.columnWidths = newWidths;
-                            handleValuesChange({ columnWidths: newWidths }, allValues);
-                        }}
-                        style={{
-                            padding: '4px 15px',
-                            border: '1px solid #d9d9d9',
-                            borderRadius: '6px',
-                            background: '#fff',
-                            cursor: 'pointer'
-                        }}
-                    >
-                        Distribute Evenly
-                    </button>
-                </Space>
+                <button
+                    type="button"
+                    onClick={() => {
+                        // Distribute column widths evenly
+                        const count = form.getFieldValue('columns');
+                        const equalWidth = Math.floor(100 / count);
+                        const newWidths = Array(count).fill(equalWidth);
+                        form.setFieldsValue({
+                            columnWidths: newWidths
+                        });
+                        // Trigger live update
+                        const allValues = form.getFieldsValue();
+                        allValues.columnWidths = newWidths;
+                        handleValuesChange({ columnWidths: newWidths }, allValues);
+                    }}
+                    style={{
+                        padding: '4px 15px',
+                        border: '1px solid #d9d9d9',
+                        borderRadius: '6px',
+                        background: '#fff',
+                        cursor: 'pointer'
+                    }}
+                >
+                    Distribute Evenly
+                </button>
             </Form.Item>
 
             <Form.Item
@@ -163,59 +161,37 @@ const ColumnBlockSettings = ({
                 label="Background Color"
                 name="backgroundColor"
             >
-                <Space.Compact style={{ width: '100%' }}>
-                    <Select style={{ width: '50%' }}>
-                        <Option value="transparent">Transparent</Option>
-                        <Option value="#ffffff">White</Option>
-                        <Option value="#f0f0f0">Light Gray</Option>
-                        <Option value="#e8e8e8">Gray</Option>
-                    </Select>
-                    <Form.Item name="backgroundColor" noStyle>
-                        <input
-                            type="color"
-                            style={{
-                                width: '50%',
-                                height: 32,
-                                border: '1px solid #d9d9d9',
-                                borderLeft: 'none'
-                            }}
-                            onChange={(e) => {
-                                form.setFieldsValue({ backgroundColor: e.target.value });
-                                const allValues = form.getFieldsValue();
-                                handleValuesChange({ backgroundColor: e.target.value }, allValues);
-                            }}
-                        />
-                    </Form.Item>
-                </Space.Compact>
+                <Select style={{ width: '100%' }}>
+                    <Option value="transparent">Transparent</Option>
+                    <Option value="#ffffff">White</Option>
+                    <Option value="#f0f0f0">Light Gray</Option>
+                    <Option value="#e8e8e8">Gray</Option>
+                </Select>
             </Form.Item>
 
-            <Space.Compact block>
-                <Form.Item
-                    label="Border Style"
-                    name="borderStyle"
-                    style={{ flex: 1 }}
-                >
-                    <Select style={{ width: '100%' }}>
-                        <Option value="none">None</Option>
-                        <Option value="solid">Solid</Option>
-                        <Option value="dashed">Dashed</Option>
-                        <Option value="dotted">Dotted</Option>
-                    </Select>
-                </Form.Item>
+            <Form.Item
+                label="Border Style"
+                name="borderStyle"
+            >
+                <Select style={{ width: '100%' }}>
+                    <Option value="none">None</Option>
+                    <Option value="solid">Solid</Option>
+                    <Option value="dashed">Dashed</Option>
+                    <Option value="dotted">Dotted</Option>
+                </Select>
+            </Form.Item>
 
-                <Form.Item
-                    label="Border Width"
-                    name="borderWidth"
-                    style={{ flex: 1, marginLeft: 8 }}
-                >
-                    <InputNumber
-                        min={0}
-                        max={10}
-                        addonAfter="px"
-                        style={{ width: '100%' }}
-                    />
-                </Form.Item>
-            </Space.Compact>
+            <Form.Item
+                label="Border Width"
+                name="borderWidth"
+            >
+                <InputNumber
+                    min={0}
+                    max={10}
+                    addonAfter="px"
+                    style={{ width: '100%' }}
+                />
+            </Form.Item>
 
             <Form.Item
                 label="Border Color"

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Form, InputNumber, Select, Space } from 'antd';
+import { Form, InputNumber, Select } from 'antd';
 import { BaseSettings } from '../../commons/base';
 
 const { Option } = Select;
@@ -51,126 +51,96 @@ const FlexboxBlockSettings = ({
             width={500}
             inline={inline}
         >
-            <Space.Compact block>
-                <Form.Item
-                    label="Padding"
-                    name="padding"
-                    style={{ flex: 1 }}
-                >
-                    <InputNumber
-                        min={0}
-                        max={50}
-                        addonAfter="px"
-                        style={{ width: '100%' }}
-                    />
-                </Form.Item>
+            <Form.Item
+                label="Padding"
+                name="padding"
+            >
+                <InputNumber
+                    min={0}
+                    max={50}
+                    addonAfter="px"
+                    style={{ width: '100%' }}
+                />
+            </Form.Item>
 
-                <Form.Item
-                    label="Margin"
-                    name="margin"
-                    style={{ flex: 1, marginLeft: 8 }}
-                >
-                    <InputNumber
-                        min={0}
-                        max={50}
-                        addonAfter="px"
-                        style={{ width: '100%' }}
-                    />
-                </Form.Item>
-            </Space.Compact>
+            <Form.Item
+                label="Margin"
+                name="margin"
+            >
+                <InputNumber
+                    min={0}
+                    max={50}
+                    addonAfter="px"
+                    style={{ width: '100%' }}
+                />
+            </Form.Item>
 
             <Form.Item
                 label="Background Color"
                 name="backgroundColor"
             >
-                <Space.Compact style={{ width: '100%' }}>
-                    <Select style={{ width: '50%' }}>
-                        <Option value="transparent">Transparent</Option>
-                        <Option value="#ffffff">White</Option>
-                        <Option value="#f0f0f0">Light Gray</Option>
-                        <Option value="#e8e8e8">Gray</Option>
-                    </Select>
-                    <Form.Item name="backgroundColor" noStyle>
-                        <input
-                            type="color"
-                            style={{
-                                width: '50%',
-                                height: 32,
-                                border: '1px solid #d9d9d9',
-                                borderLeft: 'none'
-                            }}
-                            onChange={(e) => {
-                                form.setFieldsValue({ backgroundColor: e.target.value });
-                                const allValues = form.getFieldsValue();
-                                handleValuesChange({ backgroundColor: e.target.value }, allValues);
-                            }}
-                        />
-                    </Form.Item>
-                </Space.Compact>
+                <Select style={{ width: '100%' }}>
+                    <Option value="transparent">Transparent</Option>
+                    <Option value="#ffffff">White</Option>
+                    <Option value="#f0f0f0">Light Gray</Option>
+                    <Option value="#e8e8e8">Gray</Option>
+                </Select>
             </Form.Item>
 
-            <Space.Compact block>
-                <Form.Item
-                    label="Border Style"
-                    name="borderStyle"
-                    style={{ flex: 1 }}
-                >
-                    <Select style={{ width: '100%' }}>
-                        <Option value="none">None</Option>
-                        <Option value="solid">Solid</Option>
-                        <Option value="dashed">Dashed</Option>
-                        <Option value="dotted">Dotted</Option>
-                    </Select>
-                </Form.Item>
+            <Form.Item
+                label="Border Style"
+                name="borderStyle"
+            >
+                <Select style={{ width: '100%' }}>
+                    <Option value="none">None</Option>
+                    <Option value="solid">Solid</Option>
+                    <Option value="dashed">Dashed</Option>
+                    <Option value="dotted">Dotted</Option>
+                </Select>
+            </Form.Item>
 
-                <Form.Item
-                    label="Border Width"
-                    name="borderWidth"
-                    style={{ flex: 1, marginLeft: 8 }}
-                >
-                    <InputNumber
-                        min={0}
-                        max={10}
-                        addonAfter="px"
-                        style={{ width: '100%' }}
-                    />
-                </Form.Item>
-            </Space.Compact>
+            <Form.Item
+                label="Border Width"
+                name="borderWidth"
+            >
+                <InputNumber
+                    min={0}
+                    max={10}
+                    addonAfter="px"
+                    style={{ width: '100%' }}
+                />
+            </Form.Item>
 
-            <Space.Compact block>
-                <Form.Item
-                    label="Border Color"
-                    name="borderColor"
-                    style={{ flex: 1 }}
-                >
-                    <input
-                        type="color"
-                        style={{
-                            width: '100%',
-                            height: 32,
-                            border: '1px solid #d9d9d9'
-                        }}
-                        onChange={(e) => {
-                            form.setFieldsValue({ borderColor: e.target.value });
-                            const allValues = form.getFieldsValue();
-                            handleValuesChange({ borderColor: e.target.value }, allValues);
-                        }}
-                    />
-                </Form.Item>
+            <Form.Item
+                label="Border Color"
+                name="borderColor"
+            >
+                <input
+                    type="color"
+                    style={{
+                        width: '100%',
+                        height: 32,
+                        border: '1px solid #d9d9d9'
+                    }}
+                    onChange={(e) => {
+                        form.setFieldsValue({ borderColor: e.target.value });
+                        const allValues = form.getFieldsValue();
+                        handleValuesChange({ borderColor: e.target.value }, allValues);
+                    }}
+                />
+            </Form.Item>
 
-                <Form.Item
-                    label="Border Radius"
-                    name="borderRadius"
-                    style={{ flex: 1, marginLeft: 8 }}
-                >
-                    <InputNumber
-                        min={0}
-                        max={50}
-                        addonAfter="px"
-                        style={{ width: '100%' }}
-                    />
-                </Form.Item>
-            </Space.Compact>
+            <Form.Item
+                label="Border Radius"
+                name="borderRadius"
+            >
+                <InputNumber
+                    min={0}
+                    max={50}
+                    addonAfter="px"
+                    style={{ width: '100%' }}
+                />
+            </Form.Item>
         </BaseSettings>
     );
 };

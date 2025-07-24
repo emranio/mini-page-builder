@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Form, Input, InputNumber, Space, Image } from 'antd';
+import { Form, Input, InputNumber, Image } from 'antd';
 import { BaseSettings } from '../../commons/base';
 
 const ImageBlockSettings = ({
@@ -61,23 +61,19 @@ const ImageBlockSettings = ({
                 <Input placeholder="Enter alternative text for accessibility" />
             </Form.Item>
 
-            <Space.Compact block>
-                <Form.Item
-                    label="Width"
-                    name="width"
-                    style={{ flex: 1 }}
-                >
-                    <Input placeholder="e.g., 100%, 200px" />
-                </Form.Item>
+            <Form.Item
+                label="Width"
+                name="width"
+            >
+                <Input placeholder="e.g., 100%, 200px" />
+            </Form.Item>
 
-                <Form.Item
-                    label="Height"
-                    name="height"
-                    style={{ flex: 1, marginLeft: 8 }}
-                >
-                    <Input placeholder="e.g., auto, 100px" />
-                </Form.Item>
-            </Space.Compact>
+            <Form.Item
+                label="Height"
+                name="height"
+            >
+                <Input placeholder="e.g., auto, 100px" />
+            </Form.Item>
 
             <Form.Item
                 label="Border Radius"

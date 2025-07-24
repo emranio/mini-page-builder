@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Select, InputNumber, Space, Button, List, Card } from 'antd';
+import { Form, Input, Select, InputNumber, Button, List, Card } from 'antd';
 import { PlusOutlined, DeleteOutlined, EditOutlined, HolderOutlined } from '@ant-design/icons';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
@@ -308,30 +308,26 @@ const TabsBlockSettings = ({
             </Form.Item>
 
             {/* Tab Appearance */}
-            <Space.Compact block>
-                <Form.Item
-                    label="Tab Style"
-                    name="tabStyle"
-                    style={{ flex: 1 }}
-                >
-                    <Select style={{ width: '100%' }}>
-                        <Option value="default">Default</Option>
-                        <Option value="card">Card</Option>
-                    </Select>
-                </Form.Item>
+            <Form.Item
+                label="Tab Style"
+                name="tabStyle"
+            >
+                <Select style={{ width: '100%' }}>
+                    <Option value="default">Default</Option>
+                    <Option value="card">Card</Option>
+                </Select>
+            </Form.Item>
 
-                <Form.Item
-                    label="Tab Position"
-                    name="tabPosition"
-                    style={{ flex: 1, marginLeft: 8 }}
-                >
-                    <Select style={{ width: '100%' }}>
-                        <Option value="top">Top</Option>
-                        <Option value="left">Left</Option>
-                        <Option value="right">Right</Option>
-                    </Select>
-                </Form.Item>
-            </Space.Compact>
+            <Form.Item
+                label="Tab Position"
+                name="tabPosition"
+            >
+                <Select style={{ width: '100%' }}>
+                    <Option value="top">Top</Option>
+                    <Option value="left">Left</Option>
+                    <Option value="right">Right</Option>
+                </Select>
+            </Form.Item>
 
             {/* Container Styling */}
             <Form.Item
@@ -350,84 +346,63 @@ const TabsBlockSettings = ({
                 label="Background Color"
                 name="backgroundColor"
             >
-                <Space.Compact style={{ width: '100%' }}>
-                    <Select style={{ width: '50%' }}>
-                        <Option value="transparent">Transparent</Option>
-                        <Option value="#ffffff">White</Option>
-                        <Option value="#f0f0f0">Light Gray</Option>
-                        <Option value="#e8e8e8">Gray</Option>
-                    </Select>
-                    <Form.Item name="backgroundColor" noStyle>
-                        <input
-                            type="color"
-                            style={{
-                                width: '50%',
-                                height: 32,
-                                border: '1px solid #d9d9d9',
-                                borderLeft: 'none'
-                            }}
-                        />
-                    </Form.Item>
-                </Space.Compact>
+                <Select style={{ width: '100%' }}>
+                    <Option value="transparent">Transparent</Option>
+                    <Option value="#ffffff">White</Option>
+                    <Option value="#f0f0f0">Light Gray</Option>
+                    <Option value="#e8e8e8">Gray</Option>
+                </Select>
             </Form.Item>
 
-            <Space.Compact block>
-                <Form.Item
-                    label="Border Style"
-                    name="borderStyle"
-                    style={{ flex: 1 }}
-                >
-                    <Select style={{ width: '100%' }}>
-                        <Option value="none">None</Option>
-                        <Option value="solid">Solid</Option>
-                        <Option value="dashed">Dashed</Option>
-                        <Option value="dotted">Dotted</Option>
-                    </Select>
-                </Form.Item>
+            <Form.Item
+                label="Border Style"
+                name="borderStyle"
+            >
+                <Select style={{ width: '100%' }}>
+                    <Option value="none">None</Option>
+                    <Option value="solid">Solid</Option>
+                    <Option value="dashed">Dashed</Option>
+                    <Option value="dotted">Dotted</Option>
+                </Select>
+            </Form.Item>
 
-                <Form.Item
-                    label="Border Width"
-                    name="borderWidth"
-                    style={{ flex: 1, marginLeft: 8 }}
-                >
-                    <InputNumber
-                        min={0}
-                        max={10}
-                        addonAfter="px"
-                        style={{ width: '100%' }}
-                    />
-                </Form.Item>
-            </Space.Compact>
+            <Form.Item
+                label="Border Width"
+                name="borderWidth"
+            >
+                <InputNumber
+                    min={0}
+                    max={10}
+                    addonAfter="px"
+                    style={{ width: '100%' }}
+                />
+            </Form.Item>
 
-            <Space.Compact block>
-                <Form.Item
-                    label="Border Color"
-                    name="borderColor"
-                    style={{ flex: 1 }}
-                >
-                    <input
-                        type="color"
-                        style={{
-                            width: '100%',
-                            height: 32,
-                            border: '1px solid #d9d9d9'
-                        }}
-                    />
-                </Form.Item>
+            <Form.Item
+                label="Border Color"
+                name="borderColor"
+            >
+                <input
+                    type="color"
+                    style={{
+                        width: '100%',
+                        height: 32,
+                        border: '1px solid #d9d9d9'
+                    }}
+                />
+            </Form.Item>
 
-                <Form.Item
-                    label="Border Radius"
-                    name="borderRadius"
-                    style={{ flex: 1, marginLeft: 8 }}
-                >
-                    <InputNumber
-                        min={0}
-                        max={50}
-                        addonAfter="px"
-                        style={{ width: '100%' }}
-                    />
-                </Form.Item>
-            </Space.Compact>
+            <Form.Item
+                label="Border Radius"
+                name="borderRadius"
+            >
+                <InputNumber
+                    min={0}
+                    max={50}
+                    addonAfter="px"
+                    style={{ width: '100%' }}
+                />
+            </Form.Item>
         </BaseSettings>
     );
 };
