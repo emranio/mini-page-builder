@@ -2,12 +2,11 @@ import { ColumnWidthOutlined } from '@ant-design/icons';
 import ColumnBlockView from './view';
 import ColumnBlockSettings from './settings';
 import ColumnBlockStyles from './style';
-import styleManager from '../../../../utils/StyleManager';
+import makeBlock from '../../../../utils/makeBlock';
 
-// Register the style function
-styleManager.registerBlockStyle('column', ColumnBlockStyles);
-
-const ColumnBlock = {
+// Create and register the block using makeBlock
+const ColumnBlock = makeBlock({
+    type: 'column',
     name: 'Columns',
     category: 'layout',
     icon: <ColumnWidthOutlined />,
@@ -24,7 +23,7 @@ const ColumnBlock = {
         borderWidth: 1,
         borderColor: '#d9d9d9'
     }
-};
+});
 
 export { default as ResizeBar } from './ResizeBar';
 export default ColumnBlock;

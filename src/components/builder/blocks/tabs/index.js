@@ -2,12 +2,11 @@ import { FileTextOutlined } from '@ant-design/icons';
 import TabsBlockView from './view';
 import TabsBlockSettings from './settings';
 import TabsBlockStyles from './style';
-import styleManager from '../../../../utils/StyleManager';
+import makeBlock from '../../../../utils/makeBlock';
 
-// Register the style function
-styleManager.registerBlockStyle('tabs', TabsBlockStyles);
-
-const TabsBlock = {
+// Create and register the block using makeBlock
+const TabsBlock = makeBlock({
+    type: 'tabs',
     name: 'Tabs',
     category: 'layout',
     icon: <FileTextOutlined />,
@@ -30,6 +29,6 @@ const TabsBlock = {
         tabStyle: 'default', // default, bordered, card
         tabPosition: 'top' // top, bottom, left, right
     }
-};
+});
 
 export default TabsBlock;

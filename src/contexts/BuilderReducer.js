@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useCallback, useEffect, useMemo } from 'react';
+import React, { createContext, useContext, useReducer, useEffect, useMemo } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import TextBlock from '../components/builder/blocks/text';
 import ImageBlock from '../components/builder/blocks/image';
@@ -347,8 +347,8 @@ export const BuilderProvider = ({ children }) => {
         }
     }, [state.isDragging]);
 
-    // Memoized selectors - only recalculate when state.blocks or state.rootBlocksOrder changes
-    const selectors = useMemo(() => createSelectors(state), [state.blocks, state.rootBlocksOrder]);
+    // Memoized selectors
+    const selectors = useMemo(() => createSelectors(state), [state]);
 
     // Action creators - wrapped in useCallback for stable references
     const actions = useMemo(() => ({

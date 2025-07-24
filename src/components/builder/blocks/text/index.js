@@ -2,12 +2,11 @@ import { FontSizeOutlined } from '@ant-design/icons';
 import TextBlockView from './view';
 import TextBlockSettings from './settings';
 import TextBlockStyles from './style';
-import styleManager from '../../../../utils/StyleManager';
+import makeBlock from '../../../../utils/makeBlock';
 
-// Register the style function
-styleManager.registerBlockStyle('text', TextBlockStyles);
-
-const TextBlock = {
+// Create and register the block using makeBlock
+const TextBlock = makeBlock({
+    type: 'text',
     name: 'Text',
     category: 'content',
     icon: <FontSizeOutlined />,
@@ -21,6 +20,6 @@ const TextBlock = {
         color: '#000000',
         textAlign: 'left'
     }
-};
+});
 
 export default TextBlock;

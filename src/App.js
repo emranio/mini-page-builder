@@ -5,7 +5,8 @@ import { Layout } from 'antd';
 import LeftPanel from './components/builder/panels/LeftPanel';
 import RightPanel from './components/builder/panels/RightPanel';
 import { BuilderProvider } from './contexts/BuilderReducer';
-import './components/builder/initializeStyles'; // Initialize block styles
+// Initialize all blocks via the registry
+import './components/builder/commons/BlockRegistry';
 import './scss/builder/App.scss';
 
 function App() {

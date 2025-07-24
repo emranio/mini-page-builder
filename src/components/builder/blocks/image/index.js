@@ -2,12 +2,11 @@ import { PictureOutlined } from '@ant-design/icons';
 import ImageBlockView from './view';
 import ImageBlockSettings from './settings';
 import ImageBlockStyles from './style';
-import styleManager from '../../../../utils/StyleManager';
+import makeBlock from '../../../../utils/makeBlock';
 
-// Register the style function
-styleManager.registerBlockStyle('image', ImageBlockStyles);
-
-const ImageBlock = {
+// Create and register the block using makeBlock
+const ImageBlock = makeBlock({
+    type: 'image',
     name: 'Image',
     category: 'media',
     icon: <PictureOutlined />,
@@ -21,6 +20,6 @@ const ImageBlock = {
         height: 'auto',
         borderRadius: 0
     }
-};
+});
 
 export default ImageBlock;

@@ -2,12 +2,11 @@ import { AppstoreOutlined } from '@ant-design/icons';
 import FlexboxBlockView from './view';
 import FlexboxBlockSettings from './settings';
 import FlexboxBlockStyles from './style';
-import styleManager from '../../../../utils/StyleManager';
+import makeBlock from '../../../../utils/makeBlock';
 
-// Register the style function
-styleManager.registerBlockStyle('flexbox', FlexboxBlockStyles);
-
-const FlexboxBlock = {
+// Create and register the block using makeBlock
+const FlexboxBlock = makeBlock({
+    type: 'flexbox',
     name: 'Container',
     category: 'layout',
     icon: <AppstoreOutlined />,
@@ -23,6 +22,6 @@ const FlexboxBlock = {
         borderColor: '#d9d9d9',
         borderRadius: 0
     }
-};
+});
 
 export default FlexboxBlock;

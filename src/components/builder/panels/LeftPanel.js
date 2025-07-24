@@ -3,13 +3,8 @@ import { Layout, Card, Typography, Row, Col, Button } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { BlockItem } from '../commons';
 import { ResizeHandle } from './partials';
-import { ItemTypes } from '../../../utils/DragTypes';
 import { useBuilder } from '../../../contexts/BuilderReducer';
-import TextBlock from '../blocks/text';
-import ImageBlock from '../blocks/image';
-import FlexboxBlock from '../blocks/flexbox';
-import ColumnBlock from '../blocks/column';
-import TabsBlock from '../blocks/tabs';
+import blockManager from '../../../utils/BlockManager';
 
 const { Sider } = Layout;
 const { Title } = Typography;
@@ -30,42 +25,18 @@ const LeftPanel = ({ width = 300, collapsed = false, onWidthChange, onToggleColl
         onWidthChange(newWidth);
     };
 
-    const blocks = [
-        {
-            type: ItemTypes.TEXT,
-            icon: TextBlock.icon,
-            label: TextBlock.name
-        },
-        {
-            type: ItemTypes.IMAGE,
-            icon: ImageBlock.icon,
-            label: ImageBlock.name
-        },
-        {
-            type: ItemTypes.FLEXBOX,
-            icon: FlexboxBlock.icon,
-            label: FlexboxBlock.name
-        },
-        {
-            type: ItemTypes.COLUMN,
-            icon: ColumnBlock.icon,
-            label: ColumnBlock.name
-        },
-        {
-            type: ItemTypes.TABS,
-            icon: TabsBlock.icon,
-            label: TabsBlock.name
-        },
-    ];
+    // Get all blocks from BlockManager
+    const blocks = blockManager.getAllBlocks().map(block => ({
+        type: block.type,
+        icon: block.icon,
+        label: block.name
+    }));
 
-    // Block registry for getting settings components
-    const blockRegistry = {
-        text: TextBlock,
-        image: ImageBlock,
-        flexbox: FlexboxBlock,
-        column: ColumnBlock,
-        tabs: TabsBlock
-    };
+    // Use BlockManager for getting settings components
+    const blockRegistry = {}; // Convert to object for easier lookup
+    blockManager.getAllBlocks().forEach(block => {
+        blockRegistry[block.type] = block;
+    });
 
     const selectedBlock = selectedBlockId ? getBlockById(selectedBlockId) : null;
     const selectedBlockConfig = selectedBlock ? blockRegistry[selectedBlock.type] : null;
