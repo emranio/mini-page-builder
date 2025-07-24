@@ -1,23 +1,13 @@
 import React, { createContext, useContext, useReducer, useEffect, useMemo } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import TextBlock from '../components/builder/blocks/text';
-import ImageBlock from '../components/builder/blocks/image';
-import ExampleContainerBlock from '../components/builder/blocks/example-container';
-import ColumnBlock from '../components/builder/blocks/column';
-import TabsBlock from '../components/builder/blocks/tabs';
+import blockManager from '../components/builder/commons/block/blockManager';
+
+// Import BlockRegistry to ensure all blocks are registered
+import '../components/builder/commons/BlockRegistry';
 
 const BuilderReducerContext = createContext();
 
 export const useBuilder = () => useContext(BuilderReducerContext);
-
-// Block registry for getting default props
-const blockRegistry = {
-    text: TextBlock,
-    image: ImageBlock,
-    'example-container': ExampleContainerBlock,
-    column: ColumnBlock,
-    tabs: TabsBlock
-};
 
 // Action types
 const ACTION_TYPES = {
@@ -151,9 +141,8 @@ const builderReducer = (state, action) => {
         case ACTION_TYPES.CREATE_BLOCK: {
             const { type, parentId, props, index, blockId } = action.payload;
 
-            // Get default props from block registry
-            const blockConfig = blockRegistry[type];
-            const defaultProps = blockConfig?.defaultProps || {};
+            // Get default props from centralized block manager
+            const defaultProps = blockManager.getDefaultProps(type);
 
             const newBlock = {
                 id: blockId,

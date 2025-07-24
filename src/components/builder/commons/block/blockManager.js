@@ -71,6 +71,16 @@ class blockManager {
     }
 
     /**
+     * Get default props for a block type
+     * @param {string} blockType - The block type identifier
+     * @returns {object} Default props for the block type
+     */
+    getDefaultProps(blockType) {
+        const blockDefinition = this.getBlock(blockType);
+        return blockDefinition?.defaultProps || {};
+    }
+
+    /**
      * Get specific drag type constants for backwards compatibility
      * @returns {object} Object with drag type constants
      */
