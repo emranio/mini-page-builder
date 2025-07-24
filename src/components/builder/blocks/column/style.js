@@ -10,7 +10,8 @@ const ColumnBlockStyles = (props, uniqueId) => {
         borderStyle = 'dashed',
         borderWidth = 1,
         borderColor = '#d9d9d9',
-        columnWidths = [50, 50]
+        // columnWidths is unused but might be needed in the future
+        // columnWidths = [50, 50]
     } = props;
 
     const backgroundColorValue = backgroundColor === 'transparent'

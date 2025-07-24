@@ -18,7 +18,8 @@ const BlockItem = ({ type, icon, label }) => {
         }),
         end: (item, monitor) => {
             setIsDragging(false);
-            const didDrop = monitor.didDrop();
+            // const didDrop = monitor.didDrop();
+            // Removed unused variable
         }
     }));
 

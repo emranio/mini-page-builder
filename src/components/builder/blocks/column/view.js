@@ -4,7 +4,8 @@ import { DropZone } from '../../commons';
 import { withBaseBlock } from '../../commons/base';
 import ResizeBar from './ResizeBar';
 import ColumnBlockSettings from './settings';
-import styleManager from '../../../../utils/StyleManager';
+// styleManager import removed as it's not used
+// import styleManager from '../../../../utils/StyleManager';
 
 const ColumnBlockView = ({
     id,

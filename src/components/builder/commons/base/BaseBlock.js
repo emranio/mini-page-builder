@@ -64,7 +64,8 @@ export const withBaseBlock = (WrappedComponent, blockType = null) => {
             if (blockType && id) {
                 styleManager.updateBlockStyles(id, blockType, props);
             }
-        }, [props, blockType, id]);
+            // blockType is in component scope and doesn't need to be in dependency array
+        }, [props, id]);
 
         // Cleanup styles on unmount
         useEffect(() => {

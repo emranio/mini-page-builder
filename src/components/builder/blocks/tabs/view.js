@@ -73,7 +73,7 @@ const TabsBlockView = ({
                 tabIds: newTabIds
             });
         }
-    }, [id, tabs.length, JSON.stringify(tabIds), createBlock, updateBlock, getBlockById, deleteBlock]);
+    }, [id, tabs, tabIds, createBlock, updateBlock, getBlockById, deleteBlock]);
 
     // Handle tab change
     const handleTabChange = (activeKey) => {

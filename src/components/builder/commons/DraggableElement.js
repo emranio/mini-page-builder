@@ -1,12 +1,12 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { useBuilder } from '../../../contexts/BuilderReducer';
 import { ItemTypes } from '../../../utils/DragTypes';
 import { Button } from 'antd';
-import { DeleteOutlined, DragOutlined } from '@ant-design/icons';
+import { DeleteOutlined } from '@ant-design/icons';
 
 const DraggableElement = ({ id, type, parentId, children }) => {
-    const { moveBlock, deleteBlock, getBlocks, setIsDragging, setDraggedBlockId } = useBuilder();
+    const { deleteBlock, setIsDragging, setDraggedBlockId } = useBuilder();
     const ref = useRef(null);
 
     // Set up the element to be draggable

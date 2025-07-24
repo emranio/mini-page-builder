@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Select, InputNumber, Button, List, Card } from 'antd';
-import { PlusOutlined, DeleteOutlined, EditOutlined, HolderOutlined } from '@ant-design/icons';
+import { Form, Input, Select, InputNumber, Button, List } from 'antd';
+import { PlusOutlined, DeleteOutlined, HolderOutlined } from '@ant-design/icons';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { useSortable } from '@dnd-kit/sortable';
@@ -98,7 +98,7 @@ const TabsBlockSettings = ({
     // Initialize tab items state
     useEffect(() => {
         setTabItems(tabs);
-    }, [element.props?.tabs]);
+    }, [element.props?.tabs, tabs]);
 
     // Sensors for drag and drop
     const sensors = useSensors(
