@@ -110,6 +110,7 @@ export const createBlockSettings = (SettingsFormComponent, blockType, settingsCo
                     form={form}
                     element={element}
                     initialValues={initialValues}
+                    throttledUpdate={throttledUpdate}
                 />
             </BaseSettings>
         );

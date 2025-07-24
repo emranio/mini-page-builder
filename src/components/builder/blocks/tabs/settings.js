@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Input, Select, InputNumber, Button, List } from 'antd';
 import { PlusOutlined, DeleteOutlined, HolderOutlined } from '@ant-design/icons';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { BaseSettings } from '../../commons/block';
 
 const { Option } = Select;
 
@@ -33,16 +32,13 @@ const SortableTabItem = ({ tab, index, onTitleChange, onDelete, isDeleteDisabled
             className="sortable-tab-item"
         >
             <List.Item
-                actions={[
-
-                ]}
                 style={{
                     padding: '8px 12px',
                     border: '1px solid #f0f0f0',
                     borderRadius: '4px',
                     marginBottom: '4px',
                     backgroundColor: isDragging ? '#f0f0f0' : '#fff',
-                    cursor: isDragging ? 'grabbing' : 'grab'
+                    cursor: isDragging ? 'grabbing' : 'default'
                 }}
             >
                 <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -80,28 +76,21 @@ const SortableTabItem = ({ tab, index, onTitleChange, onDelete, isDeleteDisabled
     );
 };
 
-const TabsBlockSettings = ({
-    open,
-    onClose,
-    element,
-    throttledUpdate,
-    inline = false
-}) => {
-    const [form] = Form.useForm();
+/**
+ * TabsBlockSettings - Enhanced form component for new architecture
+ * Includes special tab management functionality (add/edit/delete/reorder)
+ */
+const TabsBlockSettings = ({ form, element, initialValues, throttledUpdate }) => {
     const [tabItems, setTabItems] = useState([]);
 
-    // Use useMemo to prevent the tabs dependency from changing on every render
-    const tabs = React.useMemo(() => element.props?.tabs || [
-        { id: 'tab1', title: 'Tab 1' },
-        { id: 'tab2', title: 'Tab 2' }
-    ], [element.props?.tabs]);
+    const tabs = element?.props?.tabs || [];
 
     // Initialize tab items state
     useEffect(() => {
         setTabItems(tabs);
     }, [tabs]);
 
-    // Sensors for drag and drop
+    // Set up sensors for drag and drop
     const sensors = useSensors(
         useSensor(PointerSensor),
         useSensor(KeyboardSensor, {
@@ -109,206 +98,86 @@ const TabsBlockSettings = ({
         })
     );
 
-    // Update form values when element props change
-    useEffect(() => {
-        const newValues = {
-            tabs: tabItems,
-            activeTabId: element.props?.activeTabId || tabItems[0]?.id || '',
-            backgroundColor: element.props?.backgroundColor || 'transparent',
-            borderStyle: element.props?.borderStyle || 'solid',
-            borderWidth: element.props?.borderWidth || 1,
-            borderColor: element.props?.borderColor || '#d9d9d9',
-            borderRadius: element.props?.borderRadius || 4,
-            padding: element.props?.padding || 10,
-            tabStyle: element.props?.tabStyle || 'default',
-            tabPosition: element.props?.tabPosition || 'top'
-        };
-        form.setFieldsValue(newValues);
-    }, [form, element.props, tabItems]);
+    const triggerBlockUpdate = (newTabs) => {
+        // Update local state
+        setTabItems(newTabs);
 
-    const handleValuesChange = (changedValues, allValues) => {
-        // Live update the element as user changes settings
-        throttledUpdate(element.id, changedValues);
+        // Update form values
+        form.setFieldsValue({ tabs: newTabs });
+
+        // Get all current form values and update the block
+        const allValues = { ...form.getFieldsValue(), tabs: newTabs };
+        throttledUpdate(element.id, allValues);
     };
 
-    // Handle drag end
+    const handleTabTitleChange = (index, newTitle) => {
+        const newTabs = [...tabItems];
+        newTabs[index] = { ...newTabs[index], title: newTitle };
+        triggerBlockUpdate(newTabs);
+    };
+
+    const handleAddTab = () => {
+        const newTabId = `tab${Date.now()}`;
+        const newTabs = [...tabItems, { id: newTabId, title: `Tab ${tabItems.length + 1}` }];
+        triggerBlockUpdate(newTabs);
+    };
+
+    const handleDeleteTab = (index) => {
+        if (tabItems.length <= 1) return; // Don't allow deleting the last tab
+
+        const newTabs = tabItems.filter((_, i) => i !== index);
+        triggerBlockUpdate(newTabs);
+    };
+
     const handleDragEnd = (event) => {
         const { active, over } = event;
 
         if (active.id !== over?.id) {
-            const oldIndex = tabItems.findIndex((item) => item.id === active.id);
-            const newIndex = tabItems.findIndex((item) => item.id === over.id);
+            const oldIndex = tabItems.findIndex(item => item.id === active.id);
+            const newIndex = tabItems.findIndex(item => item.id === over.id);
 
-            const newTabItems = arrayMove(tabItems, oldIndex, newIndex);
-            setTabItems(newTabItems);
-
-            // Also reorder the corresponding tabIds to preserve content
-            const currentTabIds = element.props?.tabIds || [];
-            const newTabIds = arrayMove(currentTabIds, oldIndex, newIndex);
-
-            form.setFieldsValue({ tabs: newTabItems });
-            const allValues = form.getFieldsValue();
-            allValues.tabs = newTabItems;
-
-            // Include tabIds in the update to preserve container content
-            handleValuesChange({ tabs: newTabItems, tabIds: newTabIds }, allValues);
+            const reorderedTabs = arrayMove(tabItems, oldIndex, newIndex);
+            triggerBlockUpdate(reorderedTabs);
         }
-    };
-
-    // Add new tab
-    const handleAddTab = () => {
-        const newTabId = `tab${Date.now()}`;
-        const currentTabs = form.getFieldValue('tabs') || tabs;
-        const newTabs = [...currentTabs, { id: newTabId, title: `Tab ${currentTabs.length + 1}` }];
-
-        setTabItems(newTabs);
-        form.setFieldsValue({ tabs: newTabs });
-        const allValues = form.getFieldsValue();
-        allValues.tabs = newTabs;
-        handleValuesChange({ tabs: newTabs }, allValues);
-    };
-
-    // Delete tab
-    const handleDeleteTab = (index) => {
-        const currentTabs = form.getFieldValue('tabs') || tabs;
-        if (currentTabs.length <= 1) return; // Don't delete if it's the last tab
-
-        const newTabs = currentTabs.filter((_, i) => i !== index);
-        const currentActiveTab = form.getFieldValue('activeTabId');
-        const deletedTab = currentTabs[index];
-
-        // If we're deleting the active tab, switch to the first remaining tab
-        let newActiveTab = currentActiveTab;
-        if (deletedTab.id === currentActiveTab) {
-            newActiveTab = newTabs[0]?.id || '';
-        }
-
-        // Also handle the tabIds array - remove the container ID at the same index
-        const currentTabIds = element.props?.tabIds || [];
-        const newTabIds = currentTabIds.filter((_, i) => i !== index);
-
-        setTabItems(newTabs);
-        form.setFieldsValue({
-            tabs: newTabs,
-            activeTabId: newActiveTab
-        });
-
-        const allValues = form.getFieldsValue();
-        allValues.tabs = newTabs;
-        allValues.activeTabId = newActiveTab;
-
-        // Include the updated tabIds in the update to trigger proper cleanup
-        handleValuesChange({
-            tabs: newTabs,
-            activeTabId: newActiveTab,
-            tabIds: newTabIds
-        }, allValues);
-    };
-
-    // Update tab title
-    const handleTabTitleChange = (index, newTitle) => {
-        const currentTabs = form.getFieldValue('tabs') || tabs;
-        const newTabs = currentTabs.map((tab, i) =>
-            i === index ? { ...tab, title: newTitle } : tab
-        );
-
-        setTabItems(newTabs);
-        form.setFieldsValue({ tabs: newTabs });
-        const allValues = form.getFieldsValue();
-        allValues.tabs = newTabs;
-        handleValuesChange({ tabs: newTabs }, allValues);
     };
 
     return (
-        <BaseSettings
-            title="Tabs Settings"
-            open={open}
-            onCancel={onClose}
-            form={form}
-            initialValues={{
-                tabs: tabs,
-                activeTabId: element.props?.activeTabId || tabs[0]?.id || '',
-                backgroundColor: element.props?.backgroundColor || 'transparent',
-                borderStyle: element.props?.borderStyle || 'solid',
-                borderWidth: element.props?.borderWidth || 1,
-                borderColor: element.props?.borderColor || '#d9d9d9',
-                borderRadius: element.props?.borderRadius || 4,
-                padding: element.props?.padding || 10,
-                tabStyle: element.props?.tabStyle || 'default',
-                tabPosition: element.props?.tabPosition || 'top'
-            }}
-            onValuesChange={handleValuesChange}
-            width={600}
-            inline={inline}
-        >
-            {/* Tab Management */}
-            <div style={{ marginBottom: '16px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                    <span style={{ fontWeight: 500 }}>Manage Tabs</span>
-                    <Button
-                        type="dashed"
-                        size="small"
-                        icon={<PlusOutlined />}
-                        onClick={handleAddTab}
+        <>
+            <Form.Item label="Tabs">
+                <DndContext
+                    sensors={sensors}
+                    collisionDetection={closestCenter}
+                    onDragEnd={handleDragEnd}
+                >
+                    <SortableContext
+                        items={tabItems.map(tab => tab.id)}
+                        strategy={verticalListSortingStrategy}
                     >
-                        Add Tab
-                    </Button>
-                </div>
+                        <div style={{ marginBottom: '8px' }}>
+                            {tabItems.map((tab, index) => (
+                                <SortableTabItem
+                                    key={tab.id}
+                                    tab={tab}
+                                    index={index}
+                                    onTitleChange={handleTabTitleChange}
+                                    onDelete={handleDeleteTab}
+                                    isDeleteDisabled={tabItems.length <= 1}
+                                />
+                            ))}
+                        </div>
+                    </SortableContext>
+                </DndContext>
 
-                <Form.Item shouldUpdate>
-                    {() => {
-                        const formTabs = form.getFieldValue('tabs') || tabs;
-                        return (
-                            <DndContext
-                                sensors={sensors}
-                                collisionDetection={closestCenter}
-                                onDragEnd={handleDragEnd}
-                            >
-                                <SortableContext
-                                    items={formTabs.map(tab => tab.id)}
-                                    strategy={verticalListSortingStrategy}
-                                >
-                                    <div style={{ minHeight: '100px' }}>
-                                        {formTabs.map((tab, index) => (
-                                            <SortableTabItem
-                                                key={tab.id}
-                                                tab={tab}
-                                                index={index}
-                                                onTitleChange={handleTabTitleChange}
-                                                onDelete={handleDeleteTab}
-                                                isDeleteDisabled={formTabs.length <= 1}
-                                            />
-                                        ))}
-                                    </div>
-                                </SortableContext>
-                            </DndContext>
-                        );
-                    }}
-                </Form.Item>
-            </div>
-
-            {/* Active Tab */}
-            <Form.Item shouldUpdate>
-                {() => {
-                    const formTabs = form.getFieldValue('tabs') || tabs;
-                    return (
-                        <Form.Item
-                            label="Default Active Tab"
-                            name="activeTabId"
-                        >
-                            <Select style={{ width: '100%' }}>
-                                {formTabs.map(tab => (
-                                    <Option key={tab.id} value={tab.id}>
-                                        {tab.title}
-                                    </Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    );
-                }}
+                <Button
+                    type="dashed"
+                    onClick={handleAddTab}
+                    icon={<PlusOutlined />}
+                    style={{ width: '100%' }}
+                >
+                    Add Tab
+                </Button>
             </Form.Item>
 
-            {/* Tab Appearance */}
             <Form.Item
                 label="Tab Style"
                 name="tabStyle"
@@ -325,47 +194,22 @@ const TabsBlockSettings = ({
             >
                 <Select style={{ width: '100%' }}>
                     <Option value="top">Top</Option>
+                    <Option value="bottom">Bottom</Option>
                     <Option value="left">Left</Option>
                     <Option value="right">Right</Option>
                 </Select>
-            </Form.Item>
-
-            {/* Container Styling */}
-            <Form.Item
-                label="Padding"
-                name="padding"
-            >
-                <InputNumber
-                    min={0}
-                    max={50}
-                    addonAfter="px"
-                    style={{ width: '100%' }}
-                />
             </Form.Item>
 
             <Form.Item
                 label="Background Color"
                 name="backgroundColor"
             >
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                    <Select style={{ flex: 1 }}>
-                        <Option value="transparent">Transparent</Option>
-                        <Option value="#ffffff">White</Option>
-                        <Option value="#f0f0f0">Light Gray</Option>
-                        <Option value="#e8e8e8">Gray</Option>
-                        <Option value="custom">Custom Color</Option>
-                    </Select>
-                    <Input
-                        type="color"
-                        style={{
-                            width: 50,
-                            height: 32,
-                            border: '1px solid #d9d9d9',
-                            padding: 0
-                        }}
-                        placeholder="Custom"
-                    />
-                </div>
+                <Select style={{ width: '100%' }}>
+                    <Option value="transparent">Transparent</Option>
+                    <Option value="#ffffff">White</Option>
+                    <Option value="#f0f0f0">Light Gray</Option>
+                    <Option value="#e8e8e8">Gray</Option>
+                </Select>
             </Form.Item>
 
             <Form.Item
@@ -396,13 +240,17 @@ const TabsBlockSettings = ({
                 label="Border Color"
                 name="borderColor"
             >
-                <Input
+                <input
                     type="color"
                     style={{
                         width: '100%',
                         height: 32,
-                        border: '1px solid #d9d9d9',
-                        padding: 0
+                        border: '1px solid #d9d9d9'
+                    }}
+                    onChange={(e) => {
+                        form.setFieldsValue({ borderColor: e.target.value });
+                        const allValues = form.getFieldsValue();
+                        form.submit();
                     }}
                 />
             </Form.Item>
@@ -418,7 +266,19 @@ const TabsBlockSettings = ({
                     style={{ width: '100%' }}
                 />
             </Form.Item>
-        </BaseSettings>
+
+            <Form.Item
+                label="Padding"
+                name="padding"
+            >
+                <InputNumber
+                    min={0}
+                    max={50}
+                    addonAfter="px"
+                    style={{ width: '100%' }}
+                />
+            </Form.Item>
+        </>
     );
 };
 

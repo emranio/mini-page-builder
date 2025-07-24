@@ -2,34 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { Tabs } from 'antd';
 import { useBuilder } from '../../../../data/BuilderReducer';
 import { DropZone } from '../../commons';
-import { withBaseBlock } from '../../commons/block';
 
 const TabsBlockView = ({
     id,
-    tabs = [
-        { id: 'tab1', title: 'Tab 1' },
-        { id: 'tab2', title: 'Tab 2' }
-    ],
-    activeTabId = 'tab1',
-    tabIds = [],
-    backgroundColor = 'transparent',
-    borderStyle = 'solid',
-    borderWidth = 1,
-    borderColor = '#d9d9d9',
-    borderRadius = 4,
-    padding = 10,
-    tabStyle = 'default',
-    tabPosition = 'top',
-    throttledUpdate,
-    uniqueBlockId
+    tabs,
+    activeTabId,
+    tabIds,
+    backgroundColor,
+    borderStyle,
+    borderWidth,
+    borderColor,
+    borderRadius,
+    padding,
+    tabStyle,
+    tabPosition,
+    throttledUpdate
 }) => {
-    const { updateBlock, createBlock, getBlockById, isDragging, setSelectedBlockId, deleteBlock } = useBuilder();
+    const { updateBlock, createBlock, getBlockById, isDragging, deleteBlock } = useBuilder();
     const [currentActiveTab, setCurrentActiveTab] = useState(activeTabId);
-
-    const handleClick = (e) => {
-        e.stopPropagation();
-        setSelectedBlockId(id);
-    };
 
     // Initialize tab containers if they don't exist
     useEffect(() => {
@@ -97,12 +87,7 @@ const TabsBlockView = ({
     });
 
     return (
-        <div
-            id={uniqueBlockId}
-            className={`tabs-container ${isDragging ? 'during-drag' : ''}`}
-            data-id={id}
-            onClick={handleClick}
-        >
+        <>
             <Tabs
                 activeKey={currentActiveTab}
                 onChange={handleTabChange}
@@ -110,8 +95,8 @@ const TabsBlockView = ({
                 tabPosition={tabPosition}
                 items={tabItems}
             />
-        </div>
+        </>
     );
 };
 
-export default withBaseBlock(TabsBlockView, 'tabs');
+export default TabsBlockView;
