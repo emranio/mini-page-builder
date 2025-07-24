@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useDrop } from 'react-dnd';
 import { useBuilder } from '../../../contexts/BuilderReducer';
-import { ItemTypes } from '../../../utils/DragTypes';
+import blockManager from './block/blockManager';
 import { BlockRenderer } from './index';
 import PositionalDropZone from './PositionalDropZone';
 
@@ -11,8 +11,11 @@ const DropZone = ({ parentId, layoutClass = 'vertical-layout' }) => {
 
     const blocks = getBlocks(parentId);
 
+    // Get all drag types from block manager
+    const acceptedTypes = blockManager.getDragTypes();
+
     const [{ isOver }, drop] = useDrop(() => ({
-        accept: [ItemTypes.TEXT, ItemTypes.IMAGE, ItemTypes.FLEXBOX, ItemTypes.COLUMN, ItemTypes.TABS, ItemTypes.CONTAINER_ITEM],
+        accept: acceptedTypes,
         drop: (item, monitor) => {
             // Prevent dropping if this is a child of the event path (prevents duplicate drops)
             if (monitor.didDrop()) {

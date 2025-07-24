@@ -59,6 +59,35 @@ class blockManager {
     getBlocksByCategory(category) {
         return this.getAllBlocks().filter(block => block.category === category);
     }
+
+    /**
+     * Get all drag types for drag and drop operations
+     * Includes all registered block types plus the special CONTAINER_ITEM type
+     * @returns {Array<string>} Array of drag type identifiers
+     */
+    getDragTypes() {
+        const blockTypes = this.getBlockTypes();
+        return [...blockTypes, 'CONTAINER_ITEM'];
+    }
+
+    /**
+     * Get specific drag type constants for backwards compatibility
+     * @returns {object} Object with drag type constants
+     */
+    getDragTypeConstants() {
+        const blockTypes = this.getBlockTypes();
+        const constants = {};
+
+        // Add all registered block types
+        blockTypes.forEach(type => {
+            constants[type.toUpperCase()] = type;
+        });
+
+        // Add special container item type
+        constants.CONTAINER_ITEM = 'CONTAINER_ITEM';
+
+        return constants;
+    }
 }
 
 // Create singleton instance

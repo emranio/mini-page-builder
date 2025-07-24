@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { useBuilder } from '../../../contexts/BuilderReducer';
-import { ItemTypes } from '../../../utils/DragTypes';
+import blockManager from './block/blockManager';
 import { Button } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 
@@ -9,9 +9,12 @@ const Draggable = ({ id, type, parentId, children }) => {
     const { deleteBlock, setIsDragging, setDraggedBlockId } = useBuilder();
     const ref = useRef(null);
 
+    // Get drag type constants
+    const dragTypes = blockManager.getDragTypeConstants();
+
     // Set up the element to be draggable
     const [{ isDragging }, drag] = useDrag(() => ({
-        type: ItemTypes.CONTAINER_ITEM,
+        type: dragTypes.CONTAINER_ITEM,
         item: () => {
             setIsDragging(true);
             setDraggedBlockId(id); // Track which block is being dragged
@@ -28,7 +31,7 @@ const Draggable = ({ id, type, parentId, children }) => {
 
     // Set up the element to also accept drops for reordering (disabled to avoid conflicts with positional drop zones)
     const [{ isOver }, drop] = useDrop(() => ({
-        accept: ItemTypes.CONTAINER_ITEM,
+        accept: dragTypes.CONTAINER_ITEM,
         // Removed hover logic - positioning is now handled by PositionalDropZone components
         collect: monitor => ({
             isOver: !!monitor.isOver()
