@@ -1,7 +1,7 @@
 import React, { memo, useCallback } from 'react';
 import { Typography } from 'antd';
 import { withBaseBlock } from '../../commons/block';
-import { useBuilder } from '../../../../contexts/BuilderReducer';
+import { useBuilder } from '../../../../data/BuilderReducer';
 
 const { Paragraph } = Typography;
 

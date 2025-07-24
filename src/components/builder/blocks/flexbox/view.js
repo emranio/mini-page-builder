@@ -6,9 +6,9 @@ import { PlusOutlined } from '@ant-design/icons';
 import { withBaseBlock } from '../../commons/block';
 
 /**
- * ExampleContainerBlockView component - Optimized with React.memo for performance
+ * FlexboxBlockView component - Optimized with React.memo for performance
  */
-const ExampleContainerBlockView = memo(({
+const FlexboxBlockView = memo(({
     id,
     padding = 10,
     margin = 5,
@@ -28,28 +28,38 @@ const ExampleContainerBlockView = memo(({
         setSelectedBlockId(id);
     }, [id, setSelectedBlockId]);
 
-    // Add a new example-container inside this container
-    const handleAddContainer = useCallback(() => {
-        createBlock('example-container', id);
+    // Add a new flexbox container inside this container
+    const handleAddFlexbox = useCallback(() => {
+        createBlock('flexbox', id);
     }, [createBlock, id]);
+
+    const containerStyle = React.useMemo(() => ({
+        padding: `${padding}px`,
+        margin: `${margin}px`,
+        backgroundColor,
+        border: `${borderWidth}px ${borderStyle} ${borderColor}`,
+        borderRadius: `${borderRadius}px`,
+        minHeight: '100px'
+    }), [padding, margin, backgroundColor, borderStyle, borderWidth, borderColor, borderRadius]);
 
     return (
         <div
             id={uniqueBlockId}
             ref={containerRef}
-            className={`example-container ${isDragging ? 'during-drag' : ''}`}
+            className={`flexbox-container ${isDragging ? 'during-drag' : ''}`}
             data-id={id}
             onClick={handleClick}
+            style={containerStyle}
         >
             {/* Use dedicated DropZone for container contents */}
-            <div className="example-container-content">
+            <div className="flexbox-content">
                 <DropZone parentId={id} />
             </div>
 
             <div className="container-actions">
                 <Button
                     icon={<PlusOutlined />}
-                    onClick={handleAddContainer}
+                    onClick={handleAddFlexbox}
                     className="add-container-button"
                     size="small"
                 >
@@ -60,4 +70,4 @@ const ExampleContainerBlockView = memo(({
     );
 });
 
-export default withBaseBlock(ExampleContainerBlockView, 'example-container');
+export default withBaseBlock(FlexboxBlockView, 'flexbox');

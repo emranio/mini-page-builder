@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
-import { useBuilder } from '../../../contexts/BuilderReducer';
+import { useBuilder } from '../../../data/BuilderReducer';
 import blockManager from './block/blockManager';
 import { Button } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';

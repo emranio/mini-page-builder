@@ -1,7 +1,7 @@
 import React, { memo, useCallback } from 'react';
 import { Image } from 'antd';
 import { withBaseBlock } from '../../commons/block';
-import { useBuilder } from '../../../../contexts/BuilderReducer';
+import { useBuilder } from '../../../../data/BuilderReducer';
 
 /**
  * ImageBlockView component - Optimized with React.memo for performance

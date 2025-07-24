@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Tabs } from 'antd';
-import { useBuilder } from '../../../../contexts/BuilderReducer';
+import { useBuilder } from '../../../../data/BuilderReducer';
 import { DropZone } from '../../commons';
 import { withBaseBlock } from '../../commons/block';
 

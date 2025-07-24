@@ -1,6 +1,6 @@
 import React, { useRef, useCallback, useEffect, memo } from 'react';
 import { Modal, Form } from 'antd';
-import { useBuilder } from '../../../../contexts/BuilderReducer';
+import { useBuilder } from '../../../../data/BuilderReducer';
 import styleManager from './styleManager';
 
 /**

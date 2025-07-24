@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { Layout, Card, Typography, Row, Col, Button } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { ResizeHandle, BlockItem } from './partials';
-import { useBuilder } from '../../../contexts/BuilderReducer';
+import { useBuilder } from '../../../data/BuilderReducer';
 import { blockManager } from '../commons/block';
 
 const { Sider } = Layout;

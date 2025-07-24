@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { useDrop } from 'react-dnd';
-import { useBuilder } from '../../../contexts/BuilderReducer';
+import { useBuilder } from '../../../data/BuilderReducer';
 import blockManager from './block/blockManager';
 import { BlockRenderer } from './index';
 import PositionalDropZone from './PositionalDropZone';
