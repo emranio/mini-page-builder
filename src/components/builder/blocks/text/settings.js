@@ -1,11 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, memo, useCallback } from 'react';
 import { Form, Input, InputNumber, Select } from 'antd';
 import { BaseSettings } from '../../commons/block';
 
 const { Option } = Select;
 const { TextArea } = Input;
 
-const TextBlockSettings = ({
+/**
+ * TextBlockSettings component - Optimized with React.memo for performance
+ */
+const TextBlockSettings = memo(({
     open,
     onClose,
     element,
@@ -14,22 +17,24 @@ const TextBlockSettings = ({
 }) => {
     const [form] = Form.useForm();
 
+    // Memoize initial values to prevent form recreation
+    const initialValues = React.useMemo(() => ({
+        content: element.props?.content || 'Simple text block',
+        fontSize: element.props?.fontSize || 14,
+        fontWeight: element.props?.fontWeight || 'normal',
+        color: element.props?.color || '#000000',
+        textAlign: element.props?.textAlign || 'left'
+    }), [element.props]);
+
     // Update form values when element props change
     useEffect(() => {
-        const newValues = {
-            content: element.props?.content || 'Simple text block',
-            fontSize: element.props?.fontSize || 14,
-            fontWeight: element.props?.fontWeight || 'normal',
-            color: element.props?.color || '#000000',
-            textAlign: element.props?.textAlign || 'left'
-        };
-        form.setFieldsValue(newValues);
-    }, [form, element.props]);
+        form.setFieldsValue(initialValues);
+    }, [form, initialValues]);
 
-    const handleValuesChange = (changedValues, allValues) => {
+    const handleValuesChange = useCallback((changedValues, allValues) => {
         // Live update the element as user changes settings
         throttledUpdate(element.id, allValues);
-    };
+    }, [throttledUpdate, element.id]);
 
     return (
         <BaseSettings
@@ -37,13 +42,7 @@ const TextBlockSettings = ({
             open={open}
             onCancel={onClose}
             form={form}
-            initialValues={{
-                content: element.props?.content || 'Simple text block',
-                fontSize: element.props?.fontSize || 14,
-                fontWeight: element.props?.fontWeight || 'normal',
-                color: element.props?.color || '#000000',
-                textAlign: element.props?.textAlign || 'left'
-            }}
+            initialValues={initialValues}
             onValuesChange={handleValuesChange}
             width={500}
             inline={inline}
@@ -114,6 +113,6 @@ const TextBlockSettings = ({
             )}
         </BaseSettings>
     );
-};
+});
 
 export default TextBlockSettings;

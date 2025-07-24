@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Layout } from 'antd';
@@ -17,6 +17,19 @@ function App() {
 
   const [responsiveView, setResponsiveView] = useState('desktop');
 
+  // Memoize handlers to prevent unnecessary re-renders
+  const handleWidthChange = useCallback((newWidth) => {
+    setLeftPanelConfig(prev => ({ ...prev, width: newWidth }));
+  }, []);
+
+  const handleToggleCollapse = useCallback(() => {
+    setLeftPanelConfig(prev => ({ ...prev, collapsed: !prev.collapsed }));
+  }, []);
+
+  const handleResponsiveViewChange = useCallback((newView) => {
+    setResponsiveView(newView);
+  }, []);
+
   return (
     <DndProvider backend={HTML5Backend}>
       <BuilderProvider>
@@ -24,13 +37,13 @@ function App() {
           <LeftPanel
             width={leftPanelConfig.width}
             collapsed={leftPanelConfig.collapsed}
-            onWidthChange={(newWidth) => setLeftPanelConfig(prev => ({ ...prev, width: newWidth }))}
-            onToggleCollapse={() => setLeftPanelConfig(prev => ({ ...prev, collapsed: !prev.collapsed }))}
+            onWidthChange={handleWidthChange}
+            onToggleCollapse={handleToggleCollapse}
           />
           <RightPanel
             leftPanelCollapsed={leftPanelConfig.collapsed}
             responsiveView={responsiveView}
-            onResponsiveViewChange={setResponsiveView}
+            onResponsiveViewChange={handleResponsiveViewChange}
           />
         </Layout>
       </BuilderProvider>

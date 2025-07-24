@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { memo } from 'react';
 import Draggable from './Draggable';
 import blockManager from './block/blockManager';
 
-const BlockRenderer = ({ element }) => {
+/**
+ * BlockRenderer component - Renders individual blocks with drag functionality
+ * Optimized with React.memo to prevent unnecessary re-renders
+ */
+const BlockRenderer = memo(({ element }) => {
     if (!element) return null;
-
-    // Force remount key to ensure component updates properly
-    const blockKey = `${element.id}-${JSON.stringify(element.props)}`;
 
     // Wrap the block content in a draggable wrapper
     const renderBlockContent = () => {
@@ -15,7 +16,7 @@ const BlockRenderer = ({ element }) => {
 
         if (blockDefinition && blockDefinition.view) {
             const BlockComponent = blockDefinition.view;
-            return <BlockComponent key={blockKey} id={element.id} {...element.props} />;
+            return <BlockComponent id={element.id} {...element.props} />;
         }
 
         return <div>Unknown Block Type: {element.type}</div>;
@@ -30,6 +31,6 @@ const BlockRenderer = ({ element }) => {
             {renderBlockContent()}
         </Draggable>
     );
-};
+});
 
 export default BlockRenderer;

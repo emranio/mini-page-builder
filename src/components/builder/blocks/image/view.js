@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { memo, useCallback } from 'react';
 import { Image } from 'antd';
 import { withBaseBlock } from '../../commons/block';
 import { useBuilder } from '../../../../contexts/BuilderReducer';
 
-const ImageBlockView = ({
+/**
+ * ImageBlockView component - Optimized with React.memo for performance
+ */
+const ImageBlockView = memo(({
     id,
     src = 'https://placehold.co/200x50?text=click+to+edit&font=roboto',
     alt = 'Image',
@@ -15,10 +18,17 @@ const ImageBlockView = ({
 }) => {
     const { setSelectedBlockId } = useBuilder();
 
-    const handleClick = (e) => {
+    const handleClick = useCallback((e) => {
         e.stopPropagation();
         setSelectedBlockId(id);
-    };
+    }, [id, setSelectedBlockId]);
+
+    const imageStyle = React.useMemo(() => ({
+        width,
+        height,
+        borderRadius: `${borderRadius}px`,
+        cursor: 'pointer'
+    }), [width, height, borderRadius]);
 
     return (
         <div id={uniqueBlockId} className="image-block" onClick={handleClick}>
@@ -27,12 +37,12 @@ const ImageBlockView = ({
                     src={src}
                     alt={alt}
                     preview={false}
-                    width="100%"
+                    style={imageStyle}
                     className="newsletter-image"
                 />
             </div>
         </div>
     );
-};
+});
 
 export default withBaseBlock(ImageBlockView, 'image');

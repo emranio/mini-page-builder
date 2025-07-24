@@ -1,11 +1,14 @@
-import React, { useRef } from 'react';
+import React, { memo, useRef, useCallback } from 'react';
 import { useBuilder } from '../../../../contexts/BuilderReducer';
 import { DropZone } from '../../commons';
 import { Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { withBaseBlock } from '../../commons/block';
 
-const FlexboxBlockView = ({
+/**
+ * FlexboxBlockView component - Optimized with React.memo for performance
+ */
+const FlexboxBlockView = memo(({
     id,
     padding = 10,
     margin = 5,
@@ -20,15 +23,24 @@ const FlexboxBlockView = ({
     const { createBlock, isDragging, setSelectedBlockId } = useBuilder();
     const containerRef = useRef(null);
 
-    const handleClick = (e) => {
+    const handleClick = useCallback((e) => {
         e.stopPropagation();
         setSelectedBlockId(id);
-    };
+    }, [id, setSelectedBlockId]);
 
     // Add a new flexbox container inside this container
-    const handleAddFlexbox = () => {
+    const handleAddFlexbox = useCallback(() => {
         createBlock('flexbox', id);
-    };
+    }, [createBlock, id]);
+
+    const containerStyle = React.useMemo(() => ({
+        padding: `${padding}px`,
+        margin: `${margin}px`,
+        backgroundColor,
+        border: `${borderWidth}px ${borderStyle} ${borderColor}`,
+        borderRadius: `${borderRadius}px`,
+        minHeight: '100px'
+    }), [padding, margin, backgroundColor, borderStyle, borderWidth, borderColor, borderRadius]);
 
     return (
         <div
@@ -37,6 +49,7 @@ const FlexboxBlockView = ({
             className={`flexbox-container ${isDragging ? 'during-drag' : ''}`}
             data-id={id}
             onClick={handleClick}
+            style={containerStyle}
         >
             {/* Use dedicated DropZone for container contents */}
             <div className="flexbox-content">
@@ -55,6 +68,6 @@ const FlexboxBlockView = ({
             </div>
         </div>
     );
-};
+});
 
 export default withBaseBlock(FlexboxBlockView, 'flexbox');
