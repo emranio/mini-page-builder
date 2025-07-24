@@ -248,7 +248,7 @@ const ColumnBlockView = ({
             // Calculate flex basis based on width percentage
             const flexBasis = `${width}%`;
 
-            // Create the column
+            // Create the column content
             const columnContent = (
                 <div className="column-content">
                     <div className={`column-drop-area ${isDragging ? 'during-drag' : ''}`}>

@@ -102,7 +102,7 @@ const ColumnBlockStyles = (props, uniqueId) => {
         #${uniqueId} .resize-bar {
             position: absolute;
             top: 0;
-            right: -5px;
+            right: calc(-${gap / 2}px);
             width: 10px;
             height: 100%;
             cursor: col-resize;
@@ -114,27 +114,39 @@ const ColumnBlockStyles = (props, uniqueId) => {
             transition: opacity 0.2s ease;
         }
 
+        #${uniqueId} .column-element-row:hover .resize-bar {
+            opacity: 0.6;
+        }
+        
         #${uniqueId} .column-wrapper:hover .resize-bar {
+            opacity: 1;
+        }
+        
+        #${uniqueId} .resize-bar:hover {
             opacity: 1;
         }
 
         #${uniqueId} .resize-bar-handle {
-            width: 2px;
+            width: 4px;
             height: 60%;
             background-color: #1890ff;
-            border-radius: 1px;
+            border-radius: 2px;
             transition: all 0.2s ease;
+            position: relative;
+            left: 0;
+            transform: translateX(-50%);
         }
 
         #${uniqueId} .resize-bar:hover .resize-bar-handle {
-            width: 3px;
+            width: 4px;
             background-color: #40a9ff;
+            box-shadow: 0 0 6px rgba(24, 144, 255, 0.5);
         }
 
         #${uniqueId} .resize-bar.resizing .resize-bar-handle {
-            width: 3px;
+            width: 4px;
             background-color: #1890ff;
-            box-shadow: 0 0 8px rgba(24, 144, 255, 0.3);
+            box-shadow: 0 0 8px rgba(24, 144, 255, 0.8);
         }
     `;
 };
