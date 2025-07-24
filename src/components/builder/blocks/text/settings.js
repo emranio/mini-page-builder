@@ -66,10 +66,6 @@ const TextBlockSettingsForm = ({ form, element, initialValues }) => {
                     <Option value="justify">Justify</Option>
                 </Select>
             </Form.Item>
-
-            <div style={{ marginTop: '10px', padding: '10px', backgroundColor: '#f5f5f5', borderRadius: '4px' }}>
-                <p>Content can be edited from the left panel settings.</p>
-            </div>
         </>
     );
 };

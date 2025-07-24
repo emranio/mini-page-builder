@@ -10,10 +10,6 @@ const { Paragraph } = Typography;
  */
 const TextBlockView = ({
     content,
-    fontSize,
-    fontWeight,
-    color,
-    textAlign
 }) => {
     return (
         <>
