@@ -4,6 +4,8 @@ import { DropZone } from '../../commons';
 import { withBaseBlock } from '../../commons/base';
 import ResizeBar from './ResizeBar';
 import ColumnBlockSettings from './settings';
+import StyleInjector from '../../commons/StyleInjector';
+import { generateColumnStyles } from './style';
 
 const ColumnBlockView = ({
     id,
@@ -195,15 +197,7 @@ const ColumnBlockView = ({
 
             // Create the column
             const columnContent = (
-                <div
-                    style={{
-                        flex: '1 1 auto',
-                        width: '100%',
-                        minHeight: '180px',
-                        display: 'flex'
-                    }}
-                    className="column-content"
-                >
+                <div className="column-content">
                     <div className={`column-drop-area ${isDragging ? 'during-drag' : ''}`}>
                         {columnId ? <DropZone parentId={columnId} /> : <div className="loading">Loading column...</div>}
                     </div>
@@ -224,15 +218,8 @@ const ColumnBlockView = ({
             return (
                 <div
                     key={`col-wrapper-${id}-${index}`}
-                    style={{
-                        flex: `0 0 ${flexBasis}`,
-                        maxWidth: flexBasis,
-                        boxSizing: 'border-box',
-                        display: 'flex',
-                        position: 'relative',
-                        overflow: 'visible'
-                    }}
                     className="column-wrapper"
+                    data-column-index={index}
                 >
                     {columnContent}
                     {resizeBar}
@@ -241,29 +228,26 @@ const ColumnBlockView = ({
         });
     };
 
-    const containerStyle = {
-        margin: '10px 0',
-        minHeight: '200px',
-        border: `${borderWidth}px ${borderStyle} ${borderColor}`,
-        padding: '10px',
-        width: '100%',
-        overflow: 'hidden',
-        position: 'relative',
-        display: 'flex',
-        flexDirection: 'row',
-        flexWrap: 'nowrap',
-        gap: `${gap}px`,
-        alignItems: 'stretch',
-        justifyContent: 'space-between',
-        backgroundColor: backgroundColor === 'transparent' ? 'transparent' : backgroundColor
-    };
+    // Generate unique block ID and styles
+    const blockId = `column-${id}`;
+    const dynamicCSS = generateColumnStyles(id, {
+        gap,
+        backgroundColor,
+        borderStyle,
+        borderWidth,
+        borderColor,
+        currentWidths,
+        columns
+    });
 
     return (
-        <div className="column-element column-element-container" onClick={handleClick}>
+        <>
+            <StyleInjector id={blockId} css={dynamicCSS} />
             <div
+                id={blockId}
                 className={`column-element-row ${isDragging ? 'during-drag' : ''}`}
                 data-id={id}
-                style={containerStyle}
+                onClick={handleClick}
             >
                 {renderColumns()}
             </div>
@@ -285,7 +269,7 @@ const ColumnBlockView = ({
                 }}
                 throttledUpdate={throttledUpdate}
             />
-        </div>
+        </>
     );
 };
 

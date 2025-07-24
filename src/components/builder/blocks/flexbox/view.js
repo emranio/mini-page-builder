@@ -4,6 +4,8 @@ import { DropZone } from '../../commons';
 import { Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { withBaseBlock } from '../../commons/base';
+import StyleInjector from '../../commons/StyleInjector';
+import { generateFlexboxStyles } from './style';
 
 const FlexboxBlockView = ({
     id,
@@ -29,42 +31,31 @@ const FlexboxBlockView = ({
         createBlock('flexbox', id);
     };
 
-    const containerStyle = {
-        width: '100%',
-        padding: `${padding}px`,
-        margin: `${margin}px 0`,
-        backgroundColor: backgroundColor === 'transparent' ? 'rgba(0, 0, 0, 0.02)' : backgroundColor,
-        border: `${borderWidth}px ${borderStyle} ${borderColor}`,
-        borderRadius: `${borderRadius}px`,
-        position: 'relative',
-        boxSizing: 'border-box',
-        transition: 'all 0.2s ease'
-    };
+    // Generate unique block ID and styles
+    const blockId = `flexbox-${id}`;
+    const dynamicCSS = generateFlexboxStyles(id, {
+        padding,
+        margin,
+        backgroundColor,
+        borderStyle,
+        borderWidth,
+        borderColor,
+        borderRadius
+    });
 
     return (
-        <div
-            ref={containerRef}
-            className={`flexbox-container ${isDragging ? 'during-drag' : ''}`}
-            data-id={id}
-            style={containerStyle}
-            onClick={handleClick}
-        >
-            {/* Use dedicated DropZone for container contents */}
-            <div className="flexbox-content">
+        <>
+            <StyleInjector id={blockId} css={dynamicCSS} />
+            <div
+                ref={containerRef}
+                id={blockId}
+                className={`flexbox-container ${isDragging ? 'during-drag' : ''}`}
+                data-id={id}
+                onClick={handleClick}
+            >
                 <DropZone parentId={id} />
             </div>
-
-            <div className="container-actions">
-                <Button
-                    icon={<PlusOutlined />}
-                    onClick={handleAddFlexbox}
-                    className="add-container-button"
-                    size="small"
-                >
-                    Add Container
-                </Button>
-            </div>
-        </div>
+        </>
     );
 };
 

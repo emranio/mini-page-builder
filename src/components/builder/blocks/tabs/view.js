@@ -3,6 +3,8 @@ import { Tabs } from 'antd';
 import { useBuilder } from '../../../../contexts/BuilderReducer';
 import { DropZone } from '../../commons';
 import { withBaseBlock } from '../../commons/base';
+import StyleInjector from '../../commons/StyleInjector';
+import { generateTabsStyles } from './style';
 
 const TabsBlockView = ({
     id,
@@ -88,13 +90,7 @@ const TabsBlockView = ({
             key: tab.id,
             label: tab.title,
             children: (
-                <div
-                    className={`tab-content ${isDragging ? 'during-drag' : ''}`}
-                    style={{
-                        minHeight: '200px',
-                        padding: '10px'
-                    }}
-                >
+                <div className={`tab-content ${isDragging ? 'during-drag' : ''}`}>
                     {tabContainerId ? (
                         <DropZone parentId={tabContainerId} />
                     ) : (
@@ -105,31 +101,32 @@ const TabsBlockView = ({
         };
     });
 
-    const containerStyle = {
-        backgroundColor: backgroundColor === 'transparent' ? 'transparent' : backgroundColor,
-        border: `${borderWidth}px ${borderStyle} ${borderColor}`,
-        borderRadius: `${borderRadius}px`,
-        padding: `${padding}px`,
-        position: 'relative',
-        width: '100%',
-        minHeight: '300px'
-    };
+    // Generate unique block ID and styles
+    const blockId = `tabs-${id}`;
+    const dynamicCSS = generateTabsStyles(id, {
+        backgroundColor,
+        borderStyle,
+        borderWidth,
+        borderColor,
+        borderRadius,
+        padding
+    });
 
     return (
-        <div
-            className={`tabs-container ${isDragging ? 'during-drag' : ''}`}
-            data-id={id}
-            style={containerStyle}
-            onClick={handleClick}
-        >
+        <>
+            <StyleInjector id={blockId} css={dynamicCSS} />
             <Tabs
+                id={blockId}
+                className={`tabs-container ${isDragging ? 'during-drag' : ''}`}
+                data-id={id}
+                onClick={handleClick}
                 activeKey={currentActiveTab}
                 onChange={handleTabChange}
                 type={tabStyle === 'card' ? 'card' : 'line'}
                 tabPosition={tabPosition}
                 items={tabItems}
             />
-        </div>
+        </>
     );
 };
 

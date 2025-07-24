@@ -2,6 +2,8 @@ import React from 'react';
 import { Image } from 'antd';
 import { withBaseBlock } from '../../commons/base';
 import { useBuilder } from '../../../../contexts/BuilderReducer';
+import StyleInjector from '../../commons/StyleInjector';
+import { generateImageStyles } from './style';
 
 const ImageBlockView = ({
     id,
@@ -19,25 +21,23 @@ const ImageBlockView = ({
         setSelectedBlockId(id);
     };
 
-    const imageStyle = {
-        width,
-        height,
-        borderRadius: `${borderRadius}px`
-    };
+    // Generate unique block ID and styles
+    const blockId = `image-${id}`;
+    const dynamicCSS = generateImageStyles(id, { width, height, borderRadius });
 
     return (
-        <div className="image-block" onClick={handleClick}>
-            <div className="image-container">
-                <Image
-                    src={src}
-                    alt={alt}
-                    preview={false}
-                    width="100%"
-                    style={imageStyle}
-                    className="newsletter-image"
-                />
-            </div>
-        </div>
+        <>
+            <StyleInjector id={blockId} css={dynamicCSS} />
+            <Image
+                id={blockId}
+                src={src}
+                alt={alt}
+                preview={false}
+                width="100%"
+                className="newsletter-image"
+                onClick={handleClick}
+            />
+        </>
     );
 };
 
