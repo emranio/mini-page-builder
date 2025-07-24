@@ -5,7 +5,7 @@ import { ItemTypes } from '../../../utils/DragTypes';
 import { Button } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 
-const DraggableElement = ({ id, type, parentId, children }) => {
+const Draggable = ({ id, type, parentId, children }) => {
     const { deleteBlock, setIsDragging, setDraggedBlockId } = useBuilder();
     const ref = useRef(null);
 
@@ -73,4 +73,4 @@ const DraggableElement = ({ id, type, parentId, children }) => {
     );
 };
 
-export default DraggableElement;
+export default Draggable;

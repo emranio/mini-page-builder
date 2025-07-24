@@ -2,7 +2,7 @@
  * BlockManager - Centralized manager for all blocks in the page builder
  * Handles registration, retrieval, and style management for blocks
  */
-import styleManager from '../../../../utils/StyleManager';
+import styleManager from './styleManager';
 
 class blockManager {
     constructor() {

@@ -1,6 +1,6 @@
 import React, { useRef, useCallback, useEffect } from 'react';
 import { useBuilder } from '../../../../contexts/BuilderReducer';
-import styleManager from '../../../../utils/StyleManager';
+import styleManager from './styleManager';
 
 /**
  * Abstract base class for all blocks

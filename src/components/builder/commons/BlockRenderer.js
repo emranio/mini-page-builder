@@ -1,7 +1,7 @@
 import React from 'react';
 // ItemTypes is not used in this file
 // import { ItemTypes } from '../../../utils/DragTypes';
-import DraggableElement from './DraggableElement';
+import Draggable from './Draggable';
 // import { useBuilder } from '../../../contexts/BuilderReducer';
 import blockManager from './block/blockManager';
 
@@ -28,13 +28,13 @@ const BlockRenderer = ({ element }) => {
     };
 
     return (
-        <DraggableElement
+        <Draggable
             id={element.id}
             type={element.type}
             parentId={element.parentId}
         >
             {renderBlockContent()}
-        </DraggableElement>
+        </Draggable>
     );
 };
 
