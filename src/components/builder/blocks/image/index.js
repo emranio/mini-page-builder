@@ -2,10 +2,10 @@ import { PictureOutlined } from '@ant-design/icons';
 import ImageBlockView from './view';
 import ImageBlockSettings from './settings';
 import ImageBlockStyles from './style';
-import { makeBlock } from '../../commons/block';
+import { createBlock } from '../../commons/block/BlockFactory';
 
-// Create and register the block using makeBlock
-const ImageBlock = makeBlock({
+// Create and register the block using the new simplified BlockFactory
+const ImageBlock = createBlock({
     type: 'image',
     name: 'Image',
     category: 'media',
@@ -19,6 +19,10 @@ const ImageBlock = makeBlock({
         width: '100%',
         height: 'auto',
         borderRadius: 0
+    },
+    settingsConfig: {
+        title: 'Image Settings',
+        width: 500
     }
 });
 

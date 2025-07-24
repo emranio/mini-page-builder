@@ -1,28 +1,19 @@
-import React, { memo, useCallback } from 'react';
+import React from 'react';
 import { Image } from 'antd';
-import { withBaseBlock } from '../../commons/block';
-import { useBuilder } from '../../../../data/BuilderReducer';
 
 /**
- * ImageBlockView component - Optimized with React.memo for performance
+ * ImageBlockView component - Simplified with automatic prop handling
+ * All common functionality (click handlers, prop defaults, memoization) is handled by BlockFactory
  */
-const ImageBlockView = memo(({
-    id,
-    src = 'https://placehold.co/200x50?text=click+to+edit&font=roboto',
-    alt = 'Image',
-    width = '100%',
-    height = 'auto',
-    borderRadius = 0,
-    throttledUpdate,
-    uniqueBlockId
+const ImageBlockView = ({
+    src,
+    alt,
+    width,
+    height,
+    borderRadius,
+    uniqueBlockId,
+    onClick
 }) => {
-    const { setSelectedBlockId } = useBuilder();
-
-    const handleClick = useCallback((e) => {
-        e.stopPropagation();
-        setSelectedBlockId(id);
-    }, [id, setSelectedBlockId]);
-
     const imageStyle = React.useMemo(() => ({
         width,
         height,
@@ -31,7 +22,7 @@ const ImageBlockView = memo(({
     }), [width, height, borderRadius]);
 
     return (
-        <div id={uniqueBlockId} className="image-block" onClick={handleClick}>
+        <div id={uniqueBlockId} className="image-block" onClick={onClick}>
             <div className="image-container">
                 <Image
                     src={src}
@@ -43,6 +34,6 @@ const ImageBlockView = memo(({
             </div>
         </div>
     );
-});
+};
 
-export default withBaseBlock(ImageBlockView, 'image');
+export default ImageBlockView;

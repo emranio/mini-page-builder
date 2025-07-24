@@ -1,17 +1,17 @@
 import { FontSizeOutlined } from '@ant-design/icons';
 import TextBlockView from './view';
-import TextBlockSettings from './settings';
+import TextBlockSettingsForm from './settings';
 import TextBlockStyles from './style';
-import { makeBlock } from '../../commons/block';
+import { createBlock } from '../../commons/block/BlockFactory';
 
-// Create and register the block using makeBlock
-const TextBlock = makeBlock({
+// Create and register the block using the new simplified BlockFactory
+const TextBlock = createBlock({
     type: 'text',
     name: 'Text',
     category: 'content',
     icon: <FontSizeOutlined />,
     view: TextBlockView,
-    settings: TextBlockSettings,
+    settings: TextBlockSettingsForm,
     style: TextBlockStyles,
     defaultProps: {
         content: 'Simple text block',
@@ -19,6 +19,10 @@ const TextBlock = makeBlock({
         fontWeight: 'normal',
         color: '#000000',
         textAlign: 'left'
+    },
+    settingsConfig: {
+        title: 'Text Settings',
+        width: 500
     }
 });
 

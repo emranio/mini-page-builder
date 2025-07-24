@@ -1,15 +1,10 @@
 /**
- * Text Block Styles
- * Generates dynamic CSS for text blocks
+ * Text Block Styles - Simplified version
+ * Props with defaults are automatically handled by BlockFactory
  */
 
 const TextBlockStyles = (props, uniqueId) => {
-    const {
-        fontSize = 14,
-        fontWeight = 'normal',
-        color = '#000000',
-        textAlign = 'left'
-    } = props;
+    const { fontSize, fontWeight, color, textAlign } = props;
 
     return `
         #${uniqueId} {
