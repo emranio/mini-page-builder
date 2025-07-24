@@ -4,35 +4,21 @@ import { Image } from 'antd';
 /**
  * ImageBlockView component - Simplified with automatic prop handling
  * All common functionality (click handlers, prop defaults, memoization) is handled by BlockFactory
+ * Wrapper div and click handling moved to BlockFactory for consistency across all blocks
  */
 const ImageBlockView = ({
     src,
     alt,
-    width,
-    height,
-    borderRadius,
-    uniqueBlockId,
-    onClick
 }) => {
-    const imageStyle = React.useMemo(() => ({
-        width,
-        height,
-        borderRadius: `${borderRadius}px`,
-        cursor: 'pointer'
-    }), [width, height, borderRadius]);
-
     return (
-        <div id={uniqueBlockId} className="image-block" onClick={onClick}>
-            <div className="image-container">
-                <Image
-                    src={src}
-                    alt={alt}
-                    preview={false}
-                    style={imageStyle}
-                    className="newsletter-image"
-                />
-            </div>
-        </div>
+        <>
+            <Image
+                src={src}
+                alt={alt}
+                preview={false}
+                className="newsletter-image"
+            />
+        </>
     );
 };
 

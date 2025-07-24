@@ -3,16 +3,21 @@
  * Props with defaults are automatically handled by BlockFactory
  */
 
+/**
+ * Text Block Styles - Updated for new structure with wrapper in BlockFactory
+ * Targets the fildora-builder-text-block class instead of unique ID
+ */
+
 const TextBlockStyles = (props, uniqueId) => {
     const { fontSize, fontWeight, color, textAlign } = props;
 
     return `
-        #${uniqueId} {
+        .fildora-builder-text-block {
             margin: 0;
             cursor: pointer;
         }
 
-        #${uniqueId} .text-block {
+        .fildora-builder-text-block .text-block {
             font-size: ${fontSize}px;
             font-weight: ${fontWeight};
             color: ${color};
@@ -23,12 +28,12 @@ const TextBlockStyles = (props, uniqueId) => {
             transition: all 0.2s ease;
         }
 
-        #${uniqueId} .text-block:hover {
+        .fildora-builder-text-block:hover .text-block {
             outline: 1px dashed rgba(24, 144, 255, 0.5);
             outline-offset: 2px;
         }
 
-        #${uniqueId} .text-block-editor {
+        .fildora-builder-text-block .text-block-editor {
             font-size: ${fontSize}px;
             font-weight: ${fontWeight};
             color: ${color};
@@ -41,10 +46,15 @@ const TextBlockStyles = (props, uniqueId) => {
             background: rgba(24, 144, 255, 0.05);
         }
 
-        #${uniqueId} .text-block-editor:focus {
+        .fildora-builder-text-block .text-block-editor:focus {
             outline: none;
             border-color: #40a9ff;
             box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+        }
+
+        /* Keep unique ID styles for any specific targeting needs */
+        #${uniqueId} {
+            position: relative;
         }
     `;
 };

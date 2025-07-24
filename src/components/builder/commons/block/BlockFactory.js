@@ -17,15 +17,17 @@ export const createBlockView = (ViewComponent, blockType) => {
 
         // Get block definition to access default props
         const blockDef = blockManager.getBlock(blockType);
-        const defaultProps = blockDef?.defaultProps || {};
 
         // Merge props with defaults
-        const mergedProps = useMemo(() => ({
-            ...defaultProps,
-            ...props,
-            id,
-            uniqueBlockId
-        }), [props, id, uniqueBlockId, defaultProps]);
+        const mergedProps = useMemo(() => {
+            const defaultProps = blockDef?.defaultProps || {};
+            return {
+                ...defaultProps,
+                ...props,
+                id,
+                uniqueBlockId
+            };
+        }, [props, id, uniqueBlockId, blockDef]);
 
         // Common click handler for all blocks
         const handleClick = useCallback((e) => {
@@ -34,10 +36,15 @@ export const createBlockView = (ViewComponent, blockType) => {
         }, [id, setSelectedBlockId]);
 
         return (
-            <ViewComponent
-                {...mergedProps}
+            <div
+                className={`fildora-builder-${blockType}-block`}
+                id={uniqueBlockId}
                 onClick={handleClick}
-            />
+            >
+                <ViewComponent
+                    {...mergedProps}
+                />
+            </div>
         );
     });
 
@@ -66,16 +73,16 @@ export const createBlockSettings = (SettingsFormComponent, blockType, settingsCo
 
         // Get block definition to access default props
         const blockDef = blockManager.getBlock(blockType);
-        const defaultProps = blockDef?.defaultProps || {};
 
         // Memoize initial values with defaults
         const initialValues = useMemo(() => {
+            const defaultProps = blockDef?.defaultProps || {};
             const values = {};
             Object.keys(defaultProps).forEach(key => {
                 values[key] = element.props?.[key] ?? defaultProps[key];
             });
             return values;
-        }, [element.props, defaultProps]);
+        }, [element.props, blockDef]);
 
         // Update form values when element props change
         useEffect(() => {

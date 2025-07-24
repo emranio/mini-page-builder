@@ -6,25 +6,30 @@ const { Paragraph } = Typography;
 /**
  * TextBlockView component - Simplified with automatic prop handling
  * All common functionality (click handlers, prop defaults, memoization) is handled by BlockFactory
+ * Wrapper div and click handling moved to BlockFactory for consistency across all blocks
  */
 const TextBlockView = ({
     content,
     fontSize,
     fontWeight,
     color,
-    textAlign,
-    uniqueBlockId,
-    onClick
+    textAlign
 }) => {
     return (
-        <div id={uniqueBlockId}>
+        <>
             <Paragraph
                 className="text-block"
-                onClick={onClick}
+                style={{
+                    fontSize: `${fontSize}px`,
+                    fontWeight,
+                    color,
+                    textAlign,
+                    margin: 0
+                }}
             >
                 {content}
             </Paragraph>
-        </div>
+        </>
     );
 };
 

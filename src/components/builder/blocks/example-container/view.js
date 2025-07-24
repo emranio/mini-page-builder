@@ -7,56 +7,18 @@ import { withBaseBlock } from '../../commons/block';
 
 /**
  * ExampleContainerBlockView component - Optimized with React.memo for performance
+ * Wrapper div and click handling moved to BlockFactory for consistency across all blocks
  */
 const ExampleContainerBlockView = memo(({
     id,
-    padding = 10,
-    margin = 5,
-    backgroundColor = 'transparent',
-    borderStyle = 'dashed',
-    borderWidth = 1,
-    borderColor = '#d9d9d9',
-    borderRadius = 0,
-    throttledUpdate,
-    uniqueBlockId
 }) => {
-    const { createBlock, isDragging, setSelectedBlockId } = useBuilder();
     const containerRef = useRef(null);
-
-    const handleClick = useCallback((e) => {
-        e.stopPropagation();
-        setSelectedBlockId(id);
-    }, [id, setSelectedBlockId]);
-
-    // Add a new example-container inside this container
-    const handleAddContainer = useCallback(() => {
-        createBlock('example-container', id);
-    }, [createBlock, id]);
-
     return (
-        <div
-            id={uniqueBlockId}
-            ref={containerRef}
-            className={`example-container ${isDragging ? 'during-drag' : ''}`}
-            data-id={id}
-            onClick={handleClick}
-        >
-            {/* Use dedicated DropZone for container contents */}
-            <div className="example-container-content">
+        <>
+            <div className="example-container-content" ref={containerRef}>
                 <DropZone parentId={id} />
             </div>
-
-            <div className="container-actions">
-                <Button
-                    icon={<PlusOutlined />}
-                    onClick={handleAddContainer}
-                    className="add-container-button"
-                    size="small"
-                >
-                    Add Container
-                </Button>
-            </div>
-        </div>
+        </>
     );
 });
 

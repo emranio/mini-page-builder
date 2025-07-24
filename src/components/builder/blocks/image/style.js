@@ -1,6 +1,6 @@
 /**
- * Image Block Styles
- * Generates dynamic CSS for image blocks
+ * Image Block Styles - Updated for new structure with wrapper in BlockFactory
+ * Targets the fildora-builder-image-block class instead of unique ID
  */
 
 const ImageBlockStyles = (props, uniqueId) => {
@@ -11,25 +11,18 @@ const ImageBlockStyles = (props, uniqueId) => {
     } = props;
 
     return `
-        #${uniqueId} {
+        .fildora-builder-image-block {
             cursor: pointer;
             display: block;
             transition: all 0.2s ease;
         }
 
-        #${uniqueId}:hover {
+        .fildora-builder-image-block:hover {
             outline: 1px dashed rgba(24, 144, 255, 0.5);
             outline-offset: 2px;
         }
 
-        #${uniqueId} .image-container {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #${uniqueId} .newsletter-image {
+        .fildora-builder-image-block .newsletter-image {
             width: ${width};
             height: ${height};
             border-radius: ${borderRadius}px;
@@ -38,19 +31,24 @@ const ImageBlockStyles = (props, uniqueId) => {
             transition: all 0.2s ease;
         }
 
-        #${uniqueId} .newsletter-image:hover {
+        .fildora-builder-image-block .newsletter-image:hover {
             transform: scale(1.01);
         }
 
-        #${uniqueId} .ant-image {
+        .fildora-builder-image-block .ant-image {
             width: 100%;
         }
 
-        #${uniqueId} .ant-image-img {
+        .fildora-builder-image-block .ant-image-img {
             width: ${width};
             height: ${height};
             border-radius: ${borderRadius}px;
             object-fit: cover;
+        }
+
+        /* Keep unique ID styles for any specific targeting needs */
+        #${uniqueId} {
+            position: relative;
         }
     `;
 };

@@ -1,6 +1,6 @@
 /**
- * Example Container Block Styles
- * Generates dynamic CSS for example-container blocks
+ * Example Container Block Styles - Updated for new structure with wrapper in BlockFactory
+ * Targets the fildora-builder-example-container-block class instead of unique ID
  */
 
 const ExampleContainerBlockStyles = (props, uniqueId) => {
@@ -19,7 +19,7 @@ const ExampleContainerBlockStyles = (props, uniqueId) => {
         : backgroundColor;
 
     return `
-        #${uniqueId} {
+        .fildora-builder-example-container-block {
             width: 100%;
             padding: ${padding}px;
             margin: ${margin}px 0;
@@ -32,50 +32,46 @@ const ExampleContainerBlockStyles = (props, uniqueId) => {
             min-height: 60px;
             display: flex;
             flex-direction: column;
+            cursor: pointer;
         }
 
-        #${uniqueId}:hover {
+        .fildora-builder-example-container-block:hover {
             border-color: rgba(24, 144, 255, 0.6);
             background-color: ${backgroundColor === 'transparent' ? 'rgba(24, 144, 255, 0.02)' : backgroundColorValue};
         }
 
-        #${uniqueId}.during-drag {
+        .fildora-builder-example-container-block.during-drag {
             opacity: 0.8;
             transform: scale(0.98);
         }
 
-        #${uniqueId} .example-container-content {
+        .fildora-builder-example-container-block .example-container-content {
             flex: 1;
             min-height: 40px;
         }
 
-        #${uniqueId} .container-actions {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            pointer-events: none;
+        .fildora-builder-example-container-block .container-actions {
+            display: flex;
+            justify-content: center;
+            padding: 5px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.8);
         }
 
-        #${uniqueId}:hover .container-actions {
-            opacity: 1;
-            pointer-events: auto;
+        .fildora-builder-example-container-block .add-container-button {
+            border: 1px dashed #1890ff;
+            color: #1890ff;
+            background: transparent;
         }
 
-        #${uniqueId} .add-container-button {
-            background: rgba(24, 144, 255, 0.9);
-            border-color: #1890ff;
-            color: white;
-            font-size: 12px;
-            padding: 4px 8px;
-            height: auto;
+        .fildora-builder-example-container-block .add-container-button:hover {
+            border-style: solid;
+            background: rgba(24, 144, 255, 0.1);
         }
 
-        #${uniqueId} .add-container-button:hover {
-            background: #40a9ff;
-            border-color: #40a9ff;
+        /* Keep unique ID styles for any specific targeting needs */
+        #${uniqueId} {
+            position: relative;
         }
     `;
 };

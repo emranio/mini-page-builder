@@ -9,12 +9,7 @@ const ColumnBlockView = ({
     id,
     columns = 2,
     columnWidths = [],
-    columnIds = [],
     gap = 10,
-    backgroundColor = 'transparent',
-    borderStyle = 'dashed',
-    borderWidth = 1,
-    borderColor = '#d9d9d9',
     throttledUpdate,
     uniqueBlockId
 }) => {
@@ -297,11 +292,7 @@ const ColumnBlockView = ({
                     props: {
                         columns,
                         columnWidths: currentWidths,
-                        gap,
-                        backgroundColor,
-                        borderStyle,
-                        borderWidth,
-                        borderColor
+                        gap
                     }
                 }}
                 throttledUpdate={throttledUpdate}
