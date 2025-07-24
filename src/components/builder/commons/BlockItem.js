@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDrag } from 'react-dnd';
 import { Card } from 'antd';
-import { useBuilder } from '../../../contexts/BuilderContext';
+import { useBuilder } from '../../../contexts/BuilderReducer';
 
 const BlockItem = ({ type, icon, label }) => {
     const { setIsDragging } = useBuilder();

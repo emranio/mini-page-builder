@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image } from 'antd';
 import { withBaseBlock } from '../../commons/base';
-import { useBuilder } from '../../../../contexts/BuilderContext';
+import { useBuilder } from '../../../../contexts/BuilderReducer';
 
 const ImageBlockView = ({
     id,

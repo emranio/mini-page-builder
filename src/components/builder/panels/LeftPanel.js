@@ -4,7 +4,7 @@ import { ArrowLeftOutlined } from '@ant-design/icons';
 import { BlockItem } from '../commons';
 import { ResizeHandle } from './partials';
 import { ItemTypes } from '../../../utils/DragTypes';
-import { useBuilder } from '../../../contexts/BuilderContext';
+import { useBuilder } from '../../../contexts/BuilderReducer';
 import TextBlock from '../blocks/text';
 import ImageBlock from '../blocks/image';
 import FlexboxBlock from '../blocks/flexbox';

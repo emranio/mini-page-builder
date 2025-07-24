@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
-import { useBuilder } from '../../../contexts/BuilderContext';
+import { useBuilder } from '../../../contexts/BuilderReducer';
 import { ItemTypes } from '../../../utils/DragTypes';
 import { Button } from 'antd';
 import { DeleteOutlined, DragOutlined } from '@ant-design/icons';
@@ -22,7 +22,7 @@ const DraggableElement = ({ id, type, parentId, children }) => {
         }),
         end: () => {
             setIsDragging(false);
-            // setDraggedBlockId will be cleared in the useEffect in BuilderContext
+            // setDraggedBlockId will be cleared in the useEffect in BuilderReducer
         }
     }));
 

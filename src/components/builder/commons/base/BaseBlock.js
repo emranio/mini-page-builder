@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { useBuilder } from '../../../../contexts/BuilderContext';
+import { useBuilder } from '../../../../contexts/BuilderReducer';
 
 /**
  * Abstract base class for all blocks

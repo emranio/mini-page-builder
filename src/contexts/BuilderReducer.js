@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useCallback, useEffect } from 'react';
+import React, { createContext, useContext, useReducer, useCallback, useEffect, useMemo } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import TextBlock from '../components/builder/blocks/text';
 import ImageBlock from '../components/builder/blocks/image';
@@ -6,9 +6,9 @@ import FlexboxBlock from '../components/builder/blocks/flexbox';
 import ColumnBlock from '../components/builder/blocks/column';
 import TabsBlock from '../components/builder/blocks/tabs';
 
-const BuilderContext = createContext();
+const BuilderReducerContext = createContext();
 
-export const useBuilder = () => useContext(BuilderContext);
+export const useBuilder = () => useContext(BuilderReducerContext);
 
 // Block registry for getting default props
 const blockRegistry = {
@@ -54,6 +54,73 @@ const findAllChildrenIds = (blocks, blockId) => {
     findChildren(blockId);
     return idsToDelete;
 };
+
+// Selector functions - moved outside component for better performance
+const createSelectors = (state) => ({
+    // Get all blocks at the root level or children of a specific parent
+    getBlocks: (parentId = null) => {
+        if (parentId === null) {
+            // For root level, return blocks in the order defined by rootBlocksOrder
+            return state.rootBlocksOrder.map(blockId =>
+                state.blocks.find(bl => bl.id === blockId)
+            ).filter(Boolean);
+        }
+
+        // For children, get them in the order specified by parent's children array
+        const parent = state.blocks.find(bl => bl.id === parentId);
+        if (!parent || !parent.children) {
+            return state.blocks.filter(block => block.parentId === parentId);
+        }
+
+        // Return children in the correct order
+        return parent.children.map(childId =>
+            state.blocks.find(bl => bl.id === childId)
+        ).filter(Boolean);
+    },
+
+    // Get a specific block by ID
+    getBlockById: (id) => {
+        return state.blocks.find(block => block.id === id);
+    },
+
+    // Get all children of a block
+    getChildrenOfBlock: (blockId) => {
+        const block = state.blocks.find(bl => bl.id === blockId);
+        if (!block || !block.children || block.children.length === 0) {
+            return [];
+        }
+
+        return block.children.map(childId =>
+            state.blocks.find(bl => bl.id === childId)
+        ).filter(Boolean);
+    },
+
+    // Check if container has only container children
+    hasOnlyContainerChildren: (blockId) => {
+        const block = state.blocks.find(bl => bl.id === blockId);
+        if (!block || !block.children || block.children.length === 0) return false;
+
+        const children = block.children.map(childId =>
+            state.blocks.find(bl => bl.id === childId)
+        ).filter(Boolean);
+
+        return children.every(child => child.type === 'flexbox');
+    },
+
+    // Check if container has mixed children (blocks and containers)
+    hasMixedChildren: (blockId) => {
+        const block = state.blocks.find(bl => bl.id === blockId);
+        if (!block || !block.children || block.children.length <= 1) return false;
+
+        const children = block.children.map(childId =>
+            state.blocks.find(bl => bl.id === childId)
+        ).filter(Boolean);
+
+        const hasContainers = children.some(child => child.type === 'flexbox');
+        const hasBlocks = children.some(child => child.type !== 'flexbox');
+        return hasContainers && hasBlocks;
+    }
+});
 
 // Reducer function
 const builderReducer = (state, action) => {
@@ -275,115 +342,63 @@ export const BuilderProvider = ({ children }) => {
         }
     }, [state.isDragging]);
 
-    // Action creators
-    const setIsDragging = useCallback((isDragging) => {
-        dispatch({ type: ACTION_TYPES.SET_DRAGGING_STATE, payload: isDragging });
-    }, []);
+    // Memoized selectors - only recalculate when state.blocks or state.rootBlocksOrder changes
+    const selectors = useMemo(() => createSelectors(state), [state.blocks, state.rootBlocksOrder]);
 
-    const setDraggedBlockId = useCallback((blockId) => {
-        dispatch({ type: ACTION_TYPES.SET_DRAGGED_BLOCK_ID, payload: blockId });
-    }, []);
+    // Action creators - wrapped in useCallback for stable references
+    const actions = useMemo(() => ({
+        setIsDragging: (isDragging) => {
+            dispatch({ type: ACTION_TYPES.SET_DRAGGING_STATE, payload: isDragging });
+        },
 
-    const setSelectedBlockId = useCallback((blockId) => {
-        dispatch({ type: ACTION_TYPES.SET_SELECTED_BLOCK_ID, payload: blockId });
-    }, []);
+        setDraggedBlockId: (blockId) => {
+            dispatch({ type: ACTION_TYPES.SET_DRAGGED_BLOCK_ID, payload: blockId });
+        },
 
-    // Create a new block
-    const createBlock = useCallback((type, parentId = null, props = {}, index = null) => {
-        const blockId = uuidv4();
+        setSelectedBlockId: (blockId) => {
+            dispatch({ type: ACTION_TYPES.SET_SELECTED_BLOCK_ID, payload: blockId });
+        },
 
-        dispatch({
-            type: ACTION_TYPES.CREATE_BLOCK,
-            payload: { type, parentId, props, index, blockId }
-        });
+        createBlock: (type, parentId = null, props = {}, index = null) => {
+            const blockId = uuidv4();
 
-        return blockId;
-    }, []);
+            dispatch({
+                type: ACTION_TYPES.CREATE_BLOCK,
+                payload: { type, parentId, props, index, blockId }
+            });
 
-    // Move a block to a new parent or position
-    const moveBlock = useCallback((blockId, targetParentId, index) => {
-        dispatch({
-            type: ACTION_TYPES.MOVE_BLOCK,
-            payload: { blockId, targetParentId, index }
-        });
-    }, []);
+            return blockId;
+        },
 
-    // Update block properties
-    const updateBlock = useCallback((blockId, newProps) => {
-        dispatch({
-            type: ACTION_TYPES.UPDATE_BLOCK,
-            payload: { blockId, newProps }
-        });
-    }, []);
+        moveBlock: (blockId, targetParentId, index) => {
+            dispatch({
+                type: ACTION_TYPES.MOVE_BLOCK,
+                payload: { blockId, targetParentId, index }
+            });
+        },
 
-    // Delete a block and its children recursively
-    const deleteBlock = useCallback((blockId) => {
-        dispatch({
-            type: ACTION_TYPES.DELETE_BLOCK,
-            payload: { blockId }
-        });
-    }, []);
+        updateBlock: (blockId, newProps) => {
+            dispatch({
+                type: ACTION_TYPES.UPDATE_BLOCK,
+                payload: { blockId, newProps }
+            });
+        },
 
-    // Resize containers - this function is kept for backward compatibility but does nothing now
-    const resizeContainer = useCallback((blockId, newWidthPercent) => {
-        // All containers are now 100% width, so this function does nothing
-    }, []);
+        deleteBlock: (blockId) => {
+            dispatch({
+                type: ACTION_TYPES.DELETE_BLOCK,
+                payload: { blockId }
+            });
+        },
 
-    // Get all blocks at the root level or children of a specific parent
-    const getBlocks = useCallback((parentId = null) => {
-        if (parentId === null) {
-            // For root level, return blocks in the order defined by rootBlocksOrder
-            return state.rootBlocksOrder.map(blockId =>
-                state.blocks.find(bl => bl.id === blockId)
-            ).filter(Boolean);
+        // Resize containers - this function is kept for backward compatibility but does nothing now
+        resizeContainer: (blockId, newWidthPercent) => {
+            // All containers are now 100% width, so this function does nothing
         }
+    }), []);
 
-        // For children, get them in the order specified by parent's children array
-        const parent = state.blocks.find(bl => bl.id === parentId);
-        if (!parent || !parent.children) {
-            return state.blocks.filter(block => block.parentId === parentId);
-        }
-
-        // Return children in the correct order
-        return parent.children.map(childId =>
-            state.blocks.find(bl => bl.id === childId)
-        ).filter(Boolean);
-    }, [state.blocks, state.rootBlocksOrder]);
-
-    // Get a specific block by ID
-    const getBlockById = useCallback((id) => {
-        return state.blocks.find(block => block.id === id);
-    }, [state.blocks]);
-
-    // Get all children of a block
-    const getChildrenOfBlock = useCallback((blockId) => {
-        const block = state.blocks.find(bl => bl.id === blockId);
-        if (!block || !block.children || block.children.length === 0) {
-            return [];
-        }
-
-        return block.children.map(childId =>
-            state.blocks.find(bl => bl.id === childId)
-        ).filter(Boolean);
-    }, [state.blocks]);
-
-    // Check if container has only container children
-    const hasOnlyContainerChildren = useCallback((blockId) => {
-        const children = getChildrenOfBlock(blockId);
-        if (children.length === 0) return false;
-        return children.every(child => child.type === 'flexbox');
-    }, [getChildrenOfBlock]);
-
-    // Check if container has mixed children (blocks and containers)
-    const hasMixedChildren = useCallback((blockId) => {
-        const children = getChildrenOfBlock(blockId);
-        if (children.length <= 1) return false;
-        const hasContainers = children.some(child => child.type === 'flexbox');
-        const hasBlocks = children.some(child => child.type !== 'flexbox');
-        return hasContainers && hasBlocks;
-    }, [getChildrenOfBlock]);
-
-    const value = {
+    // Memoized context value - prevents unnecessary re-renders
+    const value = useMemo(() => ({
         // State
         blocks: state.blocks,
         isDragging: state.isDragging,
@@ -391,26 +406,15 @@ export const BuilderProvider = ({ children }) => {
         selectedBlockId: state.selectedBlockId,
 
         // Actions
-        createBlock,
-        moveBlock,
-        updateBlock,
-        deleteBlock,
-        resizeContainer,
-        setIsDragging,
-        setDraggedBlockId,
-        setSelectedBlockId,
+        ...actions,
 
         // Selectors
-        getBlocks,
-        getBlockById,
-        getChildrenOfBlock,
-        hasOnlyContainerChildren,
-        hasMixedChildren
-    };
+        ...selectors
+    }), [state, actions, selectors]);
 
     return (
-        <BuilderContext.Provider value={value}>
+        <BuilderReducerContext.Provider value={value}>
             {children}
-        </BuilderContext.Provider>
+        </BuilderReducerContext.Provider>
     );
 };

@@ -6,7 +6,7 @@ import ColumnBlock from '../blocks/column';
 import TabsBlock from '../blocks/tabs';
 import { ItemTypes } from '../../../utils/DragTypes';
 import DraggableElement from './DraggableElement';
-import { useBuilder } from '../../../contexts/BuilderContext';
+import { useBuilder } from '../../../contexts/BuilderReducer';
 
 const BlockRenderer = ({ element }) => {
     const { isDragging } = useBuilder();

@@ -4,7 +4,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Layout } from 'antd';
 import LeftPanel from './components/builder/panels/LeftPanel';
 import RightPanel from './components/builder/panels/RightPanel';
-import { BuilderProvider } from './contexts/BuilderContext';
+import { BuilderProvider } from './contexts/BuilderReducer';
 import './scss/builder/App.scss';
 
 function App() {
