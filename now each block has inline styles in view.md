@@ -1,12 +1,12 @@
 now each block has inline styles in view.js based on it's settings.js. instead of this, create a seperate style.js in every block, then put the dynamic css there.
-add an unique id to all block's warper. based on that id, create css from style.js and put that in style tag just before the block render.
+add an unique id to all block's warper. based on that id, create css from style.js and put that in style tag in the html head.
 
 move all inline styles into style.js for each block.
 
+no need to make the id such #flexbox-block-ID
+keep it simple like with a fieldora-builder prefix #fieldora-builder-block-ID
 
+also try to remove too nested divs from view.js. keep it simple.
 
-in my whole code base, improve my code for best practices and best performance.
-also convert the context to reducer.
-use memo is good but do not overdo it, keep code clean small and simple.
+and the css related common logic should be into the baseblock. just like we registed the view and settings component into the index.js, we will register the style component in viewjs somehow with settings data.
 
-keep original functionality intact. read whole codebase first to understand it further.
