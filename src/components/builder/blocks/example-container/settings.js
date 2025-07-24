@@ -1,56 +1,15 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Form, InputNumber, Select } from 'antd';
-import { BaseSettings } from '../../commons/block';
 
 const { Option } = Select;
 
-const ExampleContainerBlockSettings = ({
-    open,
-    onClose,
-    element,
-    throttledUpdate,
-    inline = false
-}) => {
-    const [form] = Form.useForm();
-
-    // Update form values when element props change
-    useEffect(() => {
-        const newValues = {
-            padding: element.props?.padding || 10,
-            margin: element.props?.margin || 5,
-            backgroundColor: element.props?.backgroundColor || 'transparent',
-            borderStyle: element.props?.borderStyle || 'dashed',
-            borderWidth: element.props?.borderWidth || 1,
-            borderColor: element.props?.borderColor || '#d9d9d9',
-            borderRadius: element.props?.borderRadius || 0
-        };
-        form.setFieldsValue(newValues);
-    }, [form, element.props]);
-
-    const handleValuesChange = (changedValues, allValues) => {
-        // Live update the element as user changes settings
-        throttledUpdate(element.id, allValues);
-    };
-
+/**
+ * ExampleContainerBlockSettings - Simplified form component for new architecture
+ * Common functionality (form handling, prop defaults) is handled by createBlockSettings factory
+ */
+const ExampleContainerBlockSettings = ({ form }) => {
     return (
-        <BaseSettings
-            title="Container Settings"
-            open={open}
-            onCancel={onClose}
-            form={form}
-            initialValues={{
-                padding: element.props?.padding || 10,
-                margin: element.props?.margin || 5,
-                backgroundColor: element.props?.backgroundColor || 'transparent',
-                borderStyle: element.props?.borderStyle || 'dashed',
-                borderWidth: element.props?.borderWidth || 1,
-                borderColor: element.props?.borderColor || '#d9d9d9',
-                borderRadius: element.props?.borderRadius || 0
-            }}
-            onValuesChange={handleValuesChange}
-            width={500}
-            inline={inline}
-        >
+        <>
             <Form.Item
                 label="Padding"
                 name="padding"
@@ -125,7 +84,7 @@ const ExampleContainerBlockSettings = ({
                     onChange={(e) => {
                         form.setFieldsValue({ borderColor: e.target.value });
                         const allValues = form.getFieldsValue();
-                        handleValuesChange({ borderColor: e.target.value }, allValues);
+                        form.submit();
                     }}
                 />
             </Form.Item>
@@ -141,7 +100,7 @@ const ExampleContainerBlockSettings = ({
                     style={{ width: '100%' }}
                 />
             </Form.Item>
-        </BaseSettings>
+        </>
     );
 };
 

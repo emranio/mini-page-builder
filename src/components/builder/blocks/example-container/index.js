@@ -2,10 +2,10 @@ import { AppstoreOutlined } from '@ant-design/icons';
 import ExampleContainerBlockView from './view';
 import ExampleContainerBlockSettings from './settings';
 import ExampleContainerBlockStyles from './style';
-import { makeBlock } from '../../commons/block';
+import { createBlock } from '../../commons/block';
 
-// Create and register the block using makeBlock
-const ExampleContainerBlock = makeBlock({
+// Create and register the block using the new createBlock factory
+const ExampleContainerBlock = createBlock({
     type: 'example-container',
     name: 'Example Container',
     category: 'layout',

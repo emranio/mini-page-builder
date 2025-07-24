@@ -1,18 +1,22 @@
-import React, { memo, useRef, useCallback } from 'react';
-import { useBuilder } from '../../../../data/BuilderReducer';
+import React, { memo, useRef } from 'react';
 import { DropZone } from '../../commons';
-import { Button } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
-import { withBaseBlock } from '../../commons/block';
 
 /**
- * ExampleContainerBlockView component - Optimized with React.memo for performance
- * Wrapper div and click handling moved to BlockFactory for consistency across all blocks
+ * ExampleContainerBlockView component - Simplified with new architecture
+ * Wrapper div and click handling are handled by BlockFactory
  */
 const ExampleContainerBlockView = memo(({
     id,
+    padding,
+    margin,
+    backgroundColor,
+    borderStyle,
+    borderWidth,
+    borderColor,
+    borderRadius
 }) => {
     const containerRef = useRef(null);
+
     return (
         <>
             <div className="example-container-content" ref={containerRef}>
@@ -22,4 +26,4 @@ const ExampleContainerBlockView = memo(({
     );
 });
 
-export default withBaseBlock(ExampleContainerBlockView, 'example-container');
+export default ExampleContainerBlockView;
