@@ -75,6 +75,7 @@ const ColumnBlockStyles = (props, uniqueId) => {
             border-radius: 4px;
             position: relative;
             transition: all 0.2s ease;
+            width: 100%;
         }
 
         #${uniqueId} .column-drop-area:hover {

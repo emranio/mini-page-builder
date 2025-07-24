@@ -62,7 +62,7 @@ const ResizeBar = ({ onResize, onResizeStart, onResizeEnd }) => {
     return (
         <div
             ref={barRef}
-            className={`column-resize-bar ${isDragging ? 'active' : ''}`}
+            className={`resize-bar ${isDragging ? 'resizing' : ''}`}
             onMouseDown={handleMouseDown}
             title="Drag to resize columns"
         >

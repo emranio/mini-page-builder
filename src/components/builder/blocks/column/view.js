@@ -196,8 +196,10 @@ const ColumnBlockView = ({
 
             // Create the column
             const columnContent = (
-                <div className={`column-drop-area ${isDragging ? 'during-drag' : ''}`}>
-                    {columnId ? <DropZone parentId={columnId} /> : <div className="loading">Loading column...</div>}
+                <div className="column-content">
+                    <div className={`column-drop-area ${isDragging ? 'during-drag' : ''}`}>
+                        {columnId ? <DropZone parentId={columnId} /> : <div className="loading">Loading column...</div>}
+                    </div>
                 </div>
             );
 
