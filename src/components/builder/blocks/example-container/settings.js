@@ -4,7 +4,7 @@ import { BaseSettings } from '../../commons/block';
 
 const { Option } = Select;
 
-const FlexboxBlockSettings = ({
+const ExampleContainerBlockSettings = ({
     open,
     onClose,
     element,
@@ -145,4 +145,4 @@ const FlexboxBlockSettings = ({
     );
 };
 
-export default FlexboxBlockSettings;
+export default ExampleContainerBlockSettings;

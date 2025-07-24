@@ -57,8 +57,6 @@ export const BaseSettings = memo(({
     );
 });
 
-// BaseSettings will automatically get displayName from React.memo
-
 /**
  * HOC for wrapping functional components with base block functionality
  * Provides throttled updates, style management, and unique ID generation
@@ -116,11 +114,6 @@ export const withBaseBlock = (WrappedComponent, blockType = null) => {
             />
         );
     });
-
-    // Use block type for better display names instead of manual displayName
-    EnhancedComponent.displayName = blockType
-        ? `${blockType.charAt(0).toUpperCase() + blockType.slice(1)}BlockView`
-        : `Enhanced(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`;
 
     return EnhancedComponent;
 };

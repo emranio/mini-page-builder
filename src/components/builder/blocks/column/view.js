@@ -102,7 +102,7 @@ const ColumnBlockView = ({
             // If we need more columns, create them
             if (currentColumnIds.length < columns) {
                 for (let i = currentColumnIds.length; i < columns; i++) {
-                    const columnId = createBlock('flexbox', id);
+                    const columnId = createBlock('example-container', id);
                     newColumnIds.push(columnId);
                 }
             }

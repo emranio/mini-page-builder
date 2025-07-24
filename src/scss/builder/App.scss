@@ -288,8 +288,8 @@
     }
 }
 
-/* Flexbox Container - Base styles only, details in ContainerLayout.scss and ContainerStyles.scss */
-.flexbox-container {
+/* Example Container - Base styles only, details in ContainerLayout.scss and ContainerStyles.scss */
+.example-container {
     position: relative;
     min-height: 60px;
     padding: 10px;
@@ -302,7 +302,7 @@
     transition: width 0.2s ease-out;
 
     /* These styles are being managed in ContainerStyles.scss */
-    .flexbox-content {
+    .example-container-content {
         width: 100%;
         min-height: 40px;
         box-sizing: border-box;
@@ -334,8 +334,8 @@
     padding: 10px;
 }
 
-/* Ensure elements are stacked vertically within flexbox content */
-.flexbox-content .draggable-block {
+/* Ensure elements are stacked vertically within example container content */
+.example-container-content .draggable-block {
     width: 100%;
     display: block;
 }

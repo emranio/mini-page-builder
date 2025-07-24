@@ -3,7 +3,7 @@ add an unique id to all block's warper. based on that id, create css from style.
 
 move all inline styles into style.js for each block.
 
-no need to make the id such #flexbox-block-ID
+no need to make the id such #example-container-block-ID
 keep it simple like with a fieldora-builder prefix #fieldora-builder-block-ID
 
 also try to remove too nested divs from view.js. keep it simple.

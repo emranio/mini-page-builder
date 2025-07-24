@@ -1,18 +1,18 @@
 import { AppstoreOutlined } from '@ant-design/icons';
-import FlexboxBlockView from './view';
-import FlexboxBlockSettings from './settings';
-import FlexboxBlockStyles from './style';
+import ExampleContainerBlockView from './view';
+import ExampleContainerBlockSettings from './settings';
+import ExampleContainerBlockStyles from './style';
 import { makeBlock } from '../../commons/block';
 
 // Create and register the block using makeBlock
-const FlexboxBlock = makeBlock({
-    type: 'flexbox',
-    name: 'Container',
+const ExampleContainerBlock = makeBlock({
+    type: 'example-container',
+    name: 'Example Container',
     category: 'layout',
     icon: <AppstoreOutlined />,
-    view: FlexboxBlockView,
-    settings: FlexboxBlockSettings,
-    style: FlexboxBlockStyles,
+    view: ExampleContainerBlockView,
+    settings: ExampleContainerBlockSettings,
+    style: ExampleContainerBlockStyles,
     defaultProps: {
         padding: 10,
         margin: 5,
@@ -24,4 +24,4 @@ const FlexboxBlock = makeBlock({
     }
 });
 
-export default FlexboxBlock;
+export default ExampleContainerBlock;

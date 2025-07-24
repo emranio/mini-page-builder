@@ -1,9 +1,9 @@
 /**
- * Flexbox Block Styles
- * Generates dynamic CSS for flexbox/container blocks
+ * Example Container Block Styles
+ * Generates dynamic CSS for example-container blocks
  */
 
-const FlexboxBlockStyles = (props, uniqueId) => {
+const ExampleContainerBlockStyles = (props, uniqueId) => {
     const {
         padding = 10,
         margin = 5,
@@ -44,7 +44,7 @@ const FlexboxBlockStyles = (props, uniqueId) => {
             transform: scale(0.98);
         }
 
-        #${uniqueId} .flexbox-content {
+        #${uniqueId} .example-container-content {
             flex: 1;
             min-height: 40px;
         }
@@ -80,4 +80,4 @@ const FlexboxBlockStyles = (props, uniqueId) => {
     `;
 };
 
-export default FlexboxBlockStyles;
+export default ExampleContainerBlockStyles;

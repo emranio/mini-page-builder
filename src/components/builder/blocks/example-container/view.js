@@ -6,9 +6,9 @@ import { PlusOutlined } from '@ant-design/icons';
 import { withBaseBlock } from '../../commons/block';
 
 /**
- * FlexboxBlockView component - Optimized with React.memo for performance
+ * ExampleContainerBlockView component - Optimized with React.memo for performance
  */
-const FlexboxBlockView = memo(({
+const ExampleContainerBlockView = memo(({
     id,
     padding = 10,
     margin = 5,
@@ -28,9 +28,9 @@ const FlexboxBlockView = memo(({
         setSelectedBlockId(id);
     }, [id, setSelectedBlockId]);
 
-    // Add a new flexbox container inside this container
-    const handleAddFlexbox = useCallback(() => {
-        createBlock('flexbox', id);
+    // Add a new example-container inside this container
+    const handleAddContainer = useCallback(() => {
+        createBlock('example-container', id);
     }, [createBlock, id]);
 
     const containerStyle = React.useMemo(() => ({
@@ -46,20 +46,20 @@ const FlexboxBlockView = memo(({
         <div
             id={uniqueBlockId}
             ref={containerRef}
-            className={`flexbox-container ${isDragging ? 'during-drag' : ''}`}
+            className={`example-container ${isDragging ? 'during-drag' : ''}`}
             data-id={id}
             onClick={handleClick}
             style={containerStyle}
         >
             {/* Use dedicated DropZone for container contents */}
-            <div className="flexbox-content">
+            <div className="example-container-content">
                 <DropZone parentId={id} />
             </div>
 
             <div className="container-actions">
                 <Button
                     icon={<PlusOutlined />}
-                    onClick={handleAddFlexbox}
+                    onClick={handleAddContainer}
                     className="add-container-button"
                     size="small"
                 >
@@ -70,4 +70,4 @@ const FlexboxBlockView = memo(({
     );
 });
 
-export default withBaseBlock(FlexboxBlockView, 'flexbox');
+export default withBaseBlock(ExampleContainerBlockView, 'example-container');

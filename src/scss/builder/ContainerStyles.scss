@@ -22,8 +22,8 @@
         }
     }
 
-    /* Container styles for flexbox containers */
-    .flexbox-container {
+    /* Container styles for example containers */
+    .example-container {
         background-color: rgba(0, 0, 0, 0.02);
         border: 1px dashed #b5b5b5;
         padding: 10px;
@@ -43,13 +43,13 @@
 }
 
 /* Simple container styling */
-.flexbox-container {
+.example-container {
     border-color: #d9d9d9 !important;
     width: 100% !important;
 }
 
 /* Ensure elements inside containers have consistent spacing */
-.flexbox-content>.drop-zone>.draggable-block {
+.example-container-content>.drop-zone>.draggable-block {
     margin-bottom: 10px;
 
     /* Remove margin from the last child */

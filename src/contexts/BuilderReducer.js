@@ -2,7 +2,7 @@ import React, { createContext, useContext, useReducer, useEffect, useMemo } from
 import { v4 as uuidv4 } from 'uuid';
 import TextBlock from '../components/builder/blocks/text';
 import ImageBlock from '../components/builder/blocks/image';
-import FlexboxBlock from '../components/builder/blocks/flexbox';
+import ExampleContainerBlock from '../components/builder/blocks/example-container';
 import ColumnBlock from '../components/builder/blocks/column';
 import TabsBlock from '../components/builder/blocks/tabs';
 
@@ -14,7 +14,7 @@ export const useBuilder = () => useContext(BuilderReducerContext);
 const blockRegistry = {
     text: TextBlock,
     image: ImageBlock,
-    flexbox: FlexboxBlock,
+    'example-container': ExampleContainerBlock,
     column: ColumnBlock,
     tabs: TabsBlock
 };
@@ -108,7 +108,7 @@ const createSelectors = (state) => {
                 .map(childId => blocksMap.get(childId))
                 .filter(Boolean);
 
-            return children.every(child => child.type === 'flexbox');
+            return children.every(child => child.type === 'example-container');
         },
 
         // Check if container has mixed children (blocks and containers)
@@ -120,8 +120,8 @@ const createSelectors = (state) => {
                 .map(childId => blocksMap.get(childId))
                 .filter(Boolean);
 
-            const hasContainers = children.some(child => child.type === 'flexbox');
-            const hasBlocks = children.some(child => child.type !== 'flexbox');
+            const hasContainers = children.some(child => child.type === 'example-container');
+            const hasBlocks = children.some(child => child.type !== 'example-container');
             return hasContainers && hasBlocks;
         }
     };
@@ -160,7 +160,7 @@ const builderReducer = (state, action) => {
                 type,
                 parentId,
                 props: { ...defaultProps, ...props },
-                children: type === 'flexbox' ? [] : null
+                children: type === 'example-container' ? [] : null
             };
 
             // Add the new block to blocks array
