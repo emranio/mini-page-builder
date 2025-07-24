@@ -1,5 +1,6 @@
 import React, { useRef, useCallback } from 'react';
 import { useBuilder } from '../../../../contexts/BuilderReducer';
+import StyleInjector from '../StyleInjector';
 
 /**
  * Abstract base class for all blocks
@@ -38,7 +39,7 @@ class BaseBlock extends React.Component {
 /**
  * HOC for wrapping functional components with base block functionality
  */
-export const withBaseBlock = (WrappedComponent) => {
+export const withBaseBlock = (WrappedComponent, blockConfig = {}) => {
     return React.forwardRef((props, ref) => {
         const { updateBlock } = useBuilder();
         const throttleTimeoutRef = useRef(null);
@@ -63,12 +64,27 @@ export const withBaseBlock = (WrappedComponent) => {
             };
         }, []);
 
+        // Generate styles if style function is provided
+        const { id } = props;
+        const { style: styleFunction, name } = blockConfig;
+        let dynamicCSS = '';
+        let blockId = '';
+
+        if (styleFunction && id && name) {
+            blockId = `${name.toLowerCase()}-${id}`;
+            dynamicCSS = styleFunction(id, props);
+        }
+
         return (
-            <WrappedComponent
-                ref={ref}
-                {...props}
-                throttledUpdate={throttledUpdate}
-            />
+            <>
+                {dynamicCSS && <StyleInjector id={blockId} css={dynamicCSS} />}
+                <WrappedComponent
+                    ref={ref}
+                    {...props}
+                    throttledUpdate={throttledUpdate}
+                    blockId={blockId}
+                />
+            </>
         );
     });
 };

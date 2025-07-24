@@ -18,14 +18,8 @@ const StyleInjector = ({ id, css }) => {
         style.id = styleId;
         style.textContent = css;
 
-        // Insert before the target element's container
-        const targetElement = document.getElementById(id);
-        if (targetElement) {
-            targetElement.parentNode.insertBefore(style, targetElement);
-        } else {
-            // Fallback: add to head if target element not found
-            document.head.appendChild(style);
-        }
+        // Always inject into head
+        document.head.appendChild(style);
 
         // Cleanup function to remove the style when component unmounts
         return () => {

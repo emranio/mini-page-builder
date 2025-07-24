@@ -4,9 +4,11 @@ add an unique id to all block's warper. based on that id, create css from style.
 move all inline styles into style.js for each block.
 
 
+no need to make the id such #flexbox-block-ID
+keep it simple like #xyz-block-ID
 
-in my whole code base, improve my code for best practices and best performance.
-also convert the context to reducer.
-use memo is good but do not overdo it, keep code clean small and simple.
+also try to remove too nested divs. keep it simple.
 
-keep original functionality intact. read whole codebase first to understand it further.
+move the <StyleInjector id={blockId} css={dynamicCSS} />. and inject the css into <head>
+
+and the css related common logic into the baseblock. just like we registed the view and settings component into the index.js, we will register the style component there

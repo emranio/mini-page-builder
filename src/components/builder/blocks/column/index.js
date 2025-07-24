@@ -1,13 +1,16 @@
 import { ColumnWidthOutlined } from '@ant-design/icons';
 import ColumnBlockView from './view';
 import ColumnBlockSettings from './settings';
+import { generateColumnStyles } from './style';
+import { withBaseBlock } from '../../commons/base';
 
 const ColumnBlock = {
-    name: 'Columns',
+    name: 'Column',
     category: 'layout',
     icon: <ColumnWidthOutlined />,
-    view: ColumnBlockView,
+    view: withBaseBlock(ColumnBlockView, { style: generateColumnStyles, name: 'Column' }),
     settings: ColumnBlockSettings,
+    style: generateColumnStyles,
     defaultProps: {
         columns: 2,
         columnWidths: [50, 50],

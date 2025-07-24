@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import { Input, Typography } from 'antd';
-import { withBaseBlock } from '../../commons/base';
 import { useBuilder } from '../../../../contexts/BuilderReducer';
-import StyleInjector from '../../commons/StyleInjector';
-import { generateTextStyles } from './style';
 
 const { Paragraph } = Typography;
 const { TextArea } = Input;
@@ -15,7 +12,8 @@ const TextBlockView = ({
     fontWeight = 'normal',
     color = '#000000',
     textAlign = 'left',
-    throttledUpdate
+    throttledUpdate,
+    blockId
 }) => {
     const [isEditing, setIsEditing] = useState(false);
 
@@ -82,36 +80,27 @@ const TextBlockView = ({
         margin: 0
     };
 
-    // Generate unique block ID and styles
-    const blockId = `text-${id}`;
-    const dynamicCSS = generateTextStyles(id, { fontSize, fontWeight, color, textAlign });
-
-    return (
-        <>
-            <StyleInjector id={blockId} css={dynamicCSS} />
-            {isEditing ? (
-                <TextArea
-                    id={blockId}
-                    autoSize
-                    autoFocus
-                    value={editingContent}
-                    onChange={(e) => handleChange(e.target.value)}
-                    onBlur={handleBlur}
-                    onKeyDown={handleKeyDown}
-                    className="text-block-editor"
-                />
-            ) : (
-                <Paragraph
-                    id={blockId}
-                    className="text-block"
-                    onClick={handleClick}
-                    onDoubleClick={handleDoubleClick}
-                >
-                    {content || 'Click to edit text'}
-                </Paragraph>
-            )}
-        </>
+    return isEditing ? (
+        <TextArea
+            id={blockId}
+            autoSize
+            autoFocus
+            value={editingContent}
+            onChange={(e) => handleChange(e.target.value)}
+            onBlur={handleBlur}
+            onKeyDown={handleKeyDown}
+            className="text-block-editor"
+        />
+    ) : (
+        <Paragraph
+            id={blockId}
+            className="text-block"
+            onClick={handleClick}
+            onDoubleClick={handleDoubleClick}
+        >
+            {content || 'Click to edit text'}
+        </Paragraph>
     );
 };
 
-export default withBaseBlock(TextBlockView);
+export default TextBlockView;

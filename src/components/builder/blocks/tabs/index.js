@@ -1,13 +1,16 @@
 import { FileTextOutlined } from '@ant-design/icons';
 import TabsBlockView from './view';
 import TabsBlockSettings from './settings';
+import { generateTabsStyles } from './style';
+import { withBaseBlock } from '../../commons/base';
 
 const TabsBlock = {
     name: 'Tabs',
     category: 'layout',
     icon: <FileTextOutlined />,
-    view: TabsBlockView,
+    view: withBaseBlock(TabsBlockView, { style: generateTabsStyles, name: 'Tabs' }),
     settings: TabsBlockSettings,
+    style: generateTabsStyles,
     defaultProps: {
         tabs: [
             { id: 'tab1', title: 'Tab 1' },

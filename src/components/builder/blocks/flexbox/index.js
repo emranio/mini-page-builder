@@ -1,13 +1,16 @@
 import { AppstoreOutlined } from '@ant-design/icons';
 import FlexboxBlockView from './view';
 import FlexboxBlockSettings from './settings';
+import { generateFlexboxStyles } from './style';
+import { withBaseBlock } from '../../commons/base';
 
 const FlexboxBlock = {
-    name: 'Container',
+    name: 'Flexbox',
     category: 'layout',
     icon: <AppstoreOutlined />,
-    view: FlexboxBlockView,
+    view: withBaseBlock(FlexboxBlockView, { style: generateFlexboxStyles, name: 'Flexbox' }),
     settings: FlexboxBlockSettings,
+    style: generateFlexboxStyles,
     defaultProps: {
         padding: 10,
         margin: 5,

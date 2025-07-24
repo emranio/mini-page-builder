@@ -1,11 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useBuilder } from '../../../../contexts/BuilderReducer';
 import { DropZone } from '../../commons';
-import { withBaseBlock } from '../../commons/base';
 import ResizeBar from './ResizeBar';
 import ColumnBlockSettings from './settings';
-import StyleInjector from '../../commons/StyleInjector';
-import { generateColumnStyles } from './style';
 
 const ColumnBlockView = ({
     id,
@@ -17,7 +14,8 @@ const ColumnBlockView = ({
     borderStyle = 'dashed',
     borderWidth = 1,
     borderColor = '#d9d9d9',
-    throttledUpdate
+    throttledUpdate,
+    blockId
 }) => {
     const { updateBlock, createBlock, getBlockById, isDragging, setSelectedBlockId } = useBuilder();
     const [isSettingsVisible, setIsSettingsVisible] = useState(false);
@@ -228,29 +226,14 @@ const ColumnBlockView = ({
         });
     };
 
-    // Generate unique block ID and styles
-    const blockId = `column-${id}`;
-    const dynamicCSS = generateColumnStyles(id, {
-        gap,
-        backgroundColor,
-        borderStyle,
-        borderWidth,
-        borderColor,
-        currentWidths,
-        columns
-    });
-
     return (
-        <>
-            <StyleInjector id={blockId} css={dynamicCSS} />
-            <div
-                id={blockId}
-                className={`column-element-row ${isDragging ? 'during-drag' : ''}`}
-                data-id={id}
-                onClick={handleClick}
-            >
-                {renderColumns()}
-            </div>
+        <div
+            id={blockId}
+            className={`column-element-row ${isDragging ? 'during-drag' : ''}`}
+            data-id={id}
+            onClick={handleClick}
+        >
+            {renderColumns()}
 
             <ColumnBlockSettings
                 open={isSettingsVisible}
@@ -269,8 +252,8 @@ const ColumnBlockView = ({
                 }}
                 throttledUpdate={throttledUpdate}
             />
-        </>
+        </div>
     );
 };
 
-export default withBaseBlock(ColumnBlockView);
+export default ColumnBlockView;

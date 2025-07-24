@@ -2,9 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Tabs } from 'antd';
 import { useBuilder } from '../../../../contexts/BuilderReducer';
 import { DropZone } from '../../commons';
-import { withBaseBlock } from '../../commons/base';
-import StyleInjector from '../../commons/StyleInjector';
-import { generateTabsStyles } from './style';
 
 const TabsBlockView = ({
     id,
@@ -22,7 +19,8 @@ const TabsBlockView = ({
     padding = 10,
     tabStyle = 'default',
     tabPosition = 'top',
-    throttledUpdate
+    throttledUpdate,
+    blockId
 }) => {
     const { updateBlock, createBlock, getBlockById, isDragging, setSelectedBlockId, deleteBlock } = useBuilder();
     const [currentActiveTab, setCurrentActiveTab] = useState(activeTabId);
@@ -101,33 +99,19 @@ const TabsBlockView = ({
         };
     });
 
-    // Generate unique block ID and styles
-    const blockId = `tabs-${id}`;
-    const dynamicCSS = generateTabsStyles(id, {
-        backgroundColor,
-        borderStyle,
-        borderWidth,
-        borderColor,
-        borderRadius,
-        padding
-    });
-
     return (
-        <>
-            <StyleInjector id={blockId} css={dynamicCSS} />
-            <Tabs
-                id={blockId}
-                className={`tabs-container ${isDragging ? 'during-drag' : ''}`}
-                data-id={id}
-                onClick={handleClick}
-                activeKey={currentActiveTab}
-                onChange={handleTabChange}
-                type={tabStyle === 'card' ? 'card' : 'line'}
-                tabPosition={tabPosition}
-                items={tabItems}
-            />
-        </>
+        <Tabs
+            id={blockId}
+            className={`tabs-container ${isDragging ? 'during-drag' : ''}`}
+            data-id={id}
+            onClick={handleClick}
+            activeKey={currentActiveTab}
+            onChange={handleTabChange}
+            type={tabStyle === 'card' ? 'card' : 'line'}
+            tabPosition={tabPosition}
+            items={tabItems}
+        />
     );
 };
 
-export default withBaseBlock(TabsBlockView);
+export default TabsBlockView;

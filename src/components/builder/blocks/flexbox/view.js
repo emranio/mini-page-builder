@@ -3,9 +3,6 @@ import { useBuilder } from '../../../../contexts/BuilderReducer';
 import { DropZone } from '../../commons';
 import { Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { withBaseBlock } from '../../commons/base';
-import StyleInjector from '../../commons/StyleInjector';
-import { generateFlexboxStyles } from './style';
 
 const FlexboxBlockView = ({
     id,
@@ -16,7 +13,8 @@ const FlexboxBlockView = ({
     borderWidth = 1,
     borderColor = '#d9d9d9',
     borderRadius = 0,
-    throttledUpdate
+    throttledUpdate,
+    blockId
 }) => {
     const { createBlock, isDragging, setSelectedBlockId } = useBuilder();
     const containerRef = useRef(null);
@@ -31,32 +29,26 @@ const FlexboxBlockView = ({
         createBlock('flexbox', id);
     };
 
-    // Generate unique block ID and styles
-    const blockId = `flexbox-${id}`;
-    const dynamicCSS = generateFlexboxStyles(id, {
-        padding,
-        margin,
-        backgroundColor,
-        borderStyle,
-        borderWidth,
-        borderColor,
-        borderRadius
-    });
-
     return (
-        <>
-            <StyleInjector id={blockId} css={dynamicCSS} />
-            <div
-                ref={containerRef}
-                id={blockId}
-                className={`flexbox-container ${isDragging ? 'during-drag' : ''}`}
-                data-id={id}
-                onClick={handleClick}
+        <div
+            ref={containerRef}
+            id={blockId}
+            className={`flexbox-container ${isDragging ? 'during-drag' : ''}`}
+            data-id={id}
+            onClick={handleClick}
+        >
+            <DropZone parentId={id} />
+
+            <Button
+                icon={<PlusOutlined />}
+                onClick={handleAddFlexbox}
+                className="add-container-button"
+                size="small"
             >
-                <DropZone parentId={id} />
-            </div>
-        </>
+                Add Container
+            </Button>
+        </div>
     );
 };
 
-export default withBaseBlock(FlexboxBlockView);
+export default FlexboxBlockView;
