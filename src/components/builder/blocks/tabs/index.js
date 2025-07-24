@@ -2,7 +2,7 @@ import { FileTextOutlined } from '@ant-design/icons';
 import TabsBlockView from './view';
 import TabsBlockSettings from './settings';
 import TabsBlockStyles from './style';
-import makeBlock from '../../../../utils/makeBlock';
+import makeBlock from '../../commons/block/makeBlock';
 
 // Create and register the block using makeBlock
 const TabsBlock = makeBlock({

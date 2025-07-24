@@ -2,12 +2,12 @@ import React from 'react';
 // ItemTypes is not used in this file
 // import { ItemTypes } from '../../../utils/DragTypes';
 import DraggableElement from './DraggableElement';
-import { useBuilder } from '../../../contexts/BuilderReducer';
-import blockManager from '../../../utils/BlockManager';
+// import { useBuilder } from '../../../contexts/BuilderReducer';
+import blockManager from './block/blockManager';
 
 const BlockRenderer = ({ element }) => {
     // isDragging is not used in this component
-    const { /* isDragging */ } = useBuilder();
+    // const { isDragging } = useBuilder();
 
     if (!element) return null;
 

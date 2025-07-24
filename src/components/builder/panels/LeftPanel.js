@@ -3,7 +3,7 @@ import { Layout, Card, Typography, Row, Col, Button } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { ResizeHandle, BlockItem } from './partials';
 import { useBuilder } from '../../../contexts/BuilderReducer';
-import blockManager from '../../../utils/BlockManager';
+import blockManager from '../commons/block/blockManager';
 
 const { Sider } = Layout;
 const { Title } = Typography;

@@ -2,7 +2,7 @@ import { FontSizeOutlined } from '@ant-design/icons';
 import TextBlockView from './view';
 import TextBlockSettings from './settings';
 import TextBlockStyles from './style';
-import makeBlock from '../../../../utils/makeBlock';
+import makeBlock from '../../commons/block/makeBlock';
 
 // Create and register the block using makeBlock
 const TextBlock = makeBlock({

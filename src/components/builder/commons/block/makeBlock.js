@@ -3,9 +3,9 @@
  * Centralizes block creation and registration logic
  */
 import React, { useRef, useCallback, useEffect } from 'react';
-import { useBuilder } from '../contexts/BuilderReducer';
-import styleManager from './StyleManager';
-import blockManager from './BlockManager';
+import { useBuilder } from '../../../../contexts/BuilderReducer';
+import styleManager from '../../../../utils/StyleManager';
+import blockManager from './blockManager';
 
 /**
  * Creates and registers a new block with the BlockManager

@@ -2,7 +2,7 @@ import { ColumnWidthOutlined } from '@ant-design/icons';
 import ColumnBlockView from './view';
 import ColumnBlockSettings from './settings';
 import ColumnBlockStyles from './style';
-import makeBlock from '../../../../utils/makeBlock';
+import makeBlock from '../../commons/block/makeBlock';
 
 // Create and register the block using makeBlock
 const ColumnBlock = makeBlock({

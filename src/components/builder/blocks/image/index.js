@@ -2,7 +2,7 @@ import { PictureOutlined } from '@ant-design/icons';
 import ImageBlockView from './view';
 import ImageBlockSettings from './settings';
 import ImageBlockStyles from './style';
-import makeBlock from '../../../../utils/makeBlock';
+import makeBlock from '../../commons/block/makeBlock';
 
 // Create and register the block using makeBlock
 const ImageBlock = makeBlock({

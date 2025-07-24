@@ -2,9 +2,9 @@
  * BlockManager - Centralized manager for all blocks in the page builder
  * Handles registration, retrieval, and style management for blocks
  */
-import styleManager from './StyleManager';
+import styleManager from '../../../../utils/StyleManager';
 
-class BlockManager {
+class blockManager {
     constructor() {
         this.blocks = new Map(); // blockType -> block definition
     }
@@ -62,6 +62,6 @@ class BlockManager {
 }
 
 // Create singleton instance
-const blockManager = new BlockManager();
+const blockManagerInstance = new blockManager();
 
-export default blockManager;
+export default blockManagerInstance;

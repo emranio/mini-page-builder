@@ -2,7 +2,7 @@ import { AppstoreOutlined } from '@ant-design/icons';
 import FlexboxBlockView from './view';
 import FlexboxBlockSettings from './settings';
 import FlexboxBlockStyles from './style';
-import makeBlock from '../../../../utils/makeBlock';
+import makeBlock from '../../commons/block/makeBlock';
 
 // Create and register the block using makeBlock
 const FlexboxBlock = makeBlock({

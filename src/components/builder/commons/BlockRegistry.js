@@ -4,7 +4,7 @@
  * This supports dynamic/lazy loading of blocks in the future
  */
 
-import blockManager from '../../../utils/BlockManager';
+import blockManager from './block/blockManager';
 
 // Import block definitions (this triggers their registration)
 import '../blocks/text';
