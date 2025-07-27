@@ -2,15 +2,15 @@ import React, { useState, useCallback } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Layout } from 'antd';
-import LeftPanel from './components/builder/panels/LeftPanel';
-import RightPanel from './components/builder/panels/RightPanel';
+import SettingsPanel from './components/builder/panels/SettingsPanel';
+import EditorPanel from './components/builder/panels/EditorPanel';
 import { BuilderProvider } from './data/BuilderReducer';
 // Initialize all blocks via the registry
 import './components/builder/commons/BlockRegistry';
 import './scss/builder/App.scss';
 
 function App() {
-  const [leftPanelConfig, setLeftPanelConfig] = useState({
+  const [settingsPanelConfig, setSettingsPanelConfig] = useState({
     width: 300,
     collapsed: false
   });
@@ -19,11 +19,11 @@ function App() {
 
   // Memoize handlers to prevent unnecessary re-renders
   const handleWidthChange = useCallback((newWidth) => {
-    setLeftPanelConfig(prev => ({ ...prev, width: newWidth }));
+    setSettingsPanelConfig(prev => ({ ...prev, width: newWidth }));
   }, []);
 
   const handleToggleCollapse = useCallback(() => {
-    setLeftPanelConfig(prev => ({ ...prev, collapsed: !prev.collapsed }));
+    setSettingsPanelConfig(prev => ({ ...prev, collapsed: !prev.collapsed }));
   }, []);
 
   const handleResponsiveViewChange = useCallback((newView) => {
@@ -34,14 +34,14 @@ function App() {
     <DndProvider backend={HTML5Backend}>
       <BuilderProvider>
         <Layout className="builder-layout">
-          <LeftPanel
-            width={leftPanelConfig.width}
-            collapsed={leftPanelConfig.collapsed}
+          <SettingsPanel
+            width={settingsPanelConfig.width}
+            collapsed={settingsPanelConfig.collapsed}
             onWidthChange={handleWidthChange}
             onToggleCollapse={handleToggleCollapse}
           />
-          <RightPanel
-            leftPanelCollapsed={leftPanelConfig.collapsed}
+          <EditorPanel
+            settingsPanelCollapsed={settingsPanelConfig.collapsed}
             responsiveView={responsiveView}
             onResponsiveViewChange={handleResponsiveViewChange}
           />

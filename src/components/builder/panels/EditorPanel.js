@@ -7,7 +7,7 @@ import { ReactIframeProxy, ResponsiveViewSelector } from './partials';
 const { Content } = Layout;
 const { Text } = Typography;
 
-const RightPanel = ({ leftPanelCollapsed, responsiveView, onResponsiveViewChange }) => {
+const EditorPanel = ({ settingsPanelCollapsed, responsiveView, onResponsiveViewChange }) => {
     const { getBlocks, isDragging } = useBuilder();
     const rootBlocks = getBlocks(null); // Get blocks at the root level
 
@@ -28,7 +28,7 @@ const RightPanel = ({ leftPanelCollapsed, responsiveView, onResponsiveViewChange
     const centerIframe = responsiveView !== 'desktop';
 
     return (
-        <Content className="right-panel">
+        <Content className="editor-panel">
             <div className="panel-content">
                 <Row align="middle" justify="space-between" style={{ marginBottom: 5, padding: '0 5px' }}>
                     <Col>
@@ -68,4 +68,4 @@ const RightPanel = ({ leftPanelCollapsed, responsiveView, onResponsiveViewChange
     );
 };
 
-export default RightPanel;
+export default EditorPanel;

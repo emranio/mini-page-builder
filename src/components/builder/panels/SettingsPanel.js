@@ -8,7 +8,7 @@ import { blockManager } from '../commons/block';
 const { Sider } = Layout;
 const { Title } = Typography;
 
-const LeftPanel = ({ width = 300, collapsed = false, onWidthChange, onToggleCollapse }) => {
+const SettingsPanel = ({ width = 300, collapsed = false, onWidthChange, onToggleCollapse }) => {
     const { selectedBlockId, setSelectedBlockId, getBlockById, updateBlock } = useBuilder();
     const lastWidthRef = useRef(width);
 
@@ -53,7 +53,7 @@ const LeftPanel = ({ width = 300, collapsed = false, onWidthChange, onToggleColl
     return (
         <Sider
             width={collapsed ? 0 : width}
-            className={`left-panel ${collapsed ? 'collapsed' : ''}`}
+            className={`settings-panel ${collapsed ? 'collapsed' : ''}`}
             style={{ position: 'relative' }}
         >
             <div className="panel-content">
@@ -106,4 +106,4 @@ const LeftPanel = ({ width = 300, collapsed = false, onWidthChange, onToggleColl
     );
 };
 
-export default LeftPanel;
+export default SettingsPanel;
