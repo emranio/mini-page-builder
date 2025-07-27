@@ -244,6 +244,160 @@ const createSelectors = (state) => {
          */
         getAppliedCSS: () => {
             return styleManager.getGeneratedCSS();
+        },
+
+        /**
+         * Generate static HTML for all blocks in the right panel
+         * @param {Object} options - Configuration options for HTML generation
+         * @param {boolean} options.includeCSS - Whether to include CSS styles in the HTML (default: true)
+         * @param {boolean} options.inlineStyles - Whether to use inline styles instead of CSS classes (default: false)
+         * @param {string} options.containerClass - CSS class name for the root container (default: 'page-builder-content')
+         * @returns {string} Complete HTML string for all blocks
+         */
+        getBlocksHTML: (options = {}) => {
+            const {
+                includeCSS = true,
+                inlineStyles = false,
+                containerClass = 'page-builder-content'
+            } = options;
+
+            // Get all blocks in nested format to preserve hierarchy
+            const allBlocks = state.blocks;
+            const rootBlocksOrder = state.rootBlocksOrder;
+
+            // Helper function to generate HTML for a single block
+            const generateBlockHTML = (block) => {
+                const blockDefinition = blockManager.getBlock(block.type);
+                if (!blockDefinition) {
+                    return `<div class="unknown-block">Unknown Block Type: ${block.type}</div>`;
+                }
+
+                // Get block props with defaults applied
+                const defaultProps = blockDefinition.defaultProps || {};
+                const mergedProps = { ...defaultProps, ...block.props };
+
+                // Generate unique ID for the block
+                const uniqueId = styleManager.generateBlockId(block.id);
+
+                // Generate HTML based on block type
+                let blockHTML = '';
+
+                switch (block.type) {
+                    case 'text':
+                        blockHTML = `<p class="text-block">${mergedProps.content || 'Simple text block'}</p>`;
+                        break;
+
+                    case 'image':
+                        blockHTML = `<img src="${mergedProps.src || ''}" alt="${mergedProps.alt || 'Image'}" class="newsletter-image" />`;
+                        break;
+
+                    case 'example-container':
+                        // Get children HTML
+                        const childrenHTML = getChildrenHTML(block.id);
+                        blockHTML = `<div class="example-container-content">${childrenHTML}</div>`;
+                        break;
+
+                    case 'column':
+                        // Generate column layout HTML
+                        const columnIds = mergedProps.columnIds || [];
+                        const columnWidths = mergedProps.columnWidths || [];
+                        const columns = mergedProps.columns || 2;
+
+                        let columnsHTML = '';
+                        for (let i = 0; i < columns; i++) {
+                            const width = columnWidths[i] || Math.floor(100 / columns);
+                            const columnId = columnIds[i];
+                            const columnContent = columnId ? getChildrenHTML(columnId) : '';
+
+                            columnsHTML += `<div class="column-wrapper" style="flex: 0 0 ${width}%; max-width: ${width}%;">${columnContent}</div>`;
+                        }
+                        blockHTML = `<div class="column-element-row">${columnsHTML}</div>`;
+                        break;
+
+                    case 'tabs':
+                        // Generate tabs HTML
+                        const tabs = mergedProps.tabs || [];
+                        const activeTabId = mergedProps.activeTabId || (tabs[0] && tabs[0].id);
+                        const tabIds = mergedProps.tabIds || [];
+
+                        let tabHeadersHTML = '';
+                        let tabContentHTML = '';
+
+                        tabs.forEach((tab, index) => {
+                            const isActive = tab.id === activeTabId;
+                            const tabContainerId = tabIds[index];
+                            const tabContent = tabContainerId ? getChildrenHTML(tabContainerId) : '';
+
+                            tabHeadersHTML += `<div class="tab-header ${isActive ? 'active' : ''}">${tab.title}</div>`;
+                            if (isActive) {
+                                tabContentHTML = `<div class="tab-content">${tabContent}</div>`;
+                            }
+                        });
+
+                        blockHTML = `<div class="tabs-container">
+                            <div class="tab-headers">${tabHeadersHTML}</div>
+                            ${tabContentHTML}
+                        </div>`;
+                        break;
+
+                    case 'debug-data':
+                        // Skip debug blocks in HTML output
+                        blockHTML = '';
+                        break;
+
+                    default:
+                        blockHTML = `<div class="unknown-block">Unsupported Block Type: ${block.type}</div>`;
+                        break;
+                }
+
+                // Wrap block HTML in container with ID and class
+                if (blockHTML) {
+                    const blockClass = `fildora-builder-${block.type}-block`;
+                    return `<div id="${uniqueId}" class="${blockClass}">${blockHTML}</div>`;
+                }
+
+                return '';
+            };
+
+            // Helper function to get children HTML for a parent block
+            const getChildrenHTML = (parentId) => {
+                const children = allBlocks.filter(block => block.parentId === parentId);
+                // Sort children by their order if they have a children array in parent
+                const parent = allBlocks.find(block => block.id === parentId);
+                if (parent && parent.children) {
+                    const orderedChildren = parent.children
+                        .map(childId => children.find(child => child.id === childId))
+                        .filter(Boolean);
+                    return orderedChildren.map(generateBlockHTML).join('\n');
+                }
+                return children.map(generateBlockHTML).join('\n');
+            };
+
+            // Generate HTML for root blocks in order
+            const rootBlocks = rootBlocksOrder
+                .map(blockId => allBlocks.find(block => block.id === blockId))
+                .filter(Boolean);
+
+            const contentHTML = rootBlocks.map(generateBlockHTML).join('\n');
+
+            // Generate CSS if needed
+            let cssHTML = '';
+            if (includeCSS && !inlineStyles) {
+                const allBlocksCSS = styleManager.generateCSSForBlocks(allBlocks.map(block => ({
+                    id: block.id,
+                    type: block.type,
+                    props: block.props
+                })));
+
+                if (allBlocksCSS) {
+                    cssHTML = `<style>\n${allBlocksCSS}\n</style>\n`;
+                }
+            }
+
+            // Combine everything into complete HTML
+            const completeHTML = `${cssHTML}<div class="${containerClass}">\n${contentHTML}\n</div>`;
+
+            return completeHTML;
         }
     };
 };
