@@ -6,7 +6,7 @@ import { createBlock } from '../../commons/block';
 
 // Create and register the block using the new createBlock factory
 const TabsBlock = createBlock({
-    type: 'tabs',
+    name: 'tabs',
     title: 'Tabs',
     category: 'layout',
     blockType: 'layout', // Layout, field, or design type

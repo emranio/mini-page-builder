@@ -26,7 +26,7 @@ const LeftPanel = ({ width = 300, collapsed = false, onWidthChange, onToggleColl
 
     // Get all blocks from BlockManager
     const blocks = blockManager.getAllBlocks().map(block => ({
-        type: block.type,
+        type: block.name,
         icon: block.icon,
         label: block.title
     }));
@@ -34,7 +34,7 @@ const LeftPanel = ({ width = 300, collapsed = false, onWidthChange, onToggleColl
     // Use BlockManager for getting settings components
     const blockRegistry = {}; // Convert to object for easier lookup
     blockManager.getAllBlocks().forEach(block => {
-        blockRegistry[block.type] = block;
+        blockRegistry[block.name] = block;
     });
 
     const selectedBlock = selectedBlockId ? getBlockById(selectedBlockId) : null;

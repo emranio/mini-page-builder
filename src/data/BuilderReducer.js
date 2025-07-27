@@ -133,7 +133,7 @@ const createSelectors = (state) => {
                     id: block.id,
                     type: block.type,
                     blockType: blockManager.getBlock(block.type)?.blockType || 'field',
-                    name: blockManager.getBlock(block.type)?.name || block.type,
+                    name: blockManager.getBlock(block.type)?.title || block.type,
                     parentId: block.parentId,
                     props: block.props,
                     children: block.children || null
@@ -164,7 +164,7 @@ const createSelectors = (state) => {
                                 id: block.id,
                                 type: block.type,
                                 blockType: blockDefinition?.blockType || 'field',
-                                name: blockDefinition?.name || block.type,
+                                name: blockDefinition?.title || block.type,
                                 parentId: block.parentId,
                                 props: block.props
                             };

@@ -6,7 +6,7 @@ import { createBlock } from '../../commons/block/BlockFactory';
 
 // Create and register the block using the new simplified BlockFactory
 const ImageBlock = createBlock({
-    type: 'image',
+    name: 'image',
     title: 'Image',
     category: 'media',
     blockType: 'design', // Layout, field, or design type

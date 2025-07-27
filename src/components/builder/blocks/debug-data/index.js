@@ -6,7 +6,7 @@ import { createBlock } from '../../commons/block/BlockFactory';
 
 // Create and register the debug data block
 const DebugDataBlock = createBlock({
-    type: 'debug-data',
+    name: 'debug-data',
     title: 'Debug Data',
     category: 'content',
     blockType: 'field', // Categorize as field since it displays data

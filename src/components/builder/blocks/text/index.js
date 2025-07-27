@@ -6,7 +6,7 @@ import { createBlock } from '../../commons/block/BlockFactory';
 
 // Create and register the block using the new simplified BlockFactory
 const TextBlock = createBlock({
-    type: 'text',
+    name: 'text',
     title: 'Text',
     category: 'content',
     blockType: 'field', // Layout, field, or design type

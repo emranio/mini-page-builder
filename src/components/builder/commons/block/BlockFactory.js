@@ -11,12 +11,12 @@ import blockManager from './blockManager';
 /**
  * Creates an enhanced view component with automatic prop handling and common functionality
  */
-export const createBlockView = (ViewComponent, blockType) => {
+export const createBlockView = (ViewComponent, blockName) => {
     const EnhancedView = memo(({ id, uniqueBlockId, ...props }) => {
         const { setSelectedBlockId } = useBuilder();
 
         // Get block definition to access default props
-        const blockDef = blockManager.getBlock(blockType);
+        const blockDef = blockManager.getBlock(blockName);
 
         // Merge props with defaults
         const mergedProps = useMemo(() => {
@@ -37,7 +37,7 @@ export const createBlockView = (ViewComponent, blockType) => {
 
         return (
             <div
-                className={`fildora-builder-${blockType}-block`}
+                className={`fildora-builder-${blockName}-block`}
                 id={uniqueBlockId}
                 onClick={handleClick}
             >
@@ -49,15 +49,15 @@ export const createBlockView = (ViewComponent, blockType) => {
     });
 
     EnhancedView.displayName = `Enhanced${ViewComponent.displayName || ViewComponent.name || 'View'}`;
-    return withBaseBlock(EnhancedView, blockType);
+    return withBaseBlock(EnhancedView, blockName);
 };
 
 /**
  * Creates an enhanced settings component with automatic form handling
  */
-export const createBlockSettings = (SettingsFormComponent, blockType, settingsConfig = {}, blockTitle = null) => {
+export const createBlockSettings = (SettingsFormComponent, blockName, settingsConfig = {}, blockTitle = null) => {
     const {
-        title = `${blockTitle || blockType} Settings`,
+        title = `${blockTitle || blockName} Settings`,
         width = 500,
         ...otherConfig
     } = settingsConfig;
@@ -72,7 +72,7 @@ export const createBlockSettings = (SettingsFormComponent, blockType, settingsCo
         const [form] = Form.useForm();
 
         // Get block definition to access default props
-        const blockDef = blockManager.getBlock(blockType);
+        const blockDef = blockManager.getBlock(blockName);
 
         // Memoize initial values with defaults
         const initialValues = useMemo(() => {
@@ -123,10 +123,10 @@ export const createBlockSettings = (SettingsFormComponent, blockType, settingsCo
 /**
  * Creates an enhanced style function with automatic prop handling
  */
-export const createBlockStyle = (styleFunction, blockType) => {
+export const createBlockStyle = (styleFunction, blockName) => {
     return (props, uniqueId) => {
         // Get block definition to access default props
-        const blockDef = blockManager.getBlock(blockType);
+        const blockDef = blockManager.getBlock(blockName);
         const defaultProps = blockDef?.defaultProps || {};
 
         // Merge props with defaults
@@ -140,7 +140,7 @@ export const createBlockStyle = (styleFunction, blockType) => {
  * Enhanced makeBlock factory that automatically handles prop defaults and common functionality
  */
 export const createBlock = ({
-    type,
+    name,
     title,
     category,
     blockType = 'field', // Default to 'field' if not specified
@@ -152,13 +152,13 @@ export const createBlock = ({
     settingsConfig = {}
 }) => {
     // Create enhanced components
-    const enhancedView = createBlockView(ViewComponent, type);
-    const enhancedSettings = createBlockSettings(SettingsFormComponent, type, settingsConfig, title);
-    const enhancedStyle = createBlockStyle(styleFunction, type);
+    const enhancedView = createBlockView(ViewComponent, name);
+    const enhancedSettings = createBlockSettings(SettingsFormComponent, name, settingsConfig, title);
+    const enhancedStyle = createBlockStyle(styleFunction, name);
 
     // Create block definition
     const blockDefinition = {
-        type,
+        name,
         title,
         category,
         blockType, // Add blockType to definition
@@ -170,7 +170,7 @@ export const createBlock = ({
     };
 
     // Register with block manager
-    return blockManager.registerBlock(type, blockDefinition);
+    return blockManager.registerBlock(name, blockDefinition);
 };
 
 export default createBlock;

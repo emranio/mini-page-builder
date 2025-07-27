@@ -6,33 +6,33 @@ import styleManager from './styleManager';
 
 class blockManager {
     constructor() {
-        this.blocks = new Map(); // blockType -> block definition
+        this.blocks = new Map(); // blockName -> block definition
     }
 
     /**
      * Register a block with the BlockManager
-     * @param {string} blockType - The block type identifier (text, image, etc.)
+     * @param {string} blockName - The block name identifier (text, image, etc.)
      * @param {object} blockDefinition - The block definition object
      */
-    registerBlock(blockType, blockDefinition) {
+    registerBlock(blockName, blockDefinition) {
         // Register the block
-        this.blocks.set(blockType, blockDefinition);
+        this.blocks.set(blockName, blockDefinition);
 
         // Register the block's styles if they exist
         if (blockDefinition.style) {
-            styleManager.registerBlockStyle(blockType, blockDefinition.style);
+            styleManager.registerBlockStyle(blockName, blockDefinition.style);
         }
 
         return blockDefinition;
     }
 
     /**
-     * Get a block definition by type
-     * @param {string} blockType - The block type to retrieve
+     * Get a block definition by name
+     * @param {string} blockName - The block name to retrieve
      * @returns {object|undefined} The block definition or undefined if not found
      */
-    getBlock(blockType) {
-        return this.blocks.get(blockType);
+    getBlock(blockName) {
+        return this.blocks.get(blockName);
     }
 
     /**
@@ -44,8 +44,8 @@ class blockManager {
     }
 
     /**
-     * Get all registered block types
-     * @returns {Array<string>} Array of block type identifiers
+     * Get all registered block names
+     * @returns {Array<string>} Array of block name identifiers
      */
     getBlockTypes() {
         return Array.from(this.blocks.keys());
@@ -62,7 +62,7 @@ class blockManager {
 
     /**
      * Get all drag types for drag and drop operations
-     * Includes all registered block types plus the special CONTAINER_ITEM type
+     * Includes all registered block names plus the special CONTAINER_ITEM type
      * @returns {Array<string>} Array of drag type identifiers
      */
     getDragTypes() {
@@ -71,12 +71,12 @@ class blockManager {
     }
 
     /**
-     * Get default props for a block type
-     * @param {string} blockType - The block type identifier
-     * @returns {object} Default props for the block type
+     * Get default props for a block name
+     * @param {string} blockName - The block name identifier
+     * @returns {object} Default props for the block name
      */
-    getDefaultProps(blockType) {
-        const blockDefinition = this.getBlock(blockType);
+    getDefaultProps(blockName) {
+        const blockDefinition = this.getBlock(blockName);
         return blockDefinition?.defaultProps || {};
     }
 
@@ -88,9 +88,9 @@ class blockManager {
         const blockTypes = this.getBlockTypes();
         const constants = {};
 
-        // Add all registered block types
-        blockTypes.forEach(type => {
-            constants[type.toUpperCase()] = type;
+        // Add all registered block names
+        blockTypes.forEach(name => {
+            constants[name.toUpperCase().replace('-', '_')] = name;
         });
 
         // Add special container item type
