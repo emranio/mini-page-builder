@@ -2,12 +2,12 @@ import React from 'react';
 import { useBuilder } from '../../../../data/BuilderReducer';
 
 const DebugDataBlockView = ({ id }) => {
-    const { getAllBuilderComponents, getContentComponents, getComponentsByBlockType, getAllBlocksCSS, getAppliedCSS } = useBuilder();
+    const { getEditorComponents, getContentComponents, getComponentsByBlockType, getAllBlocksCSS, getAppliedCSS } = useBuilder();
 
     // Get all the data from the right panel
-    const allComponentsNested = getAllBuilderComponents('nested', true);
-    const allComponentsFlat = getAllBuilderComponents('flat', true);
-    const contentOnly = getAllBuilderComponents('flat', false);
+    const allComponentsNested = getEditorComponents('nested', true);
+    const allComponentsFlat = getEditorComponents('flat', true);
+    const contentOnly = getEditorComponents('flat', false);
     const layoutComponents = getComponentsByBlockType('layout', 'flat');
     const fieldComponents = getComponentsByBlockType('field', 'flat');
     const designComponents = getComponentsByBlockType('design', 'flat');

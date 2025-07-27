@@ -122,7 +122,7 @@ const createSelectors = (state) => {
          * @param {boolean} includeLayout - Whether to include layout blocks (tabs, containers, columns)
          * @returns {Array} Array of components based on the specified format and filters
          */
-        getAllBuilderComponents: (format = 'nested', includeLayout = true) => {
+        getEditorComponents: (format = 'nested', includeLayout = true) => {
             const isLayoutBlock = (blockType) => {
                 const blockDefinition = blockManager.getBlock(blockType);
                 return blockDefinition?.blockType === 'layout';
@@ -194,7 +194,7 @@ const createSelectors = (state) => {
          * @returns {Array} Array of field and design components
          */
         getContentComponents: (format = 'nested') => {
-            return createSelectors(state).getAllBuilderComponents(format, false);
+            return createSelectors(state).getEditorComponents(format, false);
         },
 
         /**
@@ -204,7 +204,7 @@ const createSelectors = (state) => {
          * @returns {Array} Array of components of the specified block type
          */
         getComponentsByBlockType: (blockType, format = 'nested') => {
-            const allComponents = createSelectors(state).getAllBuilderComponents(format, true);
+            const allComponents = createSelectors(state).getEditorComponents(format, true);
 
             const filterByType = (components) => {
                 return components
@@ -243,7 +243,7 @@ const createSelectors = (state) => {
          * @returns {string} Combined CSS string from DOM
          */
         getAppliedCSS: () => {
-            return styleManager.getAllGeneratedCSS();
+            return styleManager.getGeneratedCSS();
         }
     };
 };

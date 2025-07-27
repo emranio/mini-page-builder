@@ -10,7 +10,7 @@ import { useBuilder } from '../data/BuilderReducer';
  * @returns {Object} Object with utility functions to get components
  */
 export const useBuilderComponents = () => {
-    const { getAllBuilderComponents, getContentComponents, getComponentsByBlockType } = useBuilder();
+    const { getEditorComponents, getContentComponents, getComponentsByBlockType } = useBuilder();
 
     return {
         /**
@@ -28,7 +28,7 @@ export const useBuilderComponents = () => {
          * const contentOnly = getAllComponents({ format: 'flat', includeLayout: false });
          */
         getAllComponents: ({ format = 'nested', includeLayout = true } = {}) => {
-            return getAllBuilderComponents(format, includeLayout);
+            return getEditorComponents(format, includeLayout);
         },
 
         /**
@@ -110,8 +110,8 @@ export const useBuilderComponents = () => {
  * @param {boolean} includeLayout - Whether to include layout blocks
  * @returns {Array} Array of components
  */
-export const getAllBuilderComponents = (builderState, format = 'nested', includeLayout = true) => {
-    return builderState.getAllBuilderComponents(format, includeLayout);
+export const getEditorComponents = (builderState, format = 'nested', includeLayout = true) => {
+    return builderState.getEditorComponents(format, includeLayout);
 };
 
 /**

@@ -96,7 +96,7 @@ class StyleManager {
      * Get all generated CSS for blocks currently in the DOM
      * @returns {string} Combined CSS string for all blocks
      */
-    getAllGeneratedCSS() {
+    getGeneratedCSS() {
         let combinedCSS = '';
         this.styleElements.forEach((styleElement, blockId) => {
             if (styleElement && styleElement.textContent) {
