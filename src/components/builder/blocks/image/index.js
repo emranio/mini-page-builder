@@ -7,7 +7,7 @@ import { createBlock } from '../../commons/block/BlockFactory';
 // Create and register the block using the new simplified BlockFactory
 const ImageBlock = createBlock({
     type: 'image',
-    name: 'Image',
+    title: 'Image',
     category: 'media',
     blockType: 'design', // Layout, field, or design type
     icon: <PictureOutlined />,
@@ -22,7 +22,6 @@ const ImageBlock = createBlock({
         borderRadius: 0
     },
     settingsConfig: {
-        title: 'Image Settings',
         width: 500
     }
 });

@@ -55,9 +55,9 @@ export const createBlockView = (ViewComponent, blockType) => {
 /**
  * Creates an enhanced settings component with automatic form handling
  */
-export const createBlockSettings = (SettingsFormComponent, blockType, settingsConfig = {}) => {
+export const createBlockSettings = (SettingsFormComponent, blockType, settingsConfig = {}, blockTitle = null) => {
     const {
-        title = `${blockType} Settings`,
+        title = `${blockTitle || blockType} Settings`,
         width = 500,
         ...otherConfig
     } = settingsConfig;
@@ -141,7 +141,7 @@ export const createBlockStyle = (styleFunction, blockType) => {
  */
 export const createBlock = ({
     type,
-    name,
+    title,
     category,
     blockType = 'field', // Default to 'field' if not specified
     icon,
@@ -153,13 +153,13 @@ export const createBlock = ({
 }) => {
     // Create enhanced components
     const enhancedView = createBlockView(ViewComponent, type);
-    const enhancedSettings = createBlockSettings(SettingsFormComponent, type, settingsConfig);
+    const enhancedSettings = createBlockSettings(SettingsFormComponent, type, settingsConfig, title);
     const enhancedStyle = createBlockStyle(styleFunction, type);
 
     // Create block definition
     const blockDefinition = {
         type,
-        name,
+        title,
         category,
         blockType, // Add blockType to definition
         icon,

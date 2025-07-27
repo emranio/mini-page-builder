@@ -28,7 +28,7 @@ const LeftPanel = ({ width = 300, collapsed = false, onWidthChange, onToggleColl
     const blocks = blockManager.getAllBlocks().map(block => ({
         type: block.type,
         icon: block.icon,
-        label: block.name
+        label: block.title
     }));
 
     // Use BlockManager for getting settings components
@@ -70,7 +70,7 @@ const LeftPanel = ({ width = 300, collapsed = false, onWidthChange, onToggleColl
                                 Blocks
                             </Button>
                             <Title level={4} style={{ margin: 0 }}>
-                                {selectedBlockConfig.name} Settings
+                                {selectedBlockConfig.title} Settings
                             </Title>
                         </div>
                         <SettingsComponent

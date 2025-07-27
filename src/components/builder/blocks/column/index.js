@@ -7,7 +7,7 @@ import { createBlock } from '../../commons/block';
 // Create and register the block using the new createBlock factory
 const ColumnBlock = createBlock({
     type: 'column',
-    name: 'Columns',
+    title: 'Columns',
     category: 'layout',
     blockType: 'layout', // Layout, field, or design type
     icon: <ColumnWidthOutlined />,

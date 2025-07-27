@@ -7,7 +7,7 @@ import { createBlock } from '../../commons/block/BlockFactory';
 // Create and register the debug data block
 const DebugDataBlock = createBlock({
     type: 'debug-data',
-    name: 'Debug Data',
+    title: 'Debug Data',
     category: 'content',
     blockType: 'field', // Categorize as field since it displays data
     icon: <BugOutlined />,
@@ -18,7 +18,6 @@ const DebugDataBlock = createBlock({
         // No props needed for this block
     },
     settingsConfig: {
-        title: 'Debug Data Settings',
         width: 400
     }
 });

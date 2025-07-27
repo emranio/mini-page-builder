@@ -7,7 +7,7 @@ import { createBlock } from '../../commons/block/BlockFactory';
 // Create and register the block using the new simplified BlockFactory
 const TextBlock = createBlock({
     type: 'text',
-    name: 'Text',
+    title: 'Text',
     category: 'content',
     blockType: 'field', // Layout, field, or design type
     icon: <FontSizeOutlined />,
@@ -22,7 +22,6 @@ const TextBlock = createBlock({
         textAlign: 'left'
     },
     settingsConfig: {
-        title: 'Text Settings',
         width: 500
     }
 });
