@@ -1,5 +1,6 @@
 import { AppstoreOutlined } from '@ant-design/icons';
 import ExampleContainerBlockView from './view';
+import ExampleContainerBlockEdit from './edit';
 import ExampleContainerBlockSettings from './settings';
 import ExampleContainerBlockStyles from './style';
 import { createBlock } from '../../commons/block';
@@ -12,6 +13,7 @@ const ExampleContainerBlock = createBlock({
     blockType: 'layout', // Layout, field, or design type
     icon: <AppstoreOutlined />,
     view: ExampleContainerBlockView,
+    edit: ExampleContainerBlockEdit, // Complex editing component with DropZone
     settings: ExampleContainerBlockSettings,
     style: ExampleContainerBlockStyles,
     defaultProps: {

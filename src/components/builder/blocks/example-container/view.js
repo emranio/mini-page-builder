@@ -1,22 +1,22 @@
-import React, { memo, useRef } from 'react';
-import { DropZone } from '../../commons';
+import React from 'react';
 
 /**
- * ExampleContainerBlockView component - Simplified with new architecture
- * Wrapper div and click handling are handled by BlockFactory
+ * ExampleContainerBlockView - Simplified view for HTML generation
+ * This component generates clean HTML without editing functionality
  */
-const ExampleContainerBlockView = memo(({
-    id
+const ExampleContainerBlockView = ({
+    id,
+    getChildrenHTML
 }) => {
-    const containerRef = useRef(null);
+    // Get children content for this container
+    const childrenContent = getChildrenHTML ? getChildrenHTML(id) : '';
 
     return (
-        <>
-            <div className="example-container-content" ref={containerRef}>
-                <DropZone parentId={id} />
-            </div>
-        </>
+        <div
+            className="example-container-content"
+            dangerouslySetInnerHTML={{ __html: childrenContent }}
+        />
     );
-});
+};
 
 export default ExampleContainerBlockView;

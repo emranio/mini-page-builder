@@ -14,9 +14,12 @@ const BlockRenderer = memo(({ element }) => {
         // Get block definition from BlockManager by type
         const blockDefinition = blockManager.getBlock(element.type);
 
-        if (blockDefinition && blockDefinition.view) {
-            const BlockComponent = blockDefinition.view;
-            return <BlockComponent id={element.id} {...element.props} />;
+        if (blockDefinition) {
+            // Use edit component if available (for complex editing UI), otherwise use view component
+            const BlockComponent = blockDefinition.edit || blockDefinition.view;
+            if (BlockComponent) {
+                return <BlockComponent id={element.id} {...element.props} />;
+            }
         }
 
         return <div>Unknown Block Type: {element.type}</div>;

@@ -1,50 +1,13 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Form, Input, InputNumber, Image } from 'antd';
-import { BaseSettings } from '../../commons/block';
 
-const ImageBlockSettings = ({
-    open,
-    onClose,
-    element,
-    throttledUpdate,
-    inline = false
-}) => {
-    const [form] = Form.useForm();
-
-    // Update form values when element props change
-    useEffect(() => {
-        const newValues = {
-            src: element.props?.src || 'https://placehold.co/200x50?text=click+to+edit&font=roboto',
-            alt: element.props?.alt || 'Image',
-            width: element.props?.width || '100%',
-            height: element.props?.height || 'auto',
-            borderRadius: element.props?.borderRadius || 0
-        };
-        form.setFieldsValue(newValues);
-    }, [form, element.props]);
-
-    const handleValuesChange = (changedValues, allValues) => {
-        // Live update the element as user changes settings
-        throttledUpdate(element.id, allValues);
-    };
-
+/**
+ * ImageBlockSettings - Form fields for image block configuration
+ * This follows the new simplified BlockFactory pattern
+ */
+const ImageBlockSettings = ({ form, element, initialValues }) => {
     return (
-        <BaseSettings
-            title="Image Settings"
-            open={open}
-            onCancel={onClose}
-            form={form}
-            initialValues={{
-                src: element.props?.src || 'https://placehold.co/200x50?text=click+to+edit&font=roboto',
-                alt: element.props?.alt || 'Image',
-                width: element.props?.width || '100%',
-                height: element.props?.height || 'auto',
-                borderRadius: element.props?.borderRadius || 0
-            }}
-            onValuesChange={handleValuesChange}
-            width={600}
-            inline={inline}
-        >
+        <>
             <Form.Item
                 label="Image URL"
                 name="src"
@@ -124,7 +87,7 @@ const ImageBlockSettings = ({
                     );
                 }}
             </Form.Item>
-        </BaseSettings>
+        </>
     );
 };
 

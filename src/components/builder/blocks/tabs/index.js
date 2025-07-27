@@ -1,5 +1,6 @@
 import { FileTextOutlined } from '@ant-design/icons';
 import TabsBlockView from './view';
+import TabsBlockEdit from './edit';
 import TabsBlockSettings from './settings';
 import TabsBlockStyles from './style';
 import { createBlock } from '../../commons/block';
@@ -12,6 +13,7 @@ const TabsBlock = createBlock({
     blockType: 'layout', // Layout, field, or design type
     icon: <FileTextOutlined />,
     view: TabsBlockView,
+    edit: TabsBlockEdit, // Complex editing component with Ant Design Tabs
     settings: TabsBlockSettings,
     style: TabsBlockStyles,
     defaultProps: {

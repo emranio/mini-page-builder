@@ -146,6 +146,7 @@ export const createBlock = ({
     blockType = 'field', // Default to 'field' if not specified
     icon,
     view: ViewComponent,
+    edit: EditComponent, // Optional edit component for complex editing UI
     settings: SettingsFormComponent,
     style: styleFunction,
     defaultProps = {},
@@ -153,6 +154,7 @@ export const createBlock = ({
 }) => {
     // Create enhanced components
     const enhancedView = createBlockView(ViewComponent, name);
+    const enhancedEdit = EditComponent ? createBlockView(EditComponent, name) : null;
     const enhancedSettings = createBlockSettings(SettingsFormComponent, name, settingsConfig, title);
     const enhancedStyle = createBlockStyle(styleFunction, name);
 
@@ -164,6 +166,7 @@ export const createBlock = ({
         blockType, // Add blockType to definition
         icon,
         view: enhancedView,
+        edit: enhancedEdit, // Component used in right panel for editing
         settings: enhancedSettings,
         style: enhancedStyle,
         defaultProps

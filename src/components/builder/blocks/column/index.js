@@ -1,5 +1,6 @@
 import { ColumnWidthOutlined } from '@ant-design/icons';
 import ColumnBlockView from './view';
+import ColumnBlockEdit from './edit';
 import ColumnBlockSettings from './settings';
 import ColumnBlockStyles from './style';
 import { createBlock } from '../../commons/block';
@@ -12,6 +13,7 @@ const ColumnBlock = createBlock({
     blockType: 'layout', // Layout, field, or design type
     icon: <ColumnWidthOutlined />,
     view: ColumnBlockView,
+    edit: ColumnBlockEdit, // Complex editing component with drag/drop and resizing
     settings: ColumnBlockSettings,
     style: ColumnBlockStyles,
     defaultProps: {

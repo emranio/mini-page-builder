@@ -1,101 +1,52 @@
-import React, { useState, useEffect } from 'react';
-import { Tabs } from 'antd';
-import { useBuilder } from '../../../../data/BuilderReducer';
-import { DropZone } from '../../commons';
+import React from 'react';
 
+/**
+ * TabsBlockView - Simplified view for HTML generation
+ * This component generates clean HTML without editing functionality
+ */
 const TabsBlockView = ({
-    id,
     tabs,
     activeTabId,
     tabIds,
-    backgroundColor,
-    borderStyle,
-    borderWidth,
-    borderColor,
-    borderRadius,
-    padding,
-    tabStyle,
-    tabPosition,
-    throttledUpdate
+    getChildrenHTML,
+    id
 }) => {
-    const { updateBlock, createBlock, getBlockById, isDragging, deleteBlock } = useBuilder();
-    const [currentActiveTab, setCurrentActiveTab] = useState(activeTabId);
+    const activeTab = activeTabId || (tabs?.[0]?.id);
 
-    // Initialize tab containers if they don't exist
-    useEffect(() => {
-        const block = getBlockById(id);
-        const currentTabIds = block?.props?.tabIds || [];
-        const currentTabs = block?.props?.tabs || tabs;
-
-        // If we don't have tab containers or the number of tabs changed, create/update them
-        if (currentTabIds.length !== currentTabs.length) {
-            const newTabIds = [...currentTabIds];
-
-            // If we need more containers, create them
-            if (currentTabIds.length < currentTabs.length) {
-                for (let i = currentTabIds.length; i < currentTabs.length; i++) {
-                    const tabContainerId = createBlock('example-container', id);
-                    newTabIds.push(tabContainerId);
-                }
-            }
-            // If we need fewer containers, clean up extra ones
-            else if (currentTabIds.length > currentTabs.length) {
-                // Delete the extra tab containers safely
-                for (let i = currentTabs.length; i < currentTabIds.length; i++) {
-                    const containerIdToDelete = currentTabIds[i];
-                    if (containerIdToDelete) {
-                        // Check if the container still exists before trying to delete it
-                        const containerExists = getBlockById(containerIdToDelete);
-                        if (containerExists) {
-                            try {
-                                deleteBlock(containerIdToDelete);
-                            } catch (error) {
-                                console.warn('Failed to delete tab container:', containerIdToDelete, error);
-                            }
-                        }
-                    }
-                }
-                newTabIds.splice(currentTabs.length);
-            }
-
-            // Update the parent block with the tab container IDs
-            updateBlock(id, {
-                tabIds: newTabIds
-            });
-        }
-    }, [id, tabs, tabIds, createBlock, updateBlock, getBlockById, deleteBlock]);
-
-    // Handle tab change
-    const handleTabChange = (activeKey) => {
-        setCurrentActiveTab(activeKey);
-        throttledUpdate(id, { activeTabId: activeKey });
+    const renderTabHeaders = () => {
+        return tabs?.map((tab) => (
+            <div
+                key={tab.id}
+                className={`tab-header ${tab.id === activeTab ? 'active' : ''}`}
+            >
+                {tab.title}
+            </div>
+        ));
     };
 
-    // Generate tab items
-    const tabItems = tabs.map((tab, index) => {
-        const tabContainerId = tabIds[index];
+    const renderTabContent = () => {
+        const activeTabIndex = tabs?.findIndex(tab => tab.id === activeTab);
+        if (activeTabIndex !== -1 && tabIds?.[activeTabIndex]) {
+            const tabContainerId = tabIds[activeTabIndex];
+            const tabContent = getChildrenHTML ? getChildrenHTML(tabContainerId) : '';
 
-        return {
-            key: tab.id,
-            label: tab.title,
-            children: tabContainerId ? (
-                <DropZone parentId={tabContainerId} />
-            ) : (
-                <div className="loading">Loading tab content...</div>
-            )
-        };
-    });
+            return (
+                <div
+                    className="tab-content"
+                    dangerouslySetInnerHTML={{ __html: tabContent }}
+                />
+            );
+        }
+        return <div className="tab-content"></div>;
+    };
 
     return (
-        <>
-            <Tabs
-                activeKey={currentActiveTab}
-                onChange={handleTabChange}
-                type={tabStyle === 'card' ? 'card' : 'line'}
-                tabPosition={tabPosition}
-                items={tabItems}
-            />
-        </>
+        <div className="tabs-container">
+            <div className="tab-headers">
+                {renderTabHeaders()}
+            </div>
+            {renderTabContent()}
+        </div>
     );
 };
 

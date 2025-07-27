@@ -2,7 +2,7 @@ import React from 'react';
 import { useBuilder } from '../../../../data/BuilderReducer';
 
 const DebugDataBlockView = ({ id }) => {
-    const { getEditorComponents, getContentComponents, getComponentsByBlockType, getAllBlocksCSS, getAppliedCSS } = useBuilder();
+    const { getEditorComponents, getContentComponents, getComponentsByBlockType, getAllBlocksCSS, getAppliedCSS, getBlocksHTML } = useBuilder();
 
     // Get all the data from the right panel
     const allComponentsNested = getEditorComponents('nested', true);
@@ -16,6 +16,9 @@ const DebugDataBlockView = ({ id }) => {
     const allBlocksCSS = getAllBlocksCSS();
     const appliedCSS = getAppliedCSS();
 
+    // Get HTML data - this is the new function we implemented
+    const blocksHTML = getBlocksHTML ? getBlocksHTML() : 'getBlocksHTML function not available';
+
     const data = {
         'All Components (Nested)': allComponentsNested,
         'All Components (Flat)': allComponentsFlat,
@@ -25,6 +28,7 @@ const DebugDataBlockView = ({ id }) => {
         'Design Components': designComponents,
         'Generated CSS (All Blocks)': allBlocksCSS,
         'Applied CSS (DOM)': appliedCSS,
+        'Generated HTML': blocksHTML, // New: Generated HTML output
         'Statistics': {
             totalComponents: allComponentsFlat.length,
             layoutBlocks: layoutComponents.length,
@@ -32,7 +36,8 @@ const DebugDataBlockView = ({ id }) => {
             designBlocks: designComponents.length,
             contentBlocks: contentOnly.length,
             cssLength: allBlocksCSS.length,
-            appliedCssLength: appliedCSS.length
+            appliedCssLength: appliedCSS.length,
+            htmlLength: typeof blocksHTML === 'string' ? blocksHTML.length : 0 // New: HTML length
         }
     };
 
@@ -63,7 +68,8 @@ const DebugDataBlockView = ({ id }) => {
                 Layout: {data.Statistics.layoutBlocks} |
                 Fields: {data.Statistics.fieldBlocks} |
                 Design: {data.Statistics.designBlocks} |
-                CSS: {data.Statistics.cssLength} chars
+                CSS: {data.Statistics.cssLength} chars |
+                HTML: {data.Statistics.htmlLength} chars
             </div>
 
             <pre style={{
