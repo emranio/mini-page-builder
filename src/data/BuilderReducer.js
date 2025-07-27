@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useReducer, useEffect, useMemo } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import blockManager from '../components/builder/commons/block/blockManager';
+import styleManager from '../components/builder/commons/block/styleManager';
 
 // Import BlockRegistry to ensure all blocks are registered
 import '../components/builder/commons/BlockRegistry';
@@ -220,6 +221,29 @@ const createSelectors = (state) => {
             };
 
             return filterByType(allComponents);
+        },
+
+        /**
+         * Get all generated CSS for blocks in the right panel
+         * @returns {string} Combined CSS string for all blocks
+         */
+        getAllBlocksCSS: () => {
+            // Get all blocks in flat format to generate CSS
+            const allBlocks = state.blocks.map(block => ({
+                id: block.id,
+                type: block.type,
+                props: block.props
+            }));
+
+            return styleManager.generateCSSForBlocks(allBlocks);
+        },
+
+        /**
+         * Get currently applied CSS (from DOM style elements)
+         * @returns {string} Combined CSS string from DOM
+         */
+        getAppliedCSS: () => {
+            return styleManager.getAllGeneratedCSS();
         }
     };
 };

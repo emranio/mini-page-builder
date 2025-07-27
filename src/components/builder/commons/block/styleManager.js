@@ -91,6 +91,47 @@ class StyleManager {
     getRegisteredBlockTypes() {
         return Array.from(this.blockStyles.keys());
     }
+
+    /**
+     * Get all generated CSS for blocks currently in the DOM
+     * @returns {string} Combined CSS string for all blocks
+     */
+    getAllGeneratedCSS() {
+        let combinedCSS = '';
+        this.styleElements.forEach((styleElement, blockId) => {
+            if (styleElement && styleElement.textContent) {
+                combinedCSS += `/* Block ID: ${blockId} */\n`;
+                combinedCSS += styleElement.textContent;
+                combinedCSS += '\n\n';
+            }
+        });
+        return combinedCSS.trim();
+    }
+
+    /**
+     * Generate CSS for all blocks in the builder (from block data)
+     * @param {Array} blocks - Array of block objects with id, type, and props
+     * @returns {string} Combined CSS string for all blocks
+     */
+    generateCSSForBlocks(blocks) {
+        let combinedCSS = '';
+
+        blocks.forEach(block => {
+            const styleFunction = this.blockStyles.get(block.type);
+            if (styleFunction && block.props) {
+                const uniqueId = this.generateBlockId(block.id);
+                const css = styleFunction(block.props, uniqueId);
+
+                if (css) {
+                    combinedCSS += `/* Block: ${block.type} (ID: ${block.id}) */\n`;
+                    combinedCSS += css;
+                    combinedCSS += '\n\n';
+                }
+            }
+        });
+
+        return combinedCSS.trim();
+    }
 }
 
 // Create singleton instance
