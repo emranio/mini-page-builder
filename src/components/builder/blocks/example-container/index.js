@@ -9,6 +9,7 @@ const ExampleContainerBlock = createBlock({
     type: 'example-container',
     name: 'Example Container',
     category: 'layout',
+    blockType: 'layout', // Layout, field, or design type
     icon: <AppstoreOutlined />,
     view: ExampleContainerBlockView,
     settings: ExampleContainerBlockSettings,

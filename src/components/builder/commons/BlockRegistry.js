@@ -12,6 +12,7 @@ import '../blocks/image';
 import '../blocks/example-container';
 import '../blocks/column';
 import '../blocks/tabs';
+import '../blocks/debug-data';
 
 const registry = blockManager;
 export default registry;

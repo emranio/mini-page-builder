@@ -9,6 +9,7 @@ const TabsBlock = createBlock({
     type: 'tabs',
     name: 'Tabs',
     category: 'layout',
+    blockType: 'layout', // Layout, field, or design type
     icon: <FileTextOutlined />,
     view: TabsBlockView,
     settings: TabsBlockSettings,

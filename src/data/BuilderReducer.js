@@ -113,6 +113,113 @@ const createSelectors = (state) => {
             const hasContainers = children.some(child => child.type === 'example-container');
             const hasBlocks = children.some(child => child.type !== 'example-container');
             return hasContainers && hasBlocks;
+        },
+
+        /**
+         * Get all components from the right panel (canvas) with filtering and formatting options
+         * @param {string} format - 'flat' for 1D array, 'nested' for hierarchical structure
+         * @param {boolean} includeLayout - Whether to include layout blocks (tabs, containers, columns)
+         * @returns {Array} Array of components based on the specified format and filters
+         */
+        getAllBuilderComponents: (format = 'nested', includeLayout = true) => {
+            const isLayoutBlock = (blockType) => {
+                const blockDefinition = blockManager.getBlock(blockType);
+                return blockDefinition?.blockType === 'layout';
+            };
+
+            if (format === 'flat') {
+                // Return all blocks as a flat array
+                let flatBlocks = state.blocks.map(block => ({
+                    id: block.id,
+                    type: block.type,
+                    blockType: blockManager.getBlock(block.type)?.blockType || 'field',
+                    name: blockManager.getBlock(block.type)?.name || block.type,
+                    parentId: block.parentId,
+                    props: block.props,
+                    children: block.children || null
+                }));
+
+                // Filter out layout blocks if requested
+                if (!includeLayout) {
+                    flatBlocks = flatBlocks.filter(block => !isLayoutBlock(block.type));
+                }
+
+                return flatBlocks;
+            } else {
+                // Return blocks in nested hierarchy format
+                const buildHierarchy = (parentId) => {
+                    const children = state.blocks
+                        .filter(block => block.parentId === parentId)
+                        .map(block => {
+                            const blockDefinition = blockManager.getBlock(block.type);
+                            const isLayout = isLayoutBlock(block.type);
+
+                            // Skip layout blocks if not including them
+                            if (!includeLayout && isLayout) {
+                                // But still traverse their children
+                                return buildHierarchy(block.id);
+                            }
+
+                            const blockData = {
+                                id: block.id,
+                                type: block.type,
+                                blockType: blockDefinition?.blockType || 'field',
+                                name: blockDefinition?.name || block.type,
+                                parentId: block.parentId,
+                                props: block.props
+                            };
+
+                            // Add children if they exist
+                            const blockChildren = buildHierarchy(block.id);
+                            if (blockChildren.length > 0) {
+                                blockData.children = blockChildren;
+                            }
+
+                            return blockData;
+                        })
+                        .flat() // Flatten in case we skipped layout blocks
+                        .filter(Boolean);
+
+                    return children;
+                };
+
+                return buildHierarchy(null); // Start from root blocks
+            }
+        },
+
+        /**
+         * Get only field and design components (excluding layout)
+         * @param {string} format - 'flat' for 1D array, 'nested' for hierarchical structure
+         * @returns {Array} Array of field and design components
+         */
+        getContentComponents: (format = 'nested') => {
+            return createSelectors(state).getAllBuilderComponents(format, false);
+        },
+
+        /**
+         * Get components by specific block type
+         * @param {string} blockType - 'layout', 'field', or 'design'
+         * @param {string} format - 'flat' for 1D array, 'nested' for hierarchical structure
+         * @returns {Array} Array of components of the specified block type
+         */
+        getComponentsByBlockType: (blockType, format = 'nested') => {
+            const allComponents = createSelectors(state).getAllBuilderComponents(format, true);
+
+            const filterByType = (components) => {
+                return components
+                    .filter(component => component.blockType === blockType)
+                    .map(component => {
+                        if (component.children && format === 'nested') {
+                            return {
+                                ...component,
+                                children: filterByType(component.children)
+                            };
+                        }
+                        return component;
+                    });
+            };
+
+            return filterByType(allComponents);
         }
     };
 };

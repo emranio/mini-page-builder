@@ -143,6 +143,7 @@ export const createBlock = ({
     type,
     name,
     category,
+    blockType = 'field', // Default to 'field' if not specified
     icon,
     view: ViewComponent,
     settings: SettingsFormComponent,
@@ -160,6 +161,7 @@ export const createBlock = ({
         type,
         name,
         category,
+        blockType, // Add blockType to definition
         icon,
         view: enhancedView,
         settings: enhancedSettings,

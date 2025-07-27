@@ -9,6 +9,7 @@ const TextBlock = createBlock({
     type: 'text',
     name: 'Text',
     category: 'content',
+    blockType: 'field', // Layout, field, or design type
     icon: <FontSizeOutlined />,
     view: TextBlockView,
     settings: TextBlockSettingsForm,

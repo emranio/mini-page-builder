@@ -9,6 +9,7 @@ const ColumnBlock = createBlock({
     type: 'column',
     name: 'Columns',
     category: 'layout',
+    blockType: 'layout', // Layout, field, or design type
     icon: <ColumnWidthOutlined />,
     view: ColumnBlockView,
     settings: ColumnBlockSettings,

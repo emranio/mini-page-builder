@@ -9,6 +9,7 @@ const ImageBlock = createBlock({
     type: 'image',
     name: 'Image',
     category: 'media',
+    blockType: 'design', // Layout, field, or design type
     icon: <PictureOutlined />,
     view: ImageBlockView,
     settings: ImageBlockSettings,
