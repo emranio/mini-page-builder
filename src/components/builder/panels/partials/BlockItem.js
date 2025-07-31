@@ -1,33 +1,40 @@
 import React from 'react';
-import { useDrag } from 'react-dnd';
+import { useDraggable } from '@dnd-kit/core';
 import { Card, Group, Text } from '@mantine/core';
 import { useBuilder } from '../../../../data/BuilderReducer';
 
 const BlockItem = ({ type, icon, label }) => {
     const { setIsDragging } = useBuilder();
 
-    // Set up the drag source
-    const [{ isDragging }, drag] = useDrag(() => ({
-        type,
-        item: () => {
-            setIsDragging(true);
-            return { type };
-        },
-        collect: (monitor) => ({
-            isDragging: !!monitor.isDragging(),
-        }),
-        end: (item, monitor) => {
-            setIsDragging(false);
-            // const didDrop = monitor.didDrop();
-            // Removed unused variable
+    // Set up the draggable element using @dnd-kit
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        isDragging,
+    } = useDraggable({
+        id: `new-block-${type}`,
+        data: {
+            type,
+            isNewBlock: true
         }
-    }));
+    });
+
+    const style = transform ? {
+        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+        opacity: isDragging ? 0.5 : 1
+    } : {
+        opacity: isDragging ? 0.5 : 1
+    };
 
     return (
         <div
-            ref={drag}
+            ref={setNodeRef}
+            style={style}
             className={`block-item ${isDragging ? 'dragging' : ''}`}
-            style={{ opacity: isDragging ? 0.5 : 1 }}
+            {...listeners}
+            {...attributes}
         >
             <Card
                 withBorder

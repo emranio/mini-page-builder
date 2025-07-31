@@ -1,45 +1,53 @@
-import React, { useRef } from 'react';
-import { useDrag, useDrop } from 'react-dnd';
+import React from 'react';
+import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { useBuilder } from '../../../data/BuilderReducer';
-import blockManager from './block/blockManager';
 import { ActionIcon } from '@mantine/core';
 import IconTrash from '@tabler/icons-react/dist/esm/icons/IconTrash';
 
 const Draggable = ({ id, type, parentId, children }) => {
     const { deleteBlock, setIsDragging, setDraggedBlockId } = useBuilder();
-    const ref = useRef(null);
-
-    // Get drag type constants
-    const dragTypes = blockManager.getDragTypeConstants();
 
     // Set up the element to be draggable
-    const [{ isDragging }, drag] = useDrag(() => ({
-        type: dragTypes.CONTAINER_ITEM,
-        item: () => {
-            setIsDragging(true);
-            setDraggedBlockId(id); // Track which block is being dragged
-            return { id, type, parentId };
-        },
-        collect: (monitor) => ({
-            isDragging: !!monitor.isDragging()
-        }),
-        end: () => {
-            setIsDragging(false);
-            // setDraggedBlockId will be cleared in the useEffect in BuilderReducer
+    const {
+        attributes,
+        listeners,
+        setNodeRef: setDragNodeRef,
+        transform,
+        isDragging,
+    } = useDraggable({
+        id: `block-${id}`,
+        data: {
+            blockId: id,
+            type,
+            parentId
         }
-    }));
+    });
 
-    // Set up the element to also accept drops for reordering (disabled to avoid conflicts with positional drop zones)
-    const [{ isOver }, drop] = useDrop(() => ({
-        accept: dragTypes.CONTAINER_ITEM,
-        // Removed hover logic - positioning is now handled by PositionalDropZone components
-        collect: monitor => ({
-            isOver: !!monitor.isOver()
-        })
-    }), [id, parentId]);
+    // Set up the element to also accept drops (for nested containers)
+    const {
+        setNodeRef: setDropNodeRef,
+        isOver
+    } = useDroppable({
+        id: `drop-${id}`,
+        data: {
+            blockId: id,
+            parentId: id, // This block becomes the parent for dropped items
+            index: 0 // Default to first position
+        }
+    });
 
-    // Initialize drag and drop refs
-    drag(drop(ref));
+    // Combine refs
+    const setNodeRef = (node) => {
+        setDragNodeRef(node);
+        setDropNodeRef(node);
+    };
+
+    const style = transform ? {
+        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+        opacity: isDragging ? 0.5 : 1
+    } : {
+        opacity: isDragging ? 0.5 : 1
+    };
 
     // Handle actions like delete
     const handleDelete = () => {
@@ -48,11 +56,16 @@ const Draggable = ({ id, type, parentId, children }) => {
 
     return (
         <div
-            ref={ref}
+            ref={setNodeRef}
+            style={style}
             className={`draggable-block ${isDragging ? 'dragging' : ''} ${isOver ? 'drop-target' : ''}`}
-            style={{ opacity: isDragging ? 0.5 : 1 }}
         >
-            <div className="block-actions">
+            <div
+                className="block-actions"
+                {...listeners}
+                {...attributes}
+                style={{ cursor: 'grab' }}
+            >
                 <ActionIcon
                     variant="subtle"
                     color="red"
