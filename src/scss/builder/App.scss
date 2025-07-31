@@ -57,6 +57,16 @@
             height: 100%;
             overflow-y: auto;
             overflow-x: visible;
+
+            .blocks-card {
+                .mantine-Card-root {
+                    overflow: visible;
+
+                    .mantine-Card-section {
+                        overflow: visible;
+                    }
+                }
+            }
         }
 
         .blocks-card {
@@ -211,7 +221,9 @@
 /* Element Items in Left Panel */
 .block-item {
     cursor: move;
-    margin-bottom: 10px;
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
 
     .block-card {
         transition: all 0.2s ease;
@@ -219,7 +231,8 @@
         flex-direction: column;
         align-items: center;
         justify-content: space-between;
-        min-height: 80px;
+        width: 100%;
+        height: 100%;
 
         &:hover {
             transform: translateY(-1px);
@@ -238,17 +251,35 @@
     }
 
     .block-icon {
-        font-size: 24px;
-        margin-bottom: 8px;
+        font-size: 28px;
         display: flex;
         align-items: center;
         justify-content: center;
+        flex: 1;
     }
 
     .block-label {
         text-align: center;
         display: block;
         width: 100%;
+        line-height: 1.2;
+        font-size: 11px;
+    }
+}
+
+/* Blocks grid container */
+.blocks-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-top: 16px;
+
+    /* Ensure proper responsive behavior */
+    .block-item {
+        flex: 0 0 100px;
+        /* Fixed width, no grow/shrink */
     }
 }
 

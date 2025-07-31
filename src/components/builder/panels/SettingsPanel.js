@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { Card, Title, Group, Button, Grid, Stack } from '@mantine/core';
+import { Card, Title, Group, Button, Stack } from '@mantine/core';
 import IconArrowLeft from '@tabler/icons-react/dist/esm/icons/IconArrowLeft';
 import { ResizeHandle, BlockItem } from './partials';
 import { useBuilder } from '../../../data/BuilderReducer';
@@ -89,13 +89,16 @@ const SettingsPanel = ({ width = 300, collapsed = false, onWidthChange, onToggle
                             <Card.Section withBorder p="xs">
                                 <Title order={5}>Drag & Drop Components</Title>
                             </Card.Section>
-                            <Grid gutter="md" mt="md">
+                            <div className="blocks-grid">
                                 {blocks.map((block, index) => (
-                                    <Grid.Col span={6} key={index}>
-                                        <BlockItem type={block.type} icon={block.icon} label={block.label} />
-                                    </Grid.Col>
+                                    <BlockItem
+                                        key={index}
+                                        type={block.type}
+                                        icon={block.icon}
+                                        label={block.label}
+                                    />
                                 ))}
-                            </Grid>
+                            </div>
                         </Card>
                     </Stack>
                 ))}
