@@ -35,6 +35,16 @@ class blockManager {
         return this.blocks.get(blockName);
     }
 
+    getBlockTitle(blockName) {
+        const block = this.getBlock(blockName);
+        return block ? block.title || blockName : blockName;
+    }
+
+    getBlockIcon(blockName) {
+        const block = this.getBlock(blockName);
+        return block ? block.icon || null : null;
+    }
+
     /**
      * Get all registered blocks
      * @returns {Array} Array of all block definitions

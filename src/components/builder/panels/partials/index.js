@@ -1,7 +1,8 @@
 import ResizeHandle from './ResizeHandle';
-import BlockItem from './BlockItem';
+import { BlockItem, BlockItemView } from './BlockItem';
 
 export {
     ResizeHandle,
-    BlockItem
+    BlockItem,
+    BlockItemView
 };

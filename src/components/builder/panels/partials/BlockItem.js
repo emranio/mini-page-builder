@@ -3,6 +3,46 @@ import { useDrag } from 'react-dnd';
 import { Card, Text } from '@mantine/core';
 import { useBuilder } from '../../../../data/BuilderReducer';
 
+const BlockItemView = ({ type, icon, label }) => {
+    return (
+        <Card
+            withBorder
+            shadow="none"
+            className="block-card"
+            style={{
+                cursor: 'grab',
+                width: '100px',
+                height: '100px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '8px',
+                textAlign: 'center'
+            }}
+        >
+            <div className="block-icon" style={{
+                fontSize: '28px',
+                color: '#1976d2',
+                marginBottom: 'auto',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flex: 1
+            }}>
+                {icon}
+            </div>
+            <Text size="xs" fw={500} className="block-label" style={{
+                marginTop: 'auto',
+                lineHeight: '1.2',
+                fontSize: '11px'
+            }}>
+                {label}
+            </Text>
+        </Card>
+    )
+}
+
 const BlockItem = ({ type, icon, label }) => {
     const { setIsDragging } = useBuilder();
 
@@ -32,43 +72,9 @@ const BlockItem = ({ type, icon, label }) => {
                 flexShrink: 0
             }}
         >
-            <Card
-                withBorder
-                shadow="none"
-                className="block-card"
-                style={{
-                    cursor: 'grab',
-                    width: '100%',
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '8px',
-                    textAlign: 'center'
-                }}
-            >
-                <div className="block-icon" style={{
-                    fontSize: '28px',
-                    color: '#1976d2',
-                    marginBottom: 'auto',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flex: 1
-                }}>
-                    {icon}
-                </div>
-                <Text size="xs" fw={500} className="block-label" style={{
-                    marginTop: 'auto',
-                    lineHeight: '1.2',
-                    fontSize: '11px'
-                }}>
-                    {label}
-                </Text>
-            </Card>
+            <BlockItemView type={type} icon={icon} label={label} />
         </div>
     );
 };
 
-export default BlockItem;
+export { BlockItem, BlockItemView };

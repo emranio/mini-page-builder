@@ -1,7 +1,7 @@
 /* Styling for drag and drop operations */
 
 /* Global styles for when dragging is happening */
-body.dragging {
+.dragging {
     cursor: grabbing !important;
 
     /* Show dropzone indicators using absolute positioned pseudo-elements */
@@ -36,7 +36,7 @@ body.dragging {
     border-radius: 4px;
     padding: 8px;
     text-align: center;
-    color: #1890ff;
+    color: #d516e7;
     font-size: 12px;
     min-height: 40px;
     display: flex;
@@ -86,6 +86,20 @@ body.dragging {
         background-color: rgba(24, 144, 255, 0.05);
     }
 }
+
+// .drag-preview {
+//     // display: block;
+//     // position: absolute;
+//     // top: 0;
+//     // left: 0;
+//     width: 100px;
+//     height: 100px;
+//     border: 2px solid #ff1818;
+//     pointer-events: none;
+//     z-index: 1000;
+
+// }
+
 
 /* Canvas highlighting during drag operations */
 .canvas-during-drag {
