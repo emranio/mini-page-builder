@@ -34,7 +34,7 @@ const TabsBlockView = ({
             // If we need more containers, create them
             if (currentTabIds.length < currentTabs.length) {
                 for (let i = currentTabIds.length; i < currentTabs.length; i++) {
-                    const tabContainerId = createBlock('example-container', id);
+                    const tabContainerId = createBlock('container', id);
                     newTabIds.push(tabContainerId);
                 }
             }

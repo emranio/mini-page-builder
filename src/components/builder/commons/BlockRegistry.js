@@ -9,7 +9,7 @@ import blockManager from './block/blockManager';
 // Import block definitions (this triggers their registration)
 import '../blocks/text';
 import '../blocks/image';
-import '../blocks/example-container';
+import '../blocks/container';
 import '../blocks/column';
 import '../blocks/tabs';
 import '../blocks/debug-data';

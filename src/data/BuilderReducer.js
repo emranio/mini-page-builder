@@ -99,7 +99,7 @@ const createSelectors = (state) => {
                 .map(childId => blocksMap.get(childId))
                 .filter(Boolean);
 
-            return children.every(child => child.type === 'example-container');
+            return children.every(child => child.type === 'container');
         },
 
         // Check if container has mixed children (blocks and containers)
@@ -111,8 +111,8 @@ const createSelectors = (state) => {
                 .map(childId => blocksMap.get(childId))
                 .filter(Boolean);
 
-            const hasContainers = children.some(child => child.type === 'example-container');
-            const hasBlocks = children.some(child => child.type !== 'example-container');
+            const hasContainers = children.some(child => child.type === 'container');
+            const hasBlocks = children.some(child => child.type !== 'container');
             return hasContainers && hasBlocks;
         },
 
@@ -346,7 +346,7 @@ const builderReducer = (state, action) => {
                 type,
                 parentId,
                 props: { ...defaultProps, ...props },
-                children: type === 'example-container' ? [] : null
+                children: type === 'container' ? [] : null
             };
 
             // Add the new block to blocks array

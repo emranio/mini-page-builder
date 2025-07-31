@@ -11,11 +11,7 @@ const TextBlockView = ({
 }) => {
     return (
         <>
-            <Text
-                className="text-block"
-            >
-                {content}
-            </Text>
+            {content}
         </>
     );
 };

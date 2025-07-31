@@ -192,9 +192,9 @@ class blockManager {
      */
     getBlockHTMLContent(props, blockType) {
         switch (blockType) {
-            case 'example-container':
+            case 'container':
                 const childrenHTML = props.getChildrenHTML ? props.getChildrenHTML(props.id) : '';
-                return `<div class="example-container-content">${childrenHTML}</div>`;
+                return `<div class="container-content">${childrenHTML}</div>`;
 
             case 'column':
                 return this.generateColumnHTML(props);

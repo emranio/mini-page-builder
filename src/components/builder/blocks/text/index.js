@@ -1,5 +1,6 @@
 import IconTypography from '@tabler/icons-react/dist/esm/icons/IconTypography';
 import TextBlockView from './view';
+import TextBlockEdit from './edit';
 import TextBlockSettingsForm from './settings';
 import TextBlockStyles from './style';
 import { createBlock } from '../../commons/block/BlockFactory';
@@ -12,6 +13,7 @@ const TextBlock = createBlock({
     blockType: 'field', // Layout, field, or design type
     icon: <IconTypography size={16} />,
     view: TextBlockView,
+    edit: TextBlockView, // Simple text block, no complex editing needed
     settings: TextBlockSettingsForm,
     style: TextBlockStyles,
     defaultProps: {

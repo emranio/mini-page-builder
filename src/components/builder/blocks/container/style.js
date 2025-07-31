@@ -1,6 +1,6 @@
 /**
  * Example Container Block Styles - Updated for new structure with wrapper in BlockFactory
- * Targets the fildora-builder-example-container-block class instead of unique ID
+ * Targets the fildora-builder-container-block class instead of unique ID
  */
 
 const ExampleContainerBlockStyles = (props, uniqueId) => {
@@ -20,7 +20,7 @@ const ExampleContainerBlockStyles = (props, uniqueId) => {
 
     return `
         /* Common styles for all example container blocks */
-        .fildora-builder-example-container-block {
+        .fildora-builder-container-block {
             width: 100%;
             position: relative;
             box-sizing: border-box;
@@ -31,21 +31,21 @@ const ExampleContainerBlockStyles = (props, uniqueId) => {
             cursor: pointer;
         }
 
-        .fildora-builder-example-container-block:hover {
+        .fildora-builder-container-block:hover {
             border-color: rgba(24, 144, 255, 0.6);
         }
 
-        .fildora-builder-example-container-block.during-drag {
+        .fildora-builder-container-block.during-drag {
             opacity: 0.8;
             transform: scale(0.98);
         }
 
-        .fildora-builder-example-container-block .example-container-content {
+        .fildora-builder-container-block .container-content {
             flex: 1;
             min-height: 40px;
         }
 
-        .fildora-builder-example-container-block .container-actions {
+        .fildora-builder-container-block .container-actions {
             display: flex;
             justify-content: center;
             padding: 5px;
@@ -53,13 +53,13 @@ const ExampleContainerBlockStyles = (props, uniqueId) => {
             background: rgba(255, 255, 255, 0.8);
         }
 
-        .fildora-builder-example-container-block .add-container-button {
+        .fildora-builder-container-block .add-container-button {
             border: 1px dashed #1890ff;
             color: #1890ff;
             background: transparent;
         }
 
-        .fildora-builder-example-container-block .add-container-button:hover {
+        .fildora-builder-container-block .add-container-button:hover {
             border-style: solid;
             background: rgba(24, 144, 255, 0.1);
         }

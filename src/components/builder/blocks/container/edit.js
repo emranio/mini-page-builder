@@ -12,7 +12,7 @@ const ExampleContainerBlockView = memo(({
 
     return (
         <>
-            <div className="example-container-content" ref={containerRef}>
+            <div className="container-content" ref={containerRef}>
                 <DropZone parentId={id} />
             </div>
         </>

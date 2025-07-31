@@ -22,7 +22,7 @@ const TabsBlock = createBlock({
             { id: 'tab2', title: 'Tab 2' }
         ],
         activeTabId: 'tab1',
-        tabIds: [], // Will store the example-container IDs for each tab
+        tabIds: [], // Will store the container IDs for each tab
         backgroundColor: 'transparent',
         borderStyle: 'solid',
         borderWidth: 1,

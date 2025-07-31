@@ -331,7 +331,7 @@
 }
 
 /* Example Container - Base styles only, details in ContainerLayout.scss and ContainerStyles.scss */
-.example-container {
+.container {
     position: relative;
     min-height: 60px;
     padding: 10px;
@@ -344,7 +344,7 @@
     transition: width 0.2s ease-out;
 
     /* These styles are being managed in ContainerStyles.scss */
-    .example-container-content {
+    .container-content {
         width: 100%;
         min-height: 40px;
         box-sizing: border-box;
@@ -377,7 +377,7 @@
 }
 
 /* Ensure elements are stacked vertically within example container content */
-.example-container-content .draggable-block {
+.container-content .draggable-block {
     width: 100%;
     display: block;
 }

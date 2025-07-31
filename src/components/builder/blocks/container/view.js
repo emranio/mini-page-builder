@@ -13,7 +13,7 @@ const ExampleContainerBlockView = ({
 
     return (
         <div
-            className="example-container-content"
+            className="container-content"
             dangerouslySetInnerHTML={{ __html: childrenContent }}
         />
     );
