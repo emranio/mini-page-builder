@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { Slider, NumberInput, Select, Button, ColorInput, Stack, Text } from '@mantine/core';
 import { Field } from 'rc-field-form';
+import VisualColumnResizer from './VisualColumnResizer';
 
 const ColumnBlockSettings = ({ form, element, initialValues, throttledUpdate }) => {
     const columns = element.props?.columns || 2;
@@ -27,28 +28,17 @@ const ColumnBlockSettings = ({ form, element, initialValues, throttledUpdate }) 
         throttledUpdate(element.id, allValues);
     };
 
-    // Dynamic form items for column widths
-    const renderColumnWidthFields = (formColumnCount) => {
-        const columnCount = formColumnCount || columns;
+    // Handle visual resizer changes
+    const handleVisualResizerChange = (newWidths) => {
+        // Update form values
+        form?.setFieldsValue({
+            columnWidths: newWidths
+        });
 
-        return Array(columnCount).fill(0).map((_, index) => (
-            <Stack gap="xs" key={`width-stack-${index}`}>
-                <Text size="sm" fw={500}>{`Column ${index + 1} Width (%)`}</Text>
-                <Field
-                    name={['columnWidths', index]}
-                    rules={[{ required: true, message: 'Please input the column width' }]}
-                >
-                    <NumberInput
-                        min={5}
-                        max={95}
-                        step={0.01}
-                        precision={2}
-                        suffix="%"
-                        style={{ width: '100%' }}
-                    />
-                </Field>
-            </Stack>
-        ));
+        // Trigger live update
+        const allValues = form?.getFieldsValue() || {};
+        allValues.columnWidths = newWidths;
+        handleValuesChange({ columnWidths: newWidths }, allValues);
     };
 
     return (
@@ -89,9 +79,12 @@ const ColumnBlockSettings = ({ form, element, initialValues, throttledUpdate }) 
                 </Field>
             </Stack>
 
-            <div className="column-widths-container">
-                {renderColumnWidthFields(form?.getFieldValue('columns') || columns)}
-            </div>
+            {/* Visual Column Resizer */}
+            <VisualColumnResizer
+                columns={form?.getFieldValue('columns') || columns}
+                columnWidths={form?.getFieldValue('columnWidths') || Array(columns).fill(Math.floor(100 / columns))}
+                onChange={handleVisualResizerChange}
+            />
 
             <Button
                 variant="outline"
