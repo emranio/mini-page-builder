@@ -9,7 +9,6 @@ import { BuilderProvider } from './data/BuilderReducer';
 // Initialize all blocks via the registry
 import './components/builder/commons/BlockRegistry';
 
-import '@mantine/core/styles.css';
 import './scss/builder/App.scss';
 
 function App() {

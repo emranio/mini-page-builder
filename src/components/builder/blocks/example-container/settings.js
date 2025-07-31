@@ -9,33 +9,33 @@ import { Field } from 'rc-field-form';
 const ExampleContainerBlockSettings = ({ form }) => {
     return (
         <>
-            <Field name="padding">
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>Padding</Text>
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Padding</Text>
+                <Field name="padding">
                     <NumberInput
                         min={0}
                         max={50}
                         suffix="px"
                         style={{ width: '100%' }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
 
-            <Field name="margin">
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>Margin</Text>
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Margin</Text>
+                <Field name="margin">
                     <NumberInput
                         min={0}
                         max={50}
                         suffix="px"
                         style={{ width: '100%' }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
 
-            <Field name="backgroundColor">
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>Background Color</Text>
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Background Color</Text>
+                <Field name="backgroundColor">
                     <Select
                         data={[
                             { value: 'transparent', label: 'Transparent' },
@@ -45,12 +45,12 @@ const ExampleContainerBlockSettings = ({ form }) => {
                         ]}
                         style={{ width: '100%' }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
 
-            <Field name="borderStyle">
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>Border Style</Text>
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Border Style</Text>
+                <Field name="borderStyle">
                     <Select
                         data={[
                             { value: 'none', label: 'None' },
@@ -60,45 +60,42 @@ const ExampleContainerBlockSettings = ({ form }) => {
                         ]}
                         style={{ width: '100%' }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
 
-            <Field name="borderWidth">
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>Border Width</Text>
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Border Width</Text>
+                <Field name="borderWidth">
                     <NumberInput
                         min={0}
                         max={10}
                         suffix="px"
                         style={{ width: '100%' }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
 
-            <Field name="borderColor">
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>Border Color</Text>
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Border Color</Text>
+                <Field name="borderColor">
                     <ColorInput
                         format="hex"
                         style={{ width: '100%' }}
-                        onChange={(value) => {
-                            form?.setFieldsValue({ borderColor: value });
-                        }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
 
-            <Field name="borderRadius">
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>Border Radius</Text>
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Border Radius</Text>
+                <Field name="borderRadius">
                     <NumberInput
                         min={0}
                         max={50}
                         suffix="px"
                         style={{ width: '100%' }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
         </>
     );
 };

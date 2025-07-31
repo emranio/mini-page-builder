@@ -111,21 +111,21 @@ const ColumnBlockSettings = ({ form, element, initialValues, throttledUpdate }) 
                 </Button>
             </Stack>
 
-            <Field name="gap">
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>Gap Between Columns</Text>
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Gap Between Columns</Text>
+                <Field name="gap">
                     <NumberInput
                         min={0}
                         max={50}
                         suffix="px"
                         style={{ width: '100%' }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
 
-            <Field name="backgroundColor">
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>Background Color</Text>
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Background Color</Text>
+                <Field name="backgroundColor">
                     <Select
                         data={[
                             { value: 'transparent', label: 'Transparent' },
@@ -135,12 +135,12 @@ const ColumnBlockSettings = ({ form, element, initialValues, throttledUpdate }) 
                         ]}
                         style={{ width: '100%' }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
 
-            <Field name="borderStyle">
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>Border Style</Text>
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Border Style</Text>
+                <Field name="borderStyle">
                     <Select
                         data={[
                             { value: 'none', label: 'None' },
@@ -150,35 +150,30 @@ const ColumnBlockSettings = ({ form, element, initialValues, throttledUpdate }) 
                         ]}
                         style={{ width: '100%' }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
 
-            <Field name="borderWidth">
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>Border Width</Text>
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Border Width</Text>
+                <Field name="borderWidth">
                     <NumberInput
                         min={0}
                         max={10}
                         suffix="px"
                         style={{ width: '100%' }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
 
-            <Field name="borderColor">
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>Border Color</Text>
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Border Color</Text>
+                <Field name="borderColor">
                     <ColorInput
                         format="hex"
                         style={{ width: '100%' }}
-                        onChange={(value) => {
-                            form?.setFieldsValue({ borderColor: value });
-                            const allValues = form?.getFieldsValue() || {};
-                            handleValuesChange({ borderColor: value }, allValues);
-                        }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
         </>
     );
 };

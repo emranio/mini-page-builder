@@ -175,9 +175,9 @@ const TabsBlockSettings = ({ form, element, initialValues, throttledUpdate }) =>
                 </Button>
             </Stack>
 
-            <Field name="tabStyle">
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>Tab Style</Text>
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Tab Style</Text>
+                <Field name="tabStyle">
                     <Select
                         data={[
                             { value: 'default', label: 'Default' },
@@ -185,12 +185,12 @@ const TabsBlockSettings = ({ form, element, initialValues, throttledUpdate }) =>
                         ]}
                         style={{ width: '100%' }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
 
-            <Field name="tabPosition">
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>Tab Position</Text>
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Tab Position</Text>
+                <Field name="tabPosition">
                     <Select
                         data={[
                             { value: 'top', label: 'Top' },
@@ -200,12 +200,12 @@ const TabsBlockSettings = ({ form, element, initialValues, throttledUpdate }) =>
                         ]}
                         style={{ width: '100%' }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
 
-            <Field name="backgroundColor">
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>Background Color</Text>
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Background Color</Text>
+                <Field name="backgroundColor">
                     <Select
                         data={[
                             { value: 'transparent', label: 'Transparent' },
@@ -215,12 +215,12 @@ const TabsBlockSettings = ({ form, element, initialValues, throttledUpdate }) =>
                         ]}
                         style={{ width: '100%' }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
 
-            <Field name="borderStyle">
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>Border Style</Text>
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Border Style</Text>
+                <Field name="borderStyle">
                     <Select
                         data={[
                             { value: 'none', label: 'None' },
@@ -230,24 +230,24 @@ const TabsBlockSettings = ({ form, element, initialValues, throttledUpdate }) =>
                         ]}
                         style={{ width: '100%' }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
 
-            <Field name="borderWidth">
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>Border Width</Text>
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Border Width</Text>
+                <Field name="borderWidth">
                     <NumberInput
                         min={0}
                         max={10}
                         suffix="px"
                         style={{ width: '100%' }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
 
-            <Field name="borderColor">
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>Border Color</Text>
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Border Color</Text>
+                <Field name="borderColor">
                     <input
                         type="color"
                         style={{
@@ -255,36 +255,33 @@ const TabsBlockSettings = ({ form, element, initialValues, throttledUpdate }) =>
                             height: 32,
                             border: '1px solid #d9d9d9'
                         }}
-                        onChange={(e) => {
-                            form?.setFieldsValue({ borderColor: e.target.value });
-                        }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
 
-            <Field name="borderRadius">
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>Border Radius</Text>
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Border Radius</Text>
+                <Field name="borderRadius">
                     <NumberInput
                         min={0}
                         max={50}
                         suffix="px"
                         style={{ width: '100%' }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
 
-            <Field name="padding">
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>Padding</Text>
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Padding</Text>
+                <Field name="padding">
                     <NumberInput
                         min={0}
                         max={50}
                         suffix="px"
                         style={{ width: '100%' }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
         </>
     );
 };

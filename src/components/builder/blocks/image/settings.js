@@ -9,63 +9,63 @@ import { Field } from 'rc-field-form';
 const ImageBlockSettings = ({ form, element, initialValues }) => {
     return (
         <>
-            <Field
-                name="src"
-                rules={[{ required: true, message: 'Please enter image URL' }]}
-            >
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>Image URL</Text>
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Image URL</Text>
+                <Field
+                    name="src"
+                    rules={[{ required: true, message: 'Please enter image URL' }]}
+                >
                     <TextInput
                         placeholder="Enter image URL"
                         style={{ width: '100%' }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
 
-            <Field
-                name="alt"
-                rules={[{ required: true, message: 'Please enter alternative text' }]}
-            >
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>Alt Text</Text>
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Alt Text</Text>
+                <Field
+                    name="alt"
+                    rules={[{ required: true, message: 'Please enter alternative text' }]}
+                >
                     <TextInput
                         placeholder="Enter alternative text for accessibility"
                         style={{ width: '100%' }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
 
-            <Field name="width">
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>Width</Text>
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Width</Text>
+                <Field name="width">
                     <TextInput
                         placeholder="e.g., 100%, 200px"
                         style={{ width: '100%' }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
 
-            <Field name="height">
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>Height</Text>
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Height</Text>
+                <Field name="height">
                     <TextInput
                         placeholder="e.g., auto, 100px"
                         style={{ width: '100%' }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
 
-            <Field name="borderRadius">
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>Border Radius</Text>
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Border Radius</Text>
+                <Field name="borderRadius">
                     <NumberInput
                         min={0}
                         max={50}
                         suffix="px"
                         style={{ width: '100%' }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
 
             <Stack gap="xs">
                 <Text size="sm" fw={500}>Preview:</Text>

@@ -1,9 +1,10 @@
-@import '~antd/dist/reset.css';
-@import './ContainerLayout.scss';
-@import './ContainerStyles.scss';
-@import './ColumnElement.scss';
-@import './DragOperations.scss';
-@import './ReactIframeProxy.scss';
+@use './ContainerLayout.scss';
+@use './ContainerStyles.scss';
+@use './ColumnElement.scss';
+@use './DragOperations.scss';
+@use './ReactIframeProxy.scss';
+
+@import '@mantine/core/styles.css';
 
 /* Variables */
 :root {

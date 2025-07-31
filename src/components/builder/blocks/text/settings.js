@@ -9,35 +9,35 @@ import { Field } from 'rc-field-form';
 const TextBlockSettingsForm = ({ form, element, initialValues }) => {
     return (
         <>
-            <Field
-                name="content"
-                rules={[{ required: true, message: 'Please enter text content' }]}
-            >
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>Content</Text>
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Content</Text>
+                <Field
+                    name="content"
+                    rules={[{ required: true, message: 'Please enter text content' }]}
+                >
                     <Textarea
                         rows={4}
                         placeholder="Enter your text content"
                         style={{ width: '100%' }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
 
-            <Field name="fontSize">
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>Font Size</Text>
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Font Size</Text>
+                <Field name="fontSize">
                     <NumberInput
                         min={8}
                         max={72}
                         suffix="px"
                         style={{ width: '100%' }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
 
-            <Field name="fontWeight">
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>Font Weight</Text>
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Font Weight</Text>
+                <Field name="fontWeight">
                     <Select
                         data={[
                             { value: 'normal', label: 'Normal' },
@@ -46,22 +46,22 @@ const TextBlockSettingsForm = ({ form, element, initialValues }) => {
                         ]}
                         style={{ width: '100%' }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
 
-            <Field name="color">
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>Text Color</Text>
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Text Color</Text>
+                <Field name="color">
                     <ColorInput
                         format="hex"
                         style={{ width: '100%' }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
 
-            <Field name="textAlign">
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>Text Align</Text>
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Text Align</Text>
+                <Field name="textAlign">
                     <Select
                         data={[
                             { value: 'left', label: 'Left' },
@@ -71,8 +71,8 @@ const TextBlockSettingsForm = ({ form, element, initialValues }) => {
                         ]}
                         style={{ width: '100%' }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
         </>
     );
 };
