@@ -1,7 +1,5 @@
 import React from 'react';
-import { Typography } from 'antd';
-
-const { Paragraph } = Typography;
+import { Text } from '@mantine/core';
 
 /**
  * TextBlockView component - Simplified with automatic prop handling
@@ -13,11 +11,11 @@ const TextBlockView = ({
 }) => {
     return (
         <>
-            <Paragraph
+            <Text
                 className="text-block"
             >
                 {content}
-            </Paragraph>
+            </Text>
         </>
     );
 };

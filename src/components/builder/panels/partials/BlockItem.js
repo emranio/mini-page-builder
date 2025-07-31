@@ -1,6 +1,5 @@
 import React from 'react';
 import { useDrag } from 'react-dnd';
-import { Card } from 'antd';
 import { useBuilder } from '../../../../data/BuilderReducer';
 
 const BlockItem = ({ type, icon, label }) => {
@@ -29,7 +28,7 @@ const BlockItem = ({ type, icon, label }) => {
             className={`block-item ${isDragging ? 'dragging' : ''}`}
             style={{ opacity: isDragging ? 0.5 : 1 }}
         >
-            <Card
+            <div
                 hoverable
                 className="block-card"
                 size="small"
@@ -38,7 +37,7 @@ const BlockItem = ({ type, icon, label }) => {
                     <div className="block-icon">{icon}</div>
                     <div className="block-label">{label}</div>
                 </div>
-            </Card>
+            </div>
         </div>
     );
 };

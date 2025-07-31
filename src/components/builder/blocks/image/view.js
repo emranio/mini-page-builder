@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image } from 'antd';
+import { Image } from '@mantine/core';
 
 /**
  * ImageBlockView component - Simplified with automatic prop handling
@@ -15,7 +15,6 @@ const ImageBlockView = ({
             <Image
                 src={src}
                 alt={alt}
-                preview={false}
                 className="newsletter-image"
             />
         </>

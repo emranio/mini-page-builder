@@ -2,7 +2,6 @@ import React, { useState, useCallback } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { MantineProvider } from '@mantine/core';
-import { Layout } from 'antd';
 import SettingsPanel from './components/builder/panels/SettingsPanel';
 import EditorPanel from './components/builder/panels/EditorPanel';
 import { BuilderProvider } from './data/BuilderReducer';
@@ -36,7 +35,7 @@ function App() {
     <MantineProvider>
       <DndProvider backend={HTML5Backend}>
         <BuilderProvider>
-          <Layout className="builder-layout">
+          <div className="builder-layout">
             <SettingsPanel
               width={settingsPanelConfig.width}
               collapsed={settingsPanelConfig.collapsed}
@@ -48,7 +47,7 @@ function App() {
               responsiveView={responsiveView}
               onResponsiveViewChange={handleResponsiveViewChange}
             />
-          </Layout>
+          </div>
         </BuilderProvider>
       </DndProvider>
     </MantineProvider>

@@ -2,8 +2,8 @@ import React, { useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { useBuilder } from '../../../data/BuilderReducer';
 import blockManager from './block/blockManager';
-import { Button } from 'antd';
-import { DeleteOutlined } from '@ant-design/icons';
+import { ActionIcon } from '@mantine/core';
+import { IconTrash } from '@tabler/icons-react';
 
 const Draggable = ({ id, type, parentId, children }) => {
     const { deleteBlock, setIsDragging, setDraggedBlockId } = useBuilder();
@@ -53,14 +53,15 @@ const Draggable = ({ id, type, parentId, children }) => {
             style={{ opacity: isDragging ? 0.5 : 1 }}
         >
             <div className="block-actions">
-                <Button
-                    type="text"
-                    icon={<DeleteOutlined />}
-                    size="small"
+                <ActionIcon
+                    variant="subtle"
+                    color="red"
+                    size="sm"
                     className="block-action-button"
                     onClick={handleDelete}
-                    danger
-                />
+                >
+                    <IconTrash size={16} />
+                </ActionIcon>
             </div>
             <div className="block-wrapper">
                 {/* When dragging, render a simplified placeholder instead of the full component */}
