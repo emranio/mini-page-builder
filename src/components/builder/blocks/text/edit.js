@@ -7,7 +7,7 @@ const TextBlockEdit = ({
     return (
         <>
             <Text
-                className="text-block"
+                className="text-block foo"
             >
                 {content}
             </Text>

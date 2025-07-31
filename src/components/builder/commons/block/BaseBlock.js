@@ -24,7 +24,7 @@ export const BaseSettings = memo(({
     inline = false,
     ...modalProps
 }) => {
-    const formContent = (
+    return (
         <Form
             form={form}
             initialValues={initialValues}
@@ -35,24 +35,6 @@ export const BaseSettings = memo(({
         </Form>
     );
 
-    if (inline) {
-        return (
-            <div className="inline-settings">
-                {formContent}
-            </div>
-        );
-    }
-
-    return (
-        <Modal
-            title={title}
-            opened={open}
-            onClose={onCancel}
-            {...modalProps}
-        >
-            {formContent}
-        </Modal>
-    );
 });
 
 /**

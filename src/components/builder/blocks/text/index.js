@@ -13,7 +13,7 @@ const TextBlock = createBlock({
     blockType: 'field', // Layout, field, or design type
     icon: <IconTypography size={16} />,
     view: TextBlockView,
-    edit: TextBlockView, // Simple text block, no complex editing needed
+    edit: TextBlockEdit, // Simple text block, no complex editing needed
     settings: TextBlockSettingsForm,
     style: TextBlockStyles,
     defaultProps: {

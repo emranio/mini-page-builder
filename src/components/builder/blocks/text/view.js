@@ -11,7 +11,7 @@ const TextBlockView = ({
 }) => {
     return (
         <>
-            {content}
+            foo {content}
         </>
     );
 };

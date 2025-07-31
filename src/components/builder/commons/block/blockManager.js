@@ -208,8 +208,8 @@ class blockManager {
 
             default:
                 // For custom blocks, try to extract basic content
-                const content = props.content || props.text || `${blockType} block`;
-                return `<div class="${blockType}-block">${content}</div>`;
+                // test fallback for simple text or content blocks
+                return `<div class="${blockType}-block">${props.content || ''}</div>`;
         }
     }
 
