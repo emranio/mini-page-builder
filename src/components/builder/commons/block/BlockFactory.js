@@ -141,7 +141,7 @@ export const createBlockStyle = (styleFunction, blockName) => {
  */
 export const createBlock = ({
     name,
-    title,
+    label,
     category,
     blockType = 'field', // Default to 'field' if not specified
     icon,
@@ -155,13 +155,13 @@ export const createBlock = ({
     // Create enhanced components
     const enhancedView = createBlockView(ViewComponent, name);
     const enhancedEdit = EditComponent ? createBlockView(EditComponent, name) : null;
-    const enhancedSettings = createBlockSettings(SettingsFormComponent, name, settingsConfig, title);
+    const enhancedSettings = createBlockSettings(SettingsFormComponent, name, settingsConfig, label);
     const enhancedStyle = createBlockStyle(styleFunction, name);
 
     // Create block definition
     const blockDefinition = {
         name,
-        title,
+        label,
         category,
         blockType, // Add blockType to definition
         icon,

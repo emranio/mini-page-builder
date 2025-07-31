@@ -8,7 +8,7 @@ import { createBlock } from '../../commons/block';
 // Create and register the block using the new createBlock factory
 const TabsBlock = createBlock({
     name: 'tabs',
-    title: 'Tabs',
+    label: 'Tabs',
     category: 'layout',
     blockType: 'layout', // Layout, field, or design type
     icon: <IconFiles size={16} />,

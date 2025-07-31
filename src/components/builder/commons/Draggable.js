@@ -23,7 +23,7 @@ const DragPreview = React.forwardRef(({ type, isDragging }, ref) => (
     >
         <BlockItemView
             ref={ref}
-            label={blockManager.getBlockTitle(type)}
+            label={blockManager.getBlockLabel(type)}
             icon={blockManager.getBlockIcon(type)}
         />
     </div>

@@ -25,7 +25,7 @@ const SettingsPanel = ({ width = 300, collapsed = false, onWidthChange, onToggle
     const blocks = blockManager.getAllBlocks().map(block => ({
         type: block.name,
         icon: block.icon,
-        label: block.title
+        label: block.label
     }));
 
     // Use BlockManager for getting settings components
@@ -69,7 +69,7 @@ const SettingsPanel = ({ width = 300, collapsed = false, onWidthChange, onToggle
                                 Blocks
                             </Button>
                             <Title order={4} style={{ margin: 0, flex: 1 }}>
-                                {selectedBlockConfig.title} Settings
+                                {selectedBlockConfig.label} Settings
                             </Title>
                         </Group>
                         <SettingsComponent

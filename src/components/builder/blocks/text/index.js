@@ -7,7 +7,7 @@ import { createBlock } from '../../commons/block/BlockFactory';
 // Create and register the block using the new simplified BlockFactory
 const TextBlock = createBlock({
     name: 'text',
-    title: 'Text',
+    label: 'Text',
     category: 'content',
     blockType: 'field', // Layout, field, or design type
     icon: <IconTypography size={16} />,

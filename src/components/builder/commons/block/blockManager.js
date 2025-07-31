@@ -35,9 +35,9 @@ class blockManager {
         return this.blocks.get(blockName);
     }
 
-    getBlockTitle(blockName) {
+    getBlockLabel(blockName) {
         const block = this.getBlock(blockName);
-        return block ? block.title || blockName : blockName;
+        return block ? block.label || blockName : blockName;
     }
 
     getBlockIcon(blockName) {
@@ -192,12 +192,6 @@ class blockManager {
      */
     getBlockHTMLContent(props, blockType) {
         switch (blockType) {
-            case 'text':
-                return `<p class="text-block">${props.content || 'Simple text block'}</p>`;
-
-            case 'image':
-                return `<img src="${props.src || ''}" alt="${props.alt || 'Image'}" class="newsletter-image" />`;
-
             case 'example-container':
                 const childrenHTML = props.getChildrenHTML ? props.getChildrenHTML(props.id) : '';
                 return `<div class="example-container-content">${childrenHTML}</div>`;
@@ -214,7 +208,7 @@ class blockManager {
 
             default:
                 // For custom blocks, try to extract basic content
-                const content = props.content || props.text || props.title || `${blockType} block`;
+                const content = props.content || props.text || `${blockType} block`;
                 return `<div class="${blockType}-block">${content}</div>`;
         }
     }

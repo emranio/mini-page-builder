@@ -152,6 +152,12 @@
         height: 100%;
         /* Full height */
 
+        .canvas-container {
+            flex: 1 1 0%;
+            padding: 0px 10px;
+
+        }
+
         .panel-content {
             padding: 0;
             height: 100%;
@@ -166,7 +172,7 @@
             position: relative;
             width: 100%;
             height: 100%;
-            /* Added for absolute positioning of empty-canvas */
+            overflow: auto;
         }
 
         .empty-canvas {
