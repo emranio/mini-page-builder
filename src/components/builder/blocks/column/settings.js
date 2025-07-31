@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
-import { Form, Slider, InputNumber, Select } from 'antd';
-
-const { Option } = Select;
+import { Slider, NumberInput, Select, Button, ColorInput, Stack, Text } from '@mantine/core';
+import Form, { Field } from 'rc-field-form';
 
 const ColumnBlockSettings = ({ form, element, initialValues, throttledUpdate }) => {
     const columns = element.props?.columns || 2;
@@ -33,70 +32,67 @@ const ColumnBlockSettings = ({ form, element, initialValues, throttledUpdate }) 
         const columnCount = formColumnCount || columns;
 
         return Array(columnCount).fill(0).map((_, index) => (
-            <Form.Item
+            <Field
                 key={`width-${index}`}
-                label={`Column ${index + 1} Width (%)`}
                 name={['columnWidths', index]}
                 rules={[{ required: true, message: 'Please input the column width' }]}
             >
-                <InputNumber
-                    min={5}
-                    max={95}
-                    step={0.01}
-                    precision={2}
-                    addonAfter="%"
-                    style={{ width: '100%' }}
-                />
-            </Form.Item>
+                <Stack gap="xs">
+                    <Text size="sm" fw={500}>{`Column ${index + 1} Width (%)`}</Text>
+                    <NumberInput
+                        min={5}
+                        max={95}
+                        step={0.01}
+                        precision={2}
+                        suffix="%"
+                        style={{ width: '100%' }}
+                    />
+                </Stack>
+            </Field>
         ));
     };
 
     return (
         <>
-            <Form.Item
+            <Field
                 name="columns"
-                label="Number of Columns"
                 rules={[{ required: true, message: 'Please select the number of columns' }]}
             >
-                <Slider
-                    min={2}
-                    max={12}
-                    marks={{
-                        2: '2',
-                        4: '4',
-                        6: '6',
-                        8: '8',
-                        10: '10',
-                        12: '12'
-                    }}
-                    onChange={(value) => {
-                        // When column count changes, immediately update column widths
-                        const equalWidth = Math.floor(100 / value);
-                        form?.setFieldsValue({
-                            columnWidths: Array(value).fill(equalWidth)
-                        });
-                        // Trigger live update
-                        const allValues = form?.getFieldsValue() || {};
-                        allValues.columnWidths = Array(value).fill(equalWidth);
-                        handleValuesChange({ columns: value, columnWidths: allValues.columnWidths }, allValues);
-                    }}
-                />
-            </Form.Item>
+                <Stack gap="xs">
+                    <Text size="sm" fw={500}>Number of Columns</Text>
+                    <Slider
+                        min={2}
+                        max={12}
+                        marks={[
+                            { value: 2, label: '2' },
+                            { value: 4, label: '4' },
+                            { value: 6, label: '6' },
+                            { value: 8, label: '8' },
+                            { value: 10, label: '10' },
+                            { value: 12, label: '12' }
+                        ]}
+                        onChange={(value) => {
+                            // When column count changes, immediately update column widths
+                            const equalWidth = Math.floor(100 / value);
+                            form?.setFieldsValue({
+                                columnWidths: Array(value).fill(equalWidth)
+                            });
+                            // Trigger live update
+                            const allValues = form?.getFieldsValue() || {};
+                            allValues.columnWidths = Array(value).fill(equalWidth);
+                            handleValuesChange({ columns: value, columnWidths: allValues.columnWidths }, allValues);
+                        }}
+                    />
+                </Stack>
+            </Field>
 
-            <Form.Item shouldUpdate={(prevValues, currentValues) => prevValues.columns !== currentValues.columns}>
-                {() => {
-                    const formColumnCount = form?.getFieldValue('columns') || columns;
-                    return (
-                        <div className="column-widths-container">
-                            {renderColumnWidthFields(formColumnCount)}
-                        </div>
-                    );
-                }}
-            </Form.Item>
+            <div className="column-widths-container">
+                {renderColumnWidthFields(form?.getFieldValue('columns') || columns)}
+            </div>
 
-            <Form.Item>
-                <button
-                    type="button"
+            <Stack gap="xs">
+                <Button
+                    variant="outline"
                     onClick={() => {
                         // Distribute column widths evenly
                         const count = form?.getFieldValue('columns') || columns;
@@ -110,84 +106,79 @@ const ColumnBlockSettings = ({ form, element, initialValues, throttledUpdate }) 
                         allValues.columnWidths = newWidths;
                         handleValuesChange({ columnWidths: newWidths }, allValues);
                     }}
-                    style={{
-                        padding: '4px 15px',
-                        border: '1px solid #d9d9d9',
-                        borderRadius: '6px',
-                        background: '#fff',
-                        cursor: 'pointer'
-                    }}
                 >
                     Distribute Evenly
-                </button>
-            </Form.Item>
+                </Button>
+            </Stack>
 
-            <Form.Item
-                label="Gap Between Columns"
-                name="gap"
-            >
-                <InputNumber
-                    min={0}
-                    max={50}
-                    addonAfter="px"
-                    style={{ width: '100%' }}
-                />
-            </Form.Item>
+            <Field name="gap">
+                <Stack gap="xs">
+                    <Text size="sm" fw={500}>Gap Between Columns</Text>
+                    <NumberInput
+                        min={0}
+                        max={50}
+                        suffix="px"
+                        style={{ width: '100%' }}
+                    />
+                </Stack>
+            </Field>
 
-            <Form.Item
-                label="Background Color"
-                name="backgroundColor"
-            >
-                <Select style={{ width: '100%' }}>
-                    <Option value="transparent">Transparent</Option>
-                    <Option value="#ffffff">White</Option>
-                    <Option value="#f0f0f0">Light Gray</Option>
-                    <Option value="#e8e8e8">Gray</Option>
-                </Select>
-            </Form.Item>
+            <Field name="backgroundColor">
+                <Stack gap="xs">
+                    <Text size="sm" fw={500}>Background Color</Text>
+                    <Select
+                        data={[
+                            { value: 'transparent', label: 'Transparent' },
+                            { value: '#ffffff', label: 'White' },
+                            { value: '#f0f0f0', label: 'Light Gray' },
+                            { value: '#e8e8e8', label: 'Gray' }
+                        ]}
+                        style={{ width: '100%' }}
+                    />
+                </Stack>
+            </Field>
 
-            <Form.Item
-                label="Border Style"
-                name="borderStyle"
-            >
-                <Select style={{ width: '100%' }}>
-                    <Option value="none">None</Option>
-                    <Option value="solid">Solid</Option>
-                    <Option value="dashed">Dashed</Option>
-                    <Option value="dotted">Dotted</Option>
-                </Select>
-            </Form.Item>
+            <Field name="borderStyle">
+                <Stack gap="xs">
+                    <Text size="sm" fw={500}>Border Style</Text>
+                    <Select
+                        data={[
+                            { value: 'none', label: 'None' },
+                            { value: 'solid', label: 'Solid' },
+                            { value: 'dashed', label: 'Dashed' },
+                            { value: 'dotted', label: 'Dotted' }
+                        ]}
+                        style={{ width: '100%' }}
+                    />
+                </Stack>
+            </Field>
 
-            <Form.Item
-                label="Border Width"
-                name="borderWidth"
-            >
-                <InputNumber
-                    min={0}
-                    max={10}
-                    addonAfter="px"
-                    style={{ width: '100%' }}
-                />
-            </Form.Item>
+            <Field name="borderWidth">
+                <Stack gap="xs">
+                    <Text size="sm" fw={500}>Border Width</Text>
+                    <NumberInput
+                        min={0}
+                        max={10}
+                        suffix="px"
+                        style={{ width: '100%' }}
+                    />
+                </Stack>
+            </Field>
 
-            <Form.Item
-                label="Border Color"
-                name="borderColor"
-            >
-                <input
-                    type="color"
-                    style={{
-                        width: '100%',
-                        height: 32,
-                        border: '1px solid #d9d9d9'
-                    }}
-                    onChange={(e) => {
-                        form?.setFieldsValue({ borderColor: e.target.value });
-                        const allValues = form?.getFieldsValue() || {};
-                        handleValuesChange({ borderColor: e.target.value }, allValues);
-                    }}
-                />
-            </Form.Item>
+            <Field name="borderColor">
+                <Stack gap="xs">
+                    <Text size="sm" fw={500}>Border Color</Text>
+                    <ColorInput
+                        format="hex"
+                        style={{ width: '100%' }}
+                        onChange={(value) => {
+                            form?.setFieldsValue({ borderColor: value });
+                            const allValues = form?.getFieldsValue() || {};
+                            handleValuesChange({ borderColor: value }, allValues);
+                        }}
+                    />
+                </Stack>
+            </Field>
         </>
     );
 };

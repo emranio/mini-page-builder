@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Select, InputNumber, Button, List } from 'antd';
-import { PlusOutlined, DeleteOutlined, HolderOutlined } from '@ant-design/icons';
+import { TextInput, Select, NumberInput, Button, Stack, Text, ActionIcon, Group } from '@mantine/core';
+import IconGripVertical from '@tabler/icons-react/dist/esm/icons/IconGripVertical';
+import IconTrash from '@tabler/icons-react/dist/esm/icons/IconTrash';
+import IconPlus from '@tabler/icons-react/dist/esm/icons/IconPlus';
+import { Field } from 'rc-field-form';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-
-const { Option } = Select;
 
 // Sortable Tab Item Component
 const SortableTabItem = ({ tab, index, onTitleChange, onDelete, isDeleteDisabled }) => {
@@ -31,7 +32,8 @@ const SortableTabItem = ({ tab, index, onTitleChange, onDelete, isDeleteDisabled
             style={style}
             className="sortable-tab-item"
         >
-            <List.Item
+            <Group
+                spacing="xs"
                 style={{
                     padding: '8px 12px',
                     border: '1px solid #f0f0f0',
@@ -41,37 +43,31 @@ const SortableTabItem = ({ tab, index, onTitleChange, onDelete, isDeleteDisabled
                     cursor: isDragging ? 'grabbing' : 'default'
                 }}
             >
-                <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <div
-                        {...attributes}
-                        {...listeners}
-                        style={{
-                            cursor: 'grab',
-                            padding: '4px',
-                            display: 'flex',
-                            alignItems: 'center'
-                        }}
-                    >
-                        <HolderOutlined style={{ color: '#8c8c8c' }} />
-                    </div>
-                    <Input
-                        value={tab.title}
-                        onChange={(e) => onTitleChange(index, e.target.value)}
-                        placeholder="Tab title"
-                        style={{ flex: 1 }}
-                        size="small"
-                    />
-                    <Button
-                        type="text"
-                        size="small"
-                        icon={<DeleteOutlined />}
-                        onClick={() => onDelete(index)}
-                        disabled={isDeleteDisabled}
-                        danger
-                        title="Delete tab"
-                    />
-                </div>
-            </List.Item>
+                <ActionIcon
+                    {...attributes}
+                    {...listeners}
+                    variant="subtle"
+                    style={{ cursor: 'grab' }}
+                >
+                    <IconGripVertical size={16} color="#8c8c8c" />
+                </ActionIcon>
+                <TextInput
+                    value={tab.title}
+                    onChange={(e) => onTitleChange(index, e.currentTarget.value)}
+                    placeholder="Tab title"
+                    style={{ flex: 1 }}
+                    size="sm"
+                />
+                <ActionIcon
+                    onClick={() => onDelete(index)}
+                    disabled={isDeleteDisabled}
+                    color="red"
+                    variant="subtle"
+                    title="Delete tab"
+                >
+                    <IconTrash size={16} />
+                </ActionIcon>
+            </Group>
         </div>
     );
 };
@@ -143,7 +139,8 @@ const TabsBlockSettings = ({ form, element, initialValues, throttledUpdate }) =>
 
     return (
         <>
-            <Form.Item label="Tabs">
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Tabs</Text>
                 <DndContext
                     sensors={sensors}
                     collisionDetection={closestCenter}
@@ -169,115 +166,125 @@ const TabsBlockSettings = ({ form, element, initialValues, throttledUpdate }) =>
                 </DndContext>
 
                 <Button
-                    type="dashed"
+                    variant="default"
                     onClick={handleAddTab}
-                    icon={<PlusOutlined />}
-                    style={{ width: '100%' }}
+                    leftSection={<IconPlus size={16} />}
+                    fullWidth
                 >
                     Add Tab
                 </Button>
-            </Form.Item>
+            </Stack>
 
-            <Form.Item
-                label="Tab Style"
-                name="tabStyle"
-            >
-                <Select style={{ width: '100%' }}>
-                    <Option value="default">Default</Option>
-                    <Option value="card">Card</Option>
-                </Select>
-            </Form.Item>
+            <Field name="tabStyle">
+                <Stack gap="xs">
+                    <Text size="sm" fw={500}>Tab Style</Text>
+                    <Select
+                        data={[
+                            { value: 'default', label: 'Default' },
+                            { value: 'card', label: 'Card' }
+                        ]}
+                        style={{ width: '100%' }}
+                    />
+                </Stack>
+            </Field>
 
-            <Form.Item
-                label="Tab Position"
-                name="tabPosition"
-            >
-                <Select style={{ width: '100%' }}>
-                    <Option value="top">Top</Option>
-                    <Option value="bottom">Bottom</Option>
-                    <Option value="left">Left</Option>
-                    <Option value="right">Right</Option>
-                </Select>
-            </Form.Item>
+            <Field name="tabPosition">
+                <Stack gap="xs">
+                    <Text size="sm" fw={500}>Tab Position</Text>
+                    <Select
+                        data={[
+                            { value: 'top', label: 'Top' },
+                            { value: 'bottom', label: 'Bottom' },
+                            { value: 'left', label: 'Left' },
+                            { value: 'right', label: 'Right' }
+                        ]}
+                        style={{ width: '100%' }}
+                    />
+                </Stack>
+            </Field>
 
-            <Form.Item
-                label="Background Color"
-                name="backgroundColor"
-            >
-                <Select style={{ width: '100%' }}>
-                    <Option value="transparent">Transparent</Option>
-                    <Option value="#ffffff">White</Option>
-                    <Option value="#f0f0f0">Light Gray</Option>
-                    <Option value="#e8e8e8">Gray</Option>
-                </Select>
-            </Form.Item>
+            <Field name="backgroundColor">
+                <Stack gap="xs">
+                    <Text size="sm" fw={500}>Background Color</Text>
+                    <Select
+                        data={[
+                            { value: 'transparent', label: 'Transparent' },
+                            { value: '#ffffff', label: 'White' },
+                            { value: '#f0f0f0', label: 'Light Gray' },
+                            { value: '#e8e8e8', label: 'Gray' }
+                        ]}
+                        style={{ width: '100%' }}
+                    />
+                </Stack>
+            </Field>
 
-            <Form.Item
-                label="Border Style"
-                name="borderStyle"
-            >
-                <Select style={{ width: '100%' }}>
-                    <Option value="none">None</Option>
-                    <Option value="solid">Solid</Option>
-                    <Option value="dashed">Dashed</Option>
-                    <Option value="dotted">Dotted</Option>
-                </Select>
-            </Form.Item>
+            <Field name="borderStyle">
+                <Stack gap="xs">
+                    <Text size="sm" fw={500}>Border Style</Text>
+                    <Select
+                        data={[
+                            { value: 'none', label: 'None' },
+                            { value: 'solid', label: 'Solid' },
+                            { value: 'dashed', label: 'Dashed' },
+                            { value: 'dotted', label: 'Dotted' }
+                        ]}
+                        style={{ width: '100%' }}
+                    />
+                </Stack>
+            </Field>
 
-            <Form.Item
-                label="Border Width"
-                name="borderWidth"
-            >
-                <InputNumber
-                    min={0}
-                    max={10}
-                    addonAfter="px"
-                    style={{ width: '100%' }}
-                />
-            </Form.Item>
+            <Field name="borderWidth">
+                <Stack gap="xs">
+                    <Text size="sm" fw={500}>Border Width</Text>
+                    <NumberInput
+                        min={0}
+                        max={10}
+                        suffix="px"
+                        style={{ width: '100%' }}
+                    />
+                </Stack>
+            </Field>
 
-            <Form.Item
-                label="Border Color"
-                name="borderColor"
-            >
-                <input
-                    type="color"
-                    style={{
-                        width: '100%',
-                        height: 32,
-                        border: '1px solid #d9d9d9'
-                    }}
-                    onChange={(e) => {
-                        form.setFieldsValue({ borderColor: e.target.value });
-                        const allValues = form.getFieldsValue();
-                        form.submit();
-                    }}
-                />
-            </Form.Item>
+            <Field name="borderColor">
+                <Stack gap="xs">
+                    <Text size="sm" fw={500}>Border Color</Text>
+                    <input
+                        type="color"
+                        style={{
+                            width: '100%',
+                            height: 32,
+                            border: '1px solid #d9d9d9'
+                        }}
+                        onChange={(e) => {
+                            form?.setFieldsValue({ borderColor: e.target.value });
+                        }}
+                    />
+                </Stack>
+            </Field>
 
-            <Form.Item
-                label="Border Radius"
-                name="borderRadius"
-            >
-                <InputNumber
-                    min={0}
-                    max={50}
-                    addonAfter="px"
-                    style={{ width: '100%' }}
-                />
-            </Form.Item>
+            <Field name="borderRadius">
+                <Stack gap="xs">
+                    <Text size="sm" fw={500}>Border Radius</Text>
+                    <NumberInput
+                        min={0}
+                        max={50}
+                        suffix="px"
+                        style={{ width: '100%' }}
+                    />
+                </Stack>
+            </Field>
 
-            <Form.Item
-                label="Padding"
-                name="padding"
-            >
-                <InputNumber
-                    min={0}
-                    max={50}
-                    addonAfter="px"
-                    style={{ width: '100%' }}
-                />
-            </Form.Item>
+            <Field name="padding">
+                <Stack gap="xs">
+                    <Text size="sm" fw={500}>Padding</Text>
+                    <NumberInput
+                        min={0}
+                        max={50}
+                        suffix="px"
+                        style={{ width: '100%' }}
+                    />
+                </Stack>
+            </Field>
         </>
     );
 };

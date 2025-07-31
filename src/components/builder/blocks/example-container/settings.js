@@ -1,7 +1,6 @@
 import React from 'react';
-import { Form, InputNumber, Select } from 'antd';
-
-const { Option } = Select;
+import { NumberInput, Select, ColorInput, Stack, Text } from '@mantine/core';
+import { Field } from 'rc-field-form';
 
 /**
  * ExampleContainerBlockSettings - Simplified form component for new architecture
@@ -10,96 +9,96 @@ const { Option } = Select;
 const ExampleContainerBlockSettings = ({ form }) => {
     return (
         <>
-            <Form.Item
-                label="Padding"
-                name="padding"
-            >
-                <InputNumber
-                    min={0}
-                    max={50}
-                    addonAfter="px"
-                    style={{ width: '100%' }}
-                />
-            </Form.Item>
+            <Field name="padding">
+                <Stack gap="xs">
+                    <Text size="sm" fw={500}>Padding</Text>
+                    <NumberInput
+                        min={0}
+                        max={50}
+                        suffix="px"
+                        style={{ width: '100%' }}
+                    />
+                </Stack>
+            </Field>
 
-            <Form.Item
-                label="Margin"
-                name="margin"
-            >
-                <InputNumber
-                    min={0}
-                    max={50}
-                    addonAfter="px"
-                    style={{ width: '100%' }}
-                />
-            </Form.Item>
+            <Field name="margin">
+                <Stack gap="xs">
+                    <Text size="sm" fw={500}>Margin</Text>
+                    <NumberInput
+                        min={0}
+                        max={50}
+                        suffix="px"
+                        style={{ width: '100%' }}
+                    />
+                </Stack>
+            </Field>
 
-            <Form.Item
-                label="Background Color"
-                name="backgroundColor"
-            >
-                <Select style={{ width: '100%' }}>
-                    <Option value="transparent">Transparent</Option>
-                    <Option value="#ffffff">White</Option>
-                    <Option value="#f0f0f0">Light Gray</Option>
-                    <Option value="#e8e8e8">Gray</Option>
-                </Select>
-            </Form.Item>
+            <Field name="backgroundColor">
+                <Stack gap="xs">
+                    <Text size="sm" fw={500}>Background Color</Text>
+                    <Select
+                        data={[
+                            { value: 'transparent', label: 'Transparent' },
+                            { value: '#ffffff', label: 'White' },
+                            { value: '#f0f0f0', label: 'Light Gray' },
+                            { value: '#e8e8e8', label: 'Gray' }
+                        ]}
+                        style={{ width: '100%' }}
+                    />
+                </Stack>
+            </Field>
 
-            <Form.Item
-                label="Border Style"
-                name="borderStyle"
-            >
-                <Select style={{ width: '100%' }}>
-                    <Option value="none">None</Option>
-                    <Option value="solid">Solid</Option>
-                    <Option value="dashed">Dashed</Option>
-                    <Option value="dotted">Dotted</Option>
-                </Select>
-            </Form.Item>
+            <Field name="borderStyle">
+                <Stack gap="xs">
+                    <Text size="sm" fw={500}>Border Style</Text>
+                    <Select
+                        data={[
+                            { value: 'none', label: 'None' },
+                            { value: 'solid', label: 'Solid' },
+                            { value: 'dashed', label: 'Dashed' },
+                            { value: 'dotted', label: 'Dotted' }
+                        ]}
+                        style={{ width: '100%' }}
+                    />
+                </Stack>
+            </Field>
 
-            <Form.Item
-                label="Border Width"
-                name="borderWidth"
-            >
-                <InputNumber
-                    min={0}
-                    max={10}
-                    addonAfter="px"
-                    style={{ width: '100%' }}
-                />
-            </Form.Item>
+            <Field name="borderWidth">
+                <Stack gap="xs">
+                    <Text size="sm" fw={500}>Border Width</Text>
+                    <NumberInput
+                        min={0}
+                        max={10}
+                        suffix="px"
+                        style={{ width: '100%' }}
+                    />
+                </Stack>
+            </Field>
 
-            <Form.Item
-                label="Border Color"
-                name="borderColor"
-            >
-                <input
-                    type="color"
-                    style={{
-                        width: '100%',
-                        height: 32,
-                        border: '1px solid #d9d9d9'
-                    }}
-                    onChange={(e) => {
-                        form.setFieldsValue({ borderColor: e.target.value });
-                        const allValues = form.getFieldsValue();
-                        form.submit();
-                    }}
-                />
-            </Form.Item>
+            <Field name="borderColor">
+                <Stack gap="xs">
+                    <Text size="sm" fw={500}>Border Color</Text>
+                    <ColorInput
+                        format="hex"
+                        style={{ width: '100%' }}
+                        onChange={(value) => {
+                            form?.setFieldsValue({ borderColor: value });
+                        }}
+                    />
+                </Stack>
+            </Field>
 
-            <Form.Item
-                label="Border Radius"
-                name="borderRadius"
-            >
-                <InputNumber
-                    min={0}
-                    max={50}
-                    addonAfter="px"
-                    style={{ width: '100%' }}
-                />
-            </Form.Item>
+            <Field name="borderRadius">
+                <Stack gap="xs">
+                    <Text size="sm" fw={500}>Border Radius</Text>
+                    <NumberInput
+                        min={0}
+                        max={50}
+                        suffix="px"
+                        style={{ width: '100%' }}
+                    />
+                </Stack>
+            </Field>
         </>
     );
 };

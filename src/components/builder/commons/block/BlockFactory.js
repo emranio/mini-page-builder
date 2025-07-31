@@ -3,7 +3,7 @@
  * Automatically handles prop defaults, common handlers, and base functionality
  */
 import React, { memo, useCallback, useEffect, useMemo } from 'react';
-import { Form } from 'antd';
+import Form from 'rc-field-form';
 import { BaseSettings, withBaseBlock } from './BaseBlock';
 import { useBuilder } from '../../../../data/BuilderReducer';
 import blockManager from './blockManager';

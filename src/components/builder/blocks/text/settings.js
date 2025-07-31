@@ -1,8 +1,6 @@
 import React from 'react';
-import { Form, Input, InputNumber, Select } from 'antd';
-
-const { Option } = Select;
-const { TextArea } = Input;
+import { Textarea, NumberInput, Select, ColorInput, Stack, Text } from '@mantine/core';
+import { Field } from 'rc-field-form';
 
 /**
  * TextBlockSettingsForm - Simplified settings form component
@@ -11,61 +9,70 @@ const { TextArea } = Input;
 const TextBlockSettingsForm = ({ form, element, initialValues }) => {
     return (
         <>
-            <Form.Item
-                label="Content"
+            <Field
                 name="content"
                 rules={[{ required: true, message: 'Please enter text content' }]}
             >
-                <TextArea
-                    rows={4}
-                    placeholder="Enter your text content"
-                />
-            </Form.Item>
+                <Stack gap="xs">
+                    <Text size="sm" fw={500}>Content</Text>
+                    <Textarea
+                        rows={4}
+                        placeholder="Enter your text content"
+                        style={{ width: '100%' }}
+                    />
+                </Stack>
+            </Field>
 
-            <Form.Item
-                label="Font Size"
-                name="fontSize"
-            >
-                <InputNumber
-                    min={8}
-                    max={72}
-                    addonAfter="px"
-                    style={{ width: '100%' }}
-                />
-            </Form.Item>
+            <Field name="fontSize">
+                <Stack gap="xs">
+                    <Text size="sm" fw={500}>Font Size</Text>
+                    <NumberInput
+                        min={8}
+                        max={72}
+                        suffix="px"
+                        style={{ width: '100%' }}
+                    />
+                </Stack>
+            </Field>
 
-            <Form.Item
-                label="Font Weight"
-                name="fontWeight"
-            >
-                <Select style={{ width: '100%' }}>
-                    <Option value="normal">Normal</Option>
-                    <Option value="bold">Bold</Option>
-                    <Option value="lighter">Light</Option>
-                </Select>
-            </Form.Item>
+            <Field name="fontWeight">
+                <Stack gap="xs">
+                    <Text size="sm" fw={500}>Font Weight</Text>
+                    <Select
+                        data={[
+                            { value: 'normal', label: 'Normal' },
+                            { value: 'bold', label: 'Bold' },
+                            { value: 'lighter', label: 'Light' }
+                        ]}
+                        style={{ width: '100%' }}
+                    />
+                </Stack>
+            </Field>
 
-            <Form.Item
-                label="Text Color"
-                name="color"
-            >
-                <Input
-                    type="color"
-                    style={{ width: '100%' }}
-                />
-            </Form.Item>
+            <Field name="color">
+                <Stack gap="xs">
+                    <Text size="sm" fw={500}>Text Color</Text>
+                    <ColorInput
+                        format="hex"
+                        style={{ width: '100%' }}
+                    />
+                </Stack>
+            </Field>
 
-            <Form.Item
-                label="Text Align"
-                name="textAlign"
-            >
-                <Select style={{ width: '100%' }}>
-                    <Option value="left">Left</Option>
-                    <Option value="center">Center</Option>
-                    <Option value="right">Right</Option>
-                    <Option value="justify">Justify</Option>
-                </Select>
-            </Form.Item>
+            <Field name="textAlign">
+                <Stack gap="xs">
+                    <Text size="sm" fw={500}>Text Align</Text>
+                    <Select
+                        data={[
+                            { value: 'left', label: 'Left' },
+                            { value: 'center', label: 'Center' },
+                            { value: 'right', label: 'Right' },
+                            { value: 'justify', label: 'Justify' }
+                        ]}
+                        style={{ width: '100%' }}
+                    />
+                </Stack>
+            </Field>
         </>
     );
 };

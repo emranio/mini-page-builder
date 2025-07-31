@@ -1,5 +1,6 @@
 import React, { useRef, useCallback, useEffect, memo } from 'react';
-import { Modal, Form } from 'antd';
+import { Modal } from 'antd';
+import Form from 'rc-field-form';
 import { useBuilder } from '../../../../data/BuilderReducer';
 import styleManager from './styleManager';
 
@@ -26,7 +27,6 @@ export const BaseSettings = memo(({
     const formContent = (
         <Form
             form={form}
-            layout="vertical"
             initialValues={initialValues}
             onValuesChange={onValuesChange}
             preserve={false} // Don't preserve form values when component unmounts

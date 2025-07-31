@@ -1,12 +1,15 @@
 import React, { useState, useCallback } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { MantineProvider } from '@mantine/core';
 import { Layout } from 'antd';
 import SettingsPanel from './components/builder/panels/SettingsPanel';
 import EditorPanel from './components/builder/panels/EditorPanel';
 import { BuilderProvider } from './data/BuilderReducer';
 // Initialize all blocks via the registry
 import './components/builder/commons/BlockRegistry';
+
+import '@mantine/core/styles.css';
 import './scss/builder/App.scss';
 
 function App() {
@@ -31,23 +34,25 @@ function App() {
   }, []);
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <BuilderProvider>
-        <Layout className="builder-layout">
-          <SettingsPanel
-            width={settingsPanelConfig.width}
-            collapsed={settingsPanelConfig.collapsed}
-            onWidthChange={handleWidthChange}
-            onToggleCollapse={handleToggleCollapse}
-          />
-          <EditorPanel
-            settingsPanelCollapsed={settingsPanelConfig.collapsed}
-            responsiveView={responsiveView}
-            onResponsiveViewChange={handleResponsiveViewChange}
-          />
-        </Layout>
-      </BuilderProvider>
-    </DndProvider>
+    <MantineProvider>
+      <DndProvider backend={HTML5Backend}>
+        <BuilderProvider>
+          <Layout className="builder-layout">
+            <SettingsPanel
+              width={settingsPanelConfig.width}
+              collapsed={settingsPanelConfig.collapsed}
+              onWidthChange={handleWidthChange}
+              onToggleCollapse={handleToggleCollapse}
+            />
+            <EditorPanel
+              settingsPanelCollapsed={settingsPanelConfig.collapsed}
+              responsiveView={responsiveView}
+              onResponsiveViewChange={handleResponsiveViewChange}
+            />
+          </Layout>
+        </BuilderProvider>
+      </DndProvider>
+    </MantineProvider>
   );
 }
 
