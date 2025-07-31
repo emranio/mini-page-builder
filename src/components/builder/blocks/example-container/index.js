@@ -1,4 +1,4 @@
-import { AppstoreOutlined } from '@ant-design/icons';
+import IconLayout from '@tabler/icons-react/dist/esm/icons/IconLayout';
 import ExampleContainerBlockView from './view';
 import ExampleContainerBlockEdit from './edit';
 import ExampleContainerBlockSettings from './settings';
@@ -11,7 +11,7 @@ const ExampleContainerBlock = createBlock({
     title: 'Example Container',
     category: 'layout',
     blockType: 'layout', // Layout, field, or design type
-    icon: <AppstoreOutlined />,
+    icon: <IconLayout size={16} />,
     view: ExampleContainerBlockView,
     edit: ExampleContainerBlockEdit, // Complex editing component with DropZone
     settings: ExampleContainerBlockSettings,

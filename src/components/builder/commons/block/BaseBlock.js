@@ -1,5 +1,5 @@
 import React, { useRef, useCallback, useEffect, memo } from 'react';
-import { Modal } from 'antd';
+import { Modal } from '@mantine/core';
 import Form from 'rc-field-form';
 import { useBuilder } from '../../../../data/BuilderReducer';
 import styleManager from './styleManager';
@@ -46,10 +46,8 @@ export const BaseSettings = memo(({
     return (
         <Modal
             title={title}
-            open={open}
-            onCancel={onCancel}
-            footer={null}
-            destroyOnClose
+            opened={open}
+            onClose={onCancel}
             {...modalProps}
         >
             {formContent}

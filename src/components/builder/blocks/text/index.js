@@ -1,4 +1,4 @@
-import { FontSizeOutlined } from '@ant-design/icons';
+import IconTypography from '@tabler/icons-react/dist/esm/icons/IconTypography';
 import TextBlockView from './view';
 import TextBlockSettingsForm from './settings';
 import TextBlockStyles from './style';
@@ -10,7 +10,7 @@ const TextBlock = createBlock({
     title: 'Text',
     category: 'content',
     blockType: 'field', // Layout, field, or design type
-    icon: <FontSizeOutlined />,
+    icon: <IconTypography size={16} />,
     view: TextBlockView,
     settings: TextBlockSettingsForm,
     style: TextBlockStyles,

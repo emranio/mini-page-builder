@@ -1,4 +1,4 @@
-import { PictureOutlined } from '@ant-design/icons';
+import IconPhoto from '@tabler/icons-react/dist/esm/icons/IconPhoto';
 import ImageBlockView from './view';
 import ImageBlockSettings from './settings';
 import ImageBlockStyles from './style';
@@ -10,7 +10,7 @@ const ImageBlock = createBlock({
     title: 'Image',
     category: 'media',
     blockType: 'design', // Layout, field, or design type
-    icon: <PictureOutlined />,
+    icon: <IconPhoto size={16} />,
     view: ImageBlockView,
     settings: ImageBlockSettings,
     style: ImageBlockStyles,

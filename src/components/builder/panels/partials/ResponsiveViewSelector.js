@@ -1,10 +1,9 @@
 import React from 'react';
-import { Select, Space, Typography } from 'antd';
-import { MobileOutlined, TabletOutlined, LaptopOutlined } from '@ant-design/icons';
+import { Select, Group, Text } from '@mantine/core';
+import IconDeviceLaptop from '@tabler/icons-react/dist/esm/icons/IconDeviceLaptop';
+import IconDeviceTablet from '@tabler/icons-react/dist/esm/icons/IconDeviceTablet';
+import IconDeviceMobile from '@tabler/icons-react/dist/esm/icons/IconDeviceMobile';
 import PropTypes from 'prop-types';
-
-const { Option } = Select;
-const { Text } = Typography;
 
 /**
  * ResponsiveViewSelector component for selecting different viewport sizes
@@ -15,45 +14,39 @@ const { Text } = Typography;
 const ResponsiveViewSelector = ({ value, onChange }) => {
     const viewports = [
         {
-            key: 'desktop',
-            name: 'Desktop',
+            value: 'desktop',
+            label: 'Desktop',
             width: '100%',
-            icon: <LaptopOutlined />
+            icon: <IconDeviceLaptop size={16} />
         },
         {
-            key: 'tablet',
-            name: 'Tablet',
+            value: 'tablet',
+            label: 'Tablet',
             width: '768px',
-            icon: <TabletOutlined />
+            icon: <IconDeviceTablet size={16} />
         },
         {
-            key: 'mobile',
-            name: 'Mobile',
+            value: 'mobile',
+            label: 'Mobile',
             width: '375px',
-            icon: <MobileOutlined />
+            icon: <IconDeviceMobile size={16} />
         }
     ];
 
     return (
-        <Space style={{ marginRight: 0 }}>
-            <Text strong>Responsive Preview:</Text>
+        <Group gap="xs" style={{ marginRight: 0 }}>
+            <Text fw={500} size="sm">Responsive Preview:</Text>
             <Select
                 value={value}
                 onChange={onChange}
-                style={{ width: 120 }}
-                popupMatchSelectWidth={false}
-                size='small'
-            >
-                {viewports.map(viewport => (
-                    <Option key={viewport.key} value={viewport.key}>
-                        <Space>
-                            {viewport.icon}
-                            <span>{viewport.name}</span>
-                        </Space>
-                    </Option>
-                ))}
-            </Select>
-        </Space>
+                data={viewports.map(viewport => ({
+                    value: viewport.value,
+                    label: viewport.label
+                }))}
+                size="xs"
+                w={120}
+            />
+        </Group>
     );
 };
 

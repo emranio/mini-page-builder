@@ -3,7 +3,7 @@ import { useDrag, useDrop } from 'react-dnd';
 import { useBuilder } from '../../../data/BuilderReducer';
 import blockManager from './block/blockManager';
 import { ActionIcon } from '@mantine/core';
-import { IconTrash } from '@tabler/icons-react';
+import IconTrash from '@tabler/icons-react/dist/esm/icons/IconTrash';
 
 const Draggable = ({ id, type, parentId, children }) => {
     const { deleteBlock, setIsDragging, setDraggedBlockId } = useBuilder();

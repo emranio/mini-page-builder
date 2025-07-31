@@ -1,4 +1,4 @@
-import { BugOutlined } from '@ant-design/icons';
+import IconBug from '@tabler/icons-react/dist/esm/icons/IconBug';
 import DebugDataBlockView from './view';
 import DebugDataBlockSettings from './settings';
 import DebugDataBlockStyles from './style';
@@ -10,7 +10,7 @@ const DebugDataBlock = createBlock({
     title: 'Debug Data',
     category: 'content',
     blockType: 'field', // Categorize as field since it displays data
-    icon: <BugOutlined />,
+    icon: <IconBug size={16} />,
     view: DebugDataBlockView,
     settings: DebugDataBlockSettings,
     style: DebugDataBlockStyles,

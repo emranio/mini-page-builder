@@ -1,12 +1,9 @@
 import React, { useRef, useEffect } from 'react';
-import { Layout, Card, Typography, Row, Col, Button } from 'antd';
-import { ArrowLeftOutlined } from '@ant-design/icons';
+import { Card, Title, Group, Button, Grid, Stack } from '@mantine/core';
+import IconArrowLeft from '@tabler/icons-react/dist/esm/icons/IconArrowLeft';
 import { ResizeHandle, BlockItem } from './partials';
 import { useBuilder } from '../../../data/BuilderReducer';
 import { blockManager } from '../commons/block';
-
-const { Sider } = Layout;
-const { Title } = Typography;
 
 const SettingsPanel = ({ width = 300, collapsed = false, onWidthChange, onToggleCollapse }) => {
     const { selectedBlockId, setSelectedBlockId, getBlockById, updateBlock } = useBuilder();
@@ -51,48 +48,56 @@ const SettingsPanel = ({ width = 300, collapsed = false, onWidthChange, onToggle
     };
 
     return (
-        <Sider
-            width={collapsed ? 0 : width}
+        <div
             className={`settings-panel ${collapsed ? 'collapsed' : ''}`}
-            style={{ position: 'relative' }}
+            style={{
+                width: collapsed ? 0 : width,
+                position: 'relative',
+                backgroundColor: '#fafafa',
+                borderLeft: '1px solid #e9ecef',
+                overflow: collapsed ? 'hidden' : 'visible'
+            }}
         >
-            <div className="panel-content">
+            <div className="panel-content" style={{ padding: collapsed ? 0 : '16px' }}>
                 {!collapsed && (selectedBlock && SettingsComponent ? (
                     // Show settings panel
-                    <>
-                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }}>
+                    <Stack gap="md">
+                        <Group align="center" gap="xs">
                             <Button
-                                icon={<ArrowLeftOutlined />}
+                                leftSection={<IconArrowLeft size={16} />}
                                 onClick={showBlockList}
-                                size="small"
-                                style={{ marginRight: 8 }}
+                                size="xs"
+                                variant="subtle"
                             >
                                 Blocks
                             </Button>
-                            <Title level={4} style={{ margin: 0 }}>
+                            <Title order={4} style={{ margin: 0, flex: 1 }}>
                                 {selectedBlockConfig.title} Settings
                             </Title>
-                        </div>
+                        </Group>
                         <SettingsComponent
                             element={selectedBlock}
                             throttledUpdate={throttledUpdate}
                             inline={true}
                         />
-                    </>
+                    </Stack>
                 ) : (
                     // Show blocks list
-                    <>
-                        <Title level={3}>Blocks</Title>
-                        <Card title="Drag & Drop Components" className="blocks-card">
-                            <Row gutter={[16, 16]}>
+                    <Stack gap="md">
+                        <Title order={3}>Blocks</Title>
+                        <Card withBorder padding="md">
+                            <Card.Section withBorder p="xs">
+                                <Title order={5}>Drag & Drop Components</Title>
+                            </Card.Section>
+                            <Grid gutter="md" mt="md">
                                 {blocks.map((block, index) => (
-                                    <Col span={12} key={index}>
+                                    <Grid.Col span={6} key={index}>
                                         <BlockItem type={block.type} icon={block.icon} label={block.label} />
-                                    </Col>
+                                    </Grid.Col>
                                 ))}
-                            </Row>
+                            </Grid>
                         </Card>
-                    </>
+                    </Stack>
                 ))}
             </div>
             <ResizeHandle
@@ -102,7 +107,7 @@ const SettingsPanel = ({ width = 300, collapsed = false, onWidthChange, onToggle
                 minWidth={200}
                 maxWidth={500}
             />
-        </Sider>
+        </div>
     );
 };
 

@@ -1,11 +1,8 @@
 import React from 'react';
-import { Layout, Typography, Empty, Row, Col } from 'antd';
+import { Group, Text, Stack } from '@mantine/core';
 import { useBuilder } from '../../../data/BuilderReducer';
 import { DropZone } from '../commons';
 import { ReactIframeProxy, ResponsiveViewSelector } from './partials';
-
-const { Content } = Layout;
-const { Text } = Typography;
 
 const EditorPanel = ({ settingsPanelCollapsed, responsiveView, onResponsiveViewChange }) => {
     const { getBlocks, isDragging } = useBuilder();
@@ -28,21 +25,17 @@ const EditorPanel = ({ settingsPanelCollapsed, responsiveView, onResponsiveViewC
     const centerIframe = responsiveView !== 'desktop';
 
     return (
-        <Content className="editor-panel">
-            <div className="panel-content">
-                <Row align="middle" justify="space-between" style={{ marginBottom: 5, padding: '0 5px' }}>
-                    <Col>
-                        <Text level={3} style={{ margin: 0, textAlign: 'center' }}>Email Canvas</Text>
-                    </Col>
-                    <Col>
-                        <ResponsiveViewSelector
-                            value={responsiveView}
-                            onChange={onResponsiveViewChange}
-                        />
-                    </Col>
-                </Row>
+        <div className="editor-panel" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+            <div className="panel-content" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                <Group justify="space-between" align="center" style={{ marginBottom: 5, padding: '0 5px' }}>
+                    <Text size="lg" fw={500} style={{ margin: 0, textAlign: 'center' }}>Email Canvas</Text>
+                    <ResponsiveViewSelector
+                        value={responsiveView}
+                        onChange={onResponsiveViewChange}
+                    />
+                </Group>
 
-                <div className={`iframe-container ${centerIframe ? 'centered' : ''}`}>
+                <div className={`iframe-container ${centerIframe ? 'centered' : ''}`} style={{ flex: 1 }}>
                     <ReactIframeProxy
                         title="Email Builder Preview"
                         style={{
@@ -55,16 +48,17 @@ const EditorPanel = ({ settingsPanelCollapsed, responsiveView, onResponsiveViewC
                         <div className={`canvas ${isDragging ? 'canvas-during-drag' : ''}`}>
                             <DropZone parentId={null} />
                             {rootBlocks.length === 0 && (
-                                <Empty
-                                    description={isDragging ? "Drop here to add blocks" : "Drag blocks here to start building"}
-                                    className="empty-canvas"
-                                />
+                                <Stack align="center" justify="center" gap="xs" className="empty-canvas" style={{ minHeight: '200px', color: '#999' }}>
+                                    <Text size="sm" c="dimmed">
+                                        {isDragging ? "Drop here to add blocks" : "Drag blocks here to start building"}
+                                    </Text>
+                                </Stack>
                             )}
                         </div>
                     </ReactIframeProxy>
                 </div>
             </div>
-        </Content>
+        </div>
     );
 };
 

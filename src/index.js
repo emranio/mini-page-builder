@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import 'antd/dist/reset.css'; // Import Ant Design styles
+import '@mantine/core/styles.css'; // Import Mantine styles
 import './index.css';
 import './scss/builder/ContainerLayout.scss'; // Import container layout styles
 import './scss/builder/ContainerStyles.scss'; // Import additional container styles

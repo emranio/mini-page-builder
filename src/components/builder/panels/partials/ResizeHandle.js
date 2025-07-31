@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { VerticalRightOutlined, VerticalLeftOutlined } from '@ant-design/icons';
+import IconChevronRight from '@tabler/icons-react/dist/esm/icons/IconChevronRight';
+import IconChevronLeft from '@tabler/icons-react/dist/esm/icons/IconChevronLeft';
 import PropTypes from 'prop-types';
 
 /**
@@ -66,7 +67,7 @@ const ResizeHandle = ({
                     onToggle();
                 }}
             >
-                {collapsed ? <VerticalRightOutlined /> : <VerticalLeftOutlined />}
+                {collapsed ? <IconChevronRight size={16} /> : <IconChevronLeft size={16} />}
             </div>
             <div className="resize-bar" />
         </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Tabs } from 'antd';
+import { Tabs } from '@mantine/core';
 import { useBuilder } from '../../../../data/BuilderReducer';
 import { DropZone } from '../../commons';
 
@@ -71,13 +71,12 @@ const TabsBlockView = ({
         throttledUpdate(id, { activeTabId: activeKey });
     };
 
-    // Generate tab items
+    // Generate tab items for Mantine Tabs
     const tabItems = tabs.map((tab, index) => {
         const tabContainerId = tabIds[index];
 
         return {
-            key: tab.id,
-            label: tab.title,
+            value: tab.id,
             children: tabContainerId ? (
                 <DropZone parentId={tabContainerId} />
             ) : (
@@ -89,12 +88,32 @@ const TabsBlockView = ({
     return (
         <>
             <Tabs
-                activeKey={currentActiveTab}
+                value={currentActiveTab}
                 onChange={handleTabChange}
-                type={tabStyle === 'card' ? 'card' : 'line'}
-                tabPosition={tabPosition}
-                items={tabItems}
-            />
+                variant={tabStyle === 'card' ? 'default' : 'outline'}
+                orientation={tabPosition === 'left' || tabPosition === 'right' ? 'vertical' : 'horizontal'}
+            >
+                <Tabs.List>
+                    {tabs.map(tab => (
+                        <Tabs.Tab key={tab.id} value={tab.id}>
+                            {tab.title}
+                        </Tabs.Tab>
+                    ))}
+                </Tabs.List>
+
+                {tabs.map((tab, index) => {
+                    const tabContainerId = tabIds[index];
+                    return (
+                        <Tabs.Panel key={tab.id} value={tab.id}>
+                            {tabContainerId ? (
+                                <DropZone parentId={tabContainerId} />
+                            ) : (
+                                <div className="loading">Loading tab content...</div>
+                            )}
+                        </Tabs.Panel>
+                    );
+                })}
+            </Tabs>
         </>
     );
 };

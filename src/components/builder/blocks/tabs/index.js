@@ -1,4 +1,4 @@
-import { FileTextOutlined } from '@ant-design/icons';
+import IconFiles from '@tabler/icons-react/dist/esm/icons/IconFiles';
 import TabsBlockView from './view';
 import TabsBlockEdit from './edit';
 import TabsBlockSettings from './settings';
@@ -11,7 +11,7 @@ const TabsBlock = createBlock({
     title: 'Tabs',
     category: 'layout',
     blockType: 'layout', // Layout, field, or design type
-    icon: <FileTextOutlined />,
+    icon: <IconFiles size={16} />,
     view: TabsBlockView,
     edit: TabsBlockEdit, // Complex editing component with Ant Design Tabs
     settings: TabsBlockSettings,

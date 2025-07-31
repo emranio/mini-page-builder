@@ -1,4 +1,4 @@
-import { ColumnWidthOutlined } from '@ant-design/icons';
+import IconColumns from '@tabler/icons-react/dist/esm/icons/IconColumns';
 import ColumnBlockView from './view';
 import ColumnBlockEdit from './edit';
 import ColumnBlockSettings from './settings';
@@ -11,7 +11,7 @@ const ColumnBlock = createBlock({
     title: 'Columns',
     category: 'layout',
     blockType: 'layout', // Layout, field, or design type
-    icon: <ColumnWidthOutlined />,
+    icon: <IconColumns size={16} />,
     view: ColumnBlockView,
     edit: ColumnBlockEdit, // Complex editing component with drag/drop and resizing
     settings: ColumnBlockSettings,
