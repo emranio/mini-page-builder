@@ -30,7 +30,6 @@ const TabsBlockStyles = (props, uniqueId) => {
         }
 
         .fildora-builder-tabs-block:hover {
-            /* Remove outline to reduce visual clutter */
         }
 
         .fildora-builder-tabs-block.during-drag {
@@ -89,7 +88,6 @@ const TabsBlockStyles = (props, uniqueId) => {
         }
 
         #${uniqueId}:hover {
-            ${borderStyle !== 'none' ? `border-color: rgba(24, 144, 255, 0.6);` : ''}
             background-color: ${backgroundColor === 'transparent' ? 'rgba(24, 144, 255, 0.02)' : backgroundColorValue};
         }
     `;

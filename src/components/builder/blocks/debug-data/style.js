@@ -9,7 +9,7 @@ const DebugDataBlockStyles = (uniqueId) => {
         }
 
         .fildora-builder-debug-data-block:hover {
-            box-shadow: 0 2px 8px rgba(24, 144, 255, 0.2);
+            background-color: rgba(24, 144, 255, 0.02);
         }
 
         /* Instance-specific styles */

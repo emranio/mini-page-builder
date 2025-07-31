@@ -1,46 +1,4 @@
-/* Drop zone base styles */
-.drop-zone {
-    min-height: 100px;
-    height: 100%;
-    width: 100%;
-    position: relative;
-    box-sizing: border-box;
-    /* Always use vertical layout */
-    display: flex !important;
-    flex-direction: column !important;
-    width: 100% !important;
-}
-
-/* All children in drop zones take full width */
-.drop-zone>.draggable-block {
-    width: 100% !important;
-    display: block !important;
-    margin-bottom: 10px !important;
-
-    &:last-child {
-        margin-bottom: 0;
-    }
-}
-
-/* Container content should take full width */
-.example-container-content {
-    width: 100%;
-    box-sizing: border-box;
-}
-
-/* Elements inside the container should be full width */
-.draggable-block>.block-wrapper>.text-element,
-.draggable-block>.block-wrapper>.image-element {
-    width: 100%;
-    box-sizing: border-box;
-}
-
-/* Container styles */
-.example-container {
-    position: relative;
-    box-sizing: border-box;
-    width: 100% !important;
-}
+/* Layout styles moved to UnifiedDropzones.scss and block style.js files */
 
 /* Make sure the element wrapper takes full width */
 .draggable-block>.block-wrapper {

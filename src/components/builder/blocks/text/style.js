@@ -14,7 +14,6 @@ const TextBlockStyles = (props, uniqueId) => {
         }
 
         .fildora-builder-text-block:hover .text-block {
-            /* Remove outline to reduce visual clutter */
         }
 
         /* Instance-specific styles using unique ID */
@@ -45,7 +44,6 @@ const TextBlockStyles = (props, uniqueId) => {
         #${uniqueId} .text-block-editor:focus {
             outline: none;
             border-color: #40a9ff;
-            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
         }
     `;
 };

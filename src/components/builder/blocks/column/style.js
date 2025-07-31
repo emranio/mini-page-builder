@@ -24,7 +24,6 @@ const ColumnBlockStyles = (props, uniqueId) => {
         }
 
         .fildora-builder-column-block:hover {
-            /* Remove outline to reduce visual clutter */
         }
 
         .fildora-builder-column-block .column-element-row.during-drag {
@@ -103,13 +102,11 @@ const ColumnBlockStyles = (props, uniqueId) => {
         .fildora-builder-column-block .resize-bar:hover .resize-bar-handle {
             width: 4px;
             background-color: #40a9ff;
-            box-shadow: 0 0 6px rgba(24, 144, 255, 0.5);
         }
 
         .fildora-builder-column-block .resize-bar.resizing .resize-bar-handle {
             width: 4px;
             background-color: #1890ff;
-            box-shadow: 0 0 8px rgba(24, 144, 255, 0.8);
         }
 
         /* Instance-specific styles using unique ID */
@@ -131,7 +128,6 @@ const ColumnBlockStyles = (props, uniqueId) => {
         }
 
         #${uniqueId} .column-element-row:hover {
-            border-color: rgba(24, 144, 255, 0.6);
             background-color: ${backgroundColor === 'transparent' ? 'rgba(24, 144, 255, 0.02)' : backgroundColorValue};
         }
     `;

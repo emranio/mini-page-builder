@@ -66,9 +66,8 @@ const SettingsPanel = ({ width = 300, collapsed = false, onWidthChange, onToggle
                                 size="xs"
                                 variant="subtle"
                             >
-                                Blocks
                             </Button>
-                            <Title order={4} style={{ margin: 0, flex: 1 }}>
+                            <Title order={6} style={{ margin: 0, flex: 1 }}>
                                 {selectedBlockConfig.title} Settings
                             </Title>
                         </Group>

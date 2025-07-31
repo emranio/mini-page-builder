@@ -19,11 +19,9 @@ const ImageBlockStyles = (props, uniqueId) => {
         }
 
         .fildora-builder-image-block:hover {
-            /* Remove outline to reduce visual clutter */
         }
 
         .fildora-builder-image-block .newsletter-image:hover {
-            transform: scale(1.01);
         }
 
         .fildora-builder-image-block .ant-image {

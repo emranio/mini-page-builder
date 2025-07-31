@@ -1,6 +1,6 @@
 /**
- * Example Container Block Styles - Updated for new structure with wrapper in BlockFactory
- * Targets the fildora-builder-example-container-block class instead of unique ID
+ * Example Container Block Styles - Consolidated all container styles here
+ * Uses unified dropzone classes and contains all container-specific styling
  */
 
 const ExampleContainerBlockStyles = (props, uniqueId) => {
@@ -32,7 +32,7 @@ const ExampleContainerBlockStyles = (props, uniqueId) => {
         }
 
         .fildora-builder-example-container-block:hover {
-            /* Remove border to reduce visual clutter */
+            /* Hover effects handled by unified dropzone styles */
         }
 
         .fildora-builder-example-container-block.during-drag {
@@ -40,28 +40,39 @@ const ExampleContainerBlockStyles = (props, uniqueId) => {
             transform: scale(0.98);
         }
 
+        /* Container content - uses unified dropzone styling */
         .fildora-builder-example-container-block .example-container-content {
             flex: 1;
             min-height: 40px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
+        /* Container actions styling */
         .fildora-builder-example-container-block .container-actions {
             display: flex;
             justify-content: center;
             padding: 5px;
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
-            background: rgba(255, 255, 255, 0.8);
+            margin-top: 8px;
+            text-align: center;
         }
 
         .fildora-builder-example-container-block .add-container-button {
             border: 1px dashed #1890ff;
             color: #1890ff;
-            background: transparent;
+            background: #f0f0f0;
         }
 
         .fildora-builder-example-container-block .add-container-button:hover {
             border-style: solid;
-            background: rgba(24, 144, 255, 0.1);
+            background: #e0e0e0;
+        }
+
+        /* Elements inside container take full width */
+        .fildora-builder-example-container-block .draggable-block > .block-wrapper > .text-element,
+        .fildora-builder-example-container-block .draggable-block > .block-wrapper > .image-element {
+            width: 100%;
+            box-sizing: border-box;
         }
 
         /* Instance-specific styles using unique ID */
@@ -75,6 +86,27 @@ const ExampleContainerBlockStyles = (props, uniqueId) => {
 
         #${uniqueId}:hover {
             background-color: ${backgroundColor === 'transparent' ? 'rgba(24, 144, 255, 0.02)' : backgroundColorValue};
+        }
+
+        /* Use absolute positioned overlay for hover effects during drag */
+        #${uniqueId}::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 1px dashed transparent;
+            background-color: transparent;
+            pointer-events: none;
+            opacity: 0;
+            transition: all 0.2s ease;
+            z-index: 1;
+        }
+
+        #${uniqueId}.during-drag:hover::after {
+            background-color: rgba(24, 144, 255, 0.05);
+            opacity: 1;
         }
     `;
 };

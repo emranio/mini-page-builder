@@ -14,18 +14,14 @@
     padding: 15px;
     transition: all 0.2s ease;
 
-    /* Only show border when hovering */
+    /* Only show background color on hover - NO BORDERS */
     &:hover {
-        border: 1px dashed #1890ff;
         background-color: rgba(24, 144, 255, 0.05);
-        border-radius: 4px;
     }
 
-    /* During drag operations */
+    /* During drag operations - NO BORDERS */
     &.during-drag {
-        border: 1px dashed rgba(24, 144, 255, 0.6);
         background-color: rgba(24, 144, 255, 0.08);
-        border-radius: 4px;
     }
 }
 
@@ -71,8 +67,6 @@
         opacity: 1;
         transform: scaleY(1);
         background-color: #1890ff;
-        box-shadow: 0 0 8px rgba(24, 144, 255, 0.4);
-        border: 2px solid #1890ff;
     }
 }
 
@@ -83,13 +77,10 @@ body:not(.dragging) .positional-drop-zone {
 
 /* Canvas highlighting during drag */
 .canvas-during-drag {
-    border-color: #91d5ff !important;
-    box-shadow: 0 0 8px rgba(24, 144, 255, 0.2);
-    transition: all 0.3s ease;
+    background-color: rgba(24, 144, 255, 0.02);
+    transition: background-color 0.3s ease;
 
     .empty-canvas {
-        border: 2px dashed #1890ff;
-        border-radius: 4px;
         background-color: rgba(24, 144, 255, 0.05);
     }
 }
