@@ -12,12 +12,13 @@ import './scss/builder/App.scss';
 
 function App() {
   const [settingsPanelConfig, setSettingsPanelConfig] = useState({
-    width: 300,
+    width: 250,
     collapsed: false
   });
 
   // Memoize handlers to prevent unnecessary re-renders
   const handleWidthChange = useCallback((newWidth) => {
+    if (newWidth < 250 || newWidth > 500) return; // Enforce width limits
     setSettingsPanelConfig(prev => ({ ...prev, width: newWidth }));
   }, []);
 

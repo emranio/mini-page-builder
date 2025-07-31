@@ -52,16 +52,13 @@ const SettingsPanel = ({ width = 300, collapsed = false, onWidthChange, onToggle
             className={`settings-panel ${collapsed ? 'collapsed' : ''}`}
             style={{
                 width: collapsed ? 0 : width,
-                position: 'relative',
-                backgroundColor: '#fafafa',
-                borderLeft: '1px solid #e9ecef',
                 overflow: collapsed ? 'hidden' : 'visible'
             }}
         >
             <div className="panel-content" style={{ padding: collapsed ? 0 : '16px' }}>
                 {!collapsed && (selectedBlock && SettingsComponent ? (
                     // Show settings panel
-                    <Stack gap="md">
+                    <>
                         <Group align="center" gap="xs">
                             <Button
                                 leftSection={<IconArrowLeft size={16} />}
@@ -80,27 +77,22 @@ const SettingsPanel = ({ width = 300, collapsed = false, onWidthChange, onToggle
                             throttledUpdate={throttledUpdate}
                             inline={true}
                         />
-                    </Stack>
+                    </>
                 ) : (
                     // Show blocks list
-                    <Stack gap="md">
+                    <>
                         <Title order={3}>Blocks</Title>
-                        <Card withBorder padding="md">
-                            <Card.Section withBorder p="xs">
-                                <Title order={5}>Drag & Drop Components</Title>
-                            </Card.Section>
-                            <div className="blocks-grid">
-                                {blocks.map((block, index) => (
-                                    <BlockItem
-                                        key={index}
-                                        type={block.type}
-                                        icon={block.icon}
-                                        label={block.label}
-                                    />
-                                ))}
-                            </div>
-                        </Card>
-                    </Stack>
+                        <div className="blocks-grid">
+                            {blocks.map((block, index) => (
+                                <BlockItem
+                                    key={index}
+                                    type={block.type}
+                                    icon={block.icon}
+                                    label={block.label}
+                                />
+                            ))}
+                        </div>
+                    </>
                 ))}
             </div>
             <ResizeHandle
