@@ -49,7 +49,7 @@ const PositionalDropZone = ({ parentId, index, position = 'between' }) => {
         drop(el);
     };
 
-    // Don't render if not dragging to avoid taking up space
+    // Don't render if not dragging
     if (!isDragging) {
         return null;
     }
@@ -60,6 +60,7 @@ const PositionalDropZone = ({ parentId, index, position = 'between' }) => {
             className={`positional-drop-zone ${position} ${isOver ? 'positional-drop-zone-hover' : ''}`}
             data-parent-id={parentId}
             data-index={index}
+            style={{ display: isDragging ? 'block' : 'block' }}
         />
     );
 };

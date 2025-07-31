@@ -51,19 +51,26 @@ const DropZone = ({ parentId, className = '', layoutClass = 'vertical-layout' })
     return (
         <div
             ref={setRefs}
-            className={`drop-zone ${className} ${layoutClass} ${isOver ? 'drop-zone-hover' : ''} ${isDragging ? 'during-drag' : ''}`}
+            className={`drop-zone ${className} ${layoutClass} ${isOver ? 'drop-zone-hover' : ''} ${isDragging ? 'during-drag' : ''} ${blocks.length === 0 ? 'empty-dropzone' : ''}`}
             data-parent-id={parentId}
         >
-            {/* Drop zone at the top */}
-            <PositionalDropZone parentId={parentId} index={0} position="top" />
+            {/* Drop zone at the top - only show when dragging */}
+            {isDragging && <PositionalDropZone parentId={parentId} index={0} position="top" />}
 
             {blocks.map((block, index) => (
                 <React.Fragment key={block.id}>
                     <BlockRenderer element={block} />
-                    {/* Drop zone after each block */}
-                    <PositionalDropZone parentId={parentId} index={index + 1} position="between" />
+                    {/* Drop zone after each block - only show when dragging */}
+                    {isDragging && <PositionalDropZone parentId={parentId} index={index + 1} position="between" />}
                 </React.Fragment>
             ))}
+
+            {/* Show message when empty and not dragging */}
+            {blocks.length === 0 && !isDragging && (
+                <div className="empty-dropzone-message">
+                    Drop blocks here
+                </div>
+            )}
         </div>
     );
 };
