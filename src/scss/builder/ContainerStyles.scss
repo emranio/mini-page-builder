@@ -1,23 +1,41 @@
 /* Container styles */
 .canvas {
     .drop-zone {
+        position: relative;
+
+        /* Stable dropzone indicators using absolute positioning */
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 1px dashed transparent;
+            background-color: transparent;
+            pointer-events: none;
+            opacity: 0;
+            transition: all 0.2s ease;
+            z-index: 1;
+        }
 
         /* Drop zone hover states */
-        &.drop-zone-hover {
+        &.drop-zone-hover::after {
+            border-color: #1890ff;
             background-color: rgba(24, 144, 255, 0.1);
-            outline: 2px dashed #1890ff;
+            opacity: 1;
         }
 
-        /* Show a subtle border during any drag operation */
-        &.during-drag {
-            border: 1px dashed rgba(24, 144, 255, 0.3);
+        /* Show during drag operations */
+        &.during-drag::after {
+            border-color: rgba(24, 144, 255, 0.3);
             background-color: rgba(24, 144, 255, 0.03);
-            transition: all 0.2s ease;
+            opacity: 1;
         }
 
-        /* When parent is hovered during drag, make the drop zone more visible */
-        .draggable-block:hover &.during-drag {
-            border: 1px dashed rgba(24, 144, 255, 0.6);
+        /* Enhanced visibility when parent is hovered during drag */
+        .draggable-block:hover &.during-drag::after {
+            border-color: rgba(24, 144, 255, 0.6);
             background-color: rgba(24, 144, 255, 0.05);
         }
     }
@@ -33,11 +51,26 @@
         width: 100% !important;
         transition: all 0.2s ease;
 
-        &.during-drag {
-            &:hover {
-                border-color: #1890ff;
-                background-color: rgba(24, 144, 255, 0.05);
-            }
+        /* Use absolute positioned overlay for hover effects during drag */
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 1px dashed transparent;
+            background-color: transparent;
+            pointer-events: none;
+            opacity: 0;
+            transition: all 0.2s ease;
+            z-index: 1;
+        }
+
+        &.during-drag:hover::after {
+            border-color: #1890ff;
+            background-color: rgba(24, 144, 255, 0.05);
+            opacity: 1;
         }
     }
 }

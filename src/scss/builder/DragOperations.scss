@@ -4,8 +4,28 @@
 body.dragging {
     cursor: grabbing !important;
 
+    /* Show dropzone indicators using absolute positioned pseudo-elements */
     .drop-zone {
-        outline: 1px dashed rgba(24, 144, 255, 0.2);
+        position: relative;
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 1px dashed rgba(24, 144, 255, 0.3);
+            background-color: rgba(24, 144, 255, 0.02);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            z-index: 1;
+        }
+
+        &.during-drag::after {
+            opacity: 1;
+        }
     }
 }
 
@@ -36,16 +56,17 @@ body.dragging {
         }
     }
 
+    /* When dragging, keep the original block visible but slightly dimmed */
     &.dragging {
-        opacity: 0.5;
+        opacity: 0.7;
+        transform: none;
+        /* Prevent the block from moving */
+        position: relative;
     }
 
     &.drop-target {
-        outline: 2px solid #1890ff;
-    }
+        position: relative;
 
-    /* Add a subtle highlight during global drag state */
-    .during-drag &:hover {
         &::after {
             content: '';
             position: absolute;
@@ -53,37 +74,78 @@ body.dragging {
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(24, 144, 255, 0.03);
+            border: 2px solid #1890ff;
             pointer-events: none;
-            border: 1px dashed rgba(24, 144, 255, 0.3);
-            z-index: 1;
+            z-index: 2;
         }
+    }
+
+    /* Enhanced dropzone visibility on hover during drag */
+    &:hover .drop-zone.during-drag::after {
+        border-color: rgba(24, 144, 255, 0.8);
+        background-color: rgba(24, 144, 255, 0.05);
     }
 }
 
-/* Make drop zones more visible when parent is hovered */
-.draggable-block:hover .drop-zone.during-drag {
-    background-color: rgba(24, 144, 255, 0.05);
-    border: 1px dashed rgba(24, 144, 255, 0.6);
+/* Small drag preview box that follows the cursor */
+.drag-preview-box {
+    position: fixed !important;
+    width: 60px !important;
+    height: 60px !important;
+    background: white !important;
+    border: 2px solid #1890ff !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 9999 !important;
+    pointer-events: none !important;
+    opacity: 0.95 !important;
+    transform: translate(-50%, -50%) !important;
+
+    .drag-preview-icon {
+        font-size: 18px !important;
+        margin-bottom: 4px !important;
+        color: #1890ff !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .drag-preview-title {
+        font-size: 9px !important;
+        font-weight: 600 !important;
+        color: #666 !important;
+        text-align: center !important;
+        line-height: 1.1 !important;
+        max-width: 55px !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+    }
 }
 
-/* Add a pulsing effect to drop zones during drag */
-.drop-zone.during-drag {
-    animation: pulse 2s infinite;
-    background-color: rgba(24, 144, 255, 0.02);
+/* Smooth pulsing animation for dropzones during drag */
+.drop-zone.during-drag::after {
+    animation: pulseDropzone 2s infinite;
 }
 
-@keyframes pulse {
+@keyframes pulseDropzone {
     0% {
         background-color: rgba(24, 144, 255, 0.02);
+        border-color: rgba(24, 144, 255, 0.3);
     }
 
     50% {
         background-color: rgba(24, 144, 255, 0.05);
+        border-color: rgba(24, 144, 255, 0.5);
     }
 
     100% {
         background-color: rgba(24, 144, 255, 0.02);
+        border-color: rgba(24, 144, 255, 0.3);
     }
 }
 
@@ -100,101 +162,63 @@ body.dragging {
     }
 }
 
-/* Positional Drop Zone Styles */
+/* Positional Drop Zones - Single unified dropzone indicator */
 .positional-drop-zone {
-    height: 8px;
-    margin: 2px 0;
-    border-radius: 4px;
-    transition: all 0.2s ease;
-    background-color: transparent;
-    border: 1px dashed transparent;
     position: relative;
-    z-index: 10;
-
-    &.top {
-        margin-bottom: 4px;
-        margin-top: 0;
-    }
-
-    &.between {
-        margin: 4px 0;
-    }
-
-    &:hover,
-    &.positional-drop-zone-hover {
-        background-color: rgba(24, 144, 255, 0.1);
-        border-color: #1890ff;
-        height: 12px;
-    }
-
-    /* Add visual indicator during hover */
-    &.positional-drop-zone-hover::before {
-        content: 'Drop here';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: #1890ff;
-        color: white;
-        padding: 2px 8px;
-        border-radius: 3px;
-        font-size: 10px;
-        white-space: nowrap;
-        z-index: 20;
-    }
-}
-
-/* Positional Drop Zones - only visible during drag operations */
-.positional-drop-zone {
-    height: 2px;
     width: 100%;
-    background-color: transparent;
-    border: none;
-    transition: all 0.2s ease;
+    height: 0;
     margin: 0;
     padding: 0;
-    position: relative;
     z-index: 10;
 
-    /* Invisible clickable area that's larger than visual indicator */
+    /* Create the single visual drop indicator with absolute positioning */
+    &::after {
+        content: '';
+        position: absolute;
+        top: -10px;
+        left: 0;
+        right: 0;
+        height: 20px;
+        background-color: transparent;
+        border: none;
+        border-radius: 4px;
+        opacity: 0;
+        transform: scaleY(0);
+        transition: all 0.2s ease;
+        z-index: 10;
+        pointer-events: none;
+    }
+
+    /* Larger invisible hit area for easier targeting */
     &::before {
         content: '';
         position: absolute;
-        top: -8px;
+        top: -15px;
         left: 0;
         right: 0;
-        height: 16px;
+        height: 30px;
         background-color: transparent;
+        z-index: 5;
     }
 
-    &.positional-drop-zone-hover {
-        height: 4px;
+    /* Show unified indicator on hover/drag over */
+    &:hover::after,
+    &.positional-drop-zone-hover::after {
+        opacity: 1;
+        transform: scaleY(1);
         background-color: #1890ff;
-        border-radius: 2px;
-        box-shadow: 0 0 4px rgba(24, 144, 255, 0.5);
-
-        &::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 8px;
-            height: 8px;
-            background-color: #1890ff;
-            border-radius: 50%;
-            box-shadow: 0 0 4px rgba(24, 144, 255, 0.8);
-        }
+        box-shadow: 0 0 8px rgba(24, 144, 255, 0.4);
+        border: 2px solid #1890ff;
     }
 
-    /* Different styling for top position */
+    /* Position specific adjustments */
     &.top {
-        margin-bottom: 4px;
+        margin-top: 0;
+        margin-bottom: 0;
     }
 
-    /* Styling for between positions */
     &.between {
-        margin: 2px 0;
+        margin: 0;
     }
 }
 

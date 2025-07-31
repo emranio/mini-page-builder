@@ -1,5 +1,6 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
+import { getEmptyImage } from 'react-dnd-html5-backend';
 import { useBuilder } from '../../../data/BuilderReducer';
 import blockManager from './block/blockManager';
 import { ActionIcon } from '@mantine/core';
@@ -13,12 +14,12 @@ const Draggable = ({ id, type, parentId, children }) => {
     const dragTypes = blockManager.getDragTypeConstants();
 
     // Set up the element to be draggable
-    const [{ isDragging }, drag] = useDrag(() => ({
+    const [{ isDragging }, drag, preview] = useDrag(() => ({
         type: dragTypes.CONTAINER_ITEM,
         item: () => {
             setIsDragging(true);
             setDraggedBlockId(id); // Track which block is being dragged
-            return { id, type, parentId };
+            return { id, type, parentId, blockType: type };
         },
         collect: (monitor) => ({
             isDragging: !!monitor.isDragging()
@@ -28,6 +29,11 @@ const Draggable = ({ id, type, parentId, children }) => {
             // setDraggedBlockId will be cleared in the useEffect in BuilderReducer
         }
     }));
+
+    // Hide the default drag preview
+    useEffect(() => {
+        preview(getEmptyImage(), { captureDraggingState: true });
+    }, [preview]);
 
     // Set up the element to also accept drops for reordering (disabled to avoid conflicts with positional drop zones)
     const [{ isOver }, drop] = useDrop(() => ({
@@ -50,7 +56,6 @@ const Draggable = ({ id, type, parentId, children }) => {
         <div
             ref={ref}
             className={`draggable-block ${isDragging ? 'dragging' : ''} ${isOver ? 'drop-target' : ''}`}
-            style={{ opacity: isDragging ? 0.5 : 1 }}
         >
             <div className="block-actions">
                 <ActionIcon
@@ -64,14 +69,8 @@ const Draggable = ({ id, type, parentId, children }) => {
                 </ActionIcon>
             </div>
             <div className="block-wrapper">
-                {/* When dragging, render a simplified placeholder instead of the full component */}
-                {isDragging ? (
-                    <div className="block-placeholder">
-                        {type.charAt(0).toUpperCase() + type.slice(1)} Block
-                    </div>
-                ) : (
-                    children
-                )}
+                {/* Always render the actual component, no placeholder when dragging */}
+                {children}
             </div>
         </div>
     );

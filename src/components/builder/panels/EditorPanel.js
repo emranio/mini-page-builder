@@ -1,7 +1,7 @@
 import React from 'react';
 import { Group, Text, Stack } from '@mantine/core';
 import { useBuilder } from '../../../data/BuilderReducer';
-import { DropZone } from '../commons';
+import { DropZone, CustomDragLayer } from '../commons';
 import { ReactIframeProxy, ResponsiveViewSelector } from './partials';
 
 const EditorPanel = ({ settingsPanelCollapsed, responsiveView, onResponsiveViewChange }) => {
@@ -58,6 +58,8 @@ const EditorPanel = ({ settingsPanelCollapsed, responsiveView, onResponsiveViewC
                     </ReactIframeProxy>
                 </div>
             </div>
+            {/* Custom drag layer for small preview box */}
+            <CustomDragLayer />
         </div>
     );
 };

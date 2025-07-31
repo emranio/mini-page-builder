@@ -82,26 +82,46 @@
                 display: flex;
                 flex-direction: column;
                 transition: all 0.2s ease;
+                position: relative;
 
-                &:hover {
+                /* Stable hover and drag indicators using absolute positioning */
+                &::after {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    border: 1px dashed transparent;
+                    background-color: transparent;
+                    pointer-events: none;
+                    opacity: 0;
+                    transition: all 0.2s ease;
+                    z-index: 1;
+                    border-radius: 4px;
+                }
+
+                &:hover::after {
                     border-color: #1890ff;
                     background-color: #f0f5ff;
+                    opacity: 1;
                 }
 
                 /* During drag make the dropzone more noticeable */
-                &.during-drag {
-                    border: 1px dashed rgba(24, 144, 255, 0.3);
+                &.during-drag::after {
+                    border-color: rgba(24, 144, 255, 0.3);
                     background-color: rgba(24, 144, 255, 0.03);
+                    opacity: 1;
 
                     &:hover {
-                        border: 1px dashed rgba(24, 144, 255, 0.8);
+                        border-color: rgba(24, 144, 255, 0.8);
                         background-color: rgba(24, 144, 255, 0.1);
                     }
                 }
 
                 /* Make dropzone more visible when column is hovered during drag */
-                .column-wrapper:hover &.during-drag {
-                    border: 1px dashed rgba(24, 144, 255, 0.6);
+                .column-wrapper:hover &.during-drag::after {
+                    border-color: rgba(24, 144, 255, 0.6);
                     background-color: rgba(24, 144, 255, 0.07);
                 }
             }

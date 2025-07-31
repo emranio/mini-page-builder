@@ -214,11 +214,17 @@
     margin-bottom: 10px;
 
     .block-card {
-        transition: all 0.3s;
+        transition: all 0.2s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 80px;
 
         &:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+            border-color: #1976d2;
         }
     }
 
@@ -234,18 +240,44 @@
     .block-icon {
         font-size: 24px;
         margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .block-label {
+        text-align: center;
+        display: block;
+        width: 100%;
     }
 }
 
-/* Drop Zone - Base styles only, layout handled in ContainerLayout.scss */
+/* Drop Zone - Base styles with stable indicators */
 .drop-zone {
     min-height: 40px;
     width: 100%;
     position: relative;
 
-    &.drop-zone-hover {
+    /* Use absolute positioned pseudo-element for stable visual feedback */
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border: 2px dashed transparent;
+        background-color: transparent;
+        pointer-events: none;
+        opacity: 0;
+        transition: all 0.2s ease;
+        z-index: 1;
+    }
+
+    &.drop-zone-hover::after {
+        border-color: #1890ff;
         background-color: rgba(24, 144, 255, 0.1);
-        outline: 2px dashed #1890ff;
+        opacity: 1;
     }
 }
 
