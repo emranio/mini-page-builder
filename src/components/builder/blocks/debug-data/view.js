@@ -21,12 +21,12 @@ const DebugDataBlockView = ({ id }) => {
 
     const data = {
         'All Components (Nested)': allComponentsNested,
-        'All Components (Flat)': allComponentsFlat,
-        'Content Only (No Layout)': contentOnly,
-        'Layout Components': layoutComponents,
-        'Field Components': fieldComponents,
-        'Design Components': designComponents,
-        'Generated CSS (All Blocks)': allBlocksCSS,
+        // 'All Components (Flat)': allComponentsFlat,
+        // 'Content Only (No Layout)': contentOnly,
+        // 'Layout Components': layoutComponents,
+        // 'Field Components': fieldComponents,
+        // 'Design Components': designComponents,
+        // 'Generated CSS (All Blocks)': allBlocksCSS,
         'Applied CSS (DOM)': appliedCSS,
         'Generated HTML': blocksHTML, // New: Generated HTML output
         'Statistics': {
