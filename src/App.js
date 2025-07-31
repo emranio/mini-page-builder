@@ -16,8 +16,6 @@ function App() {
     collapsed: false
   });
 
-  const [responsiveView, setResponsiveView] = useState('desktop');
-
   // Memoize handlers to prevent unnecessary re-renders
   const handleWidthChange = useCallback((newWidth) => {
     setSettingsPanelConfig(prev => ({ ...prev, width: newWidth }));
@@ -25,10 +23,6 @@ function App() {
 
   const handleToggleCollapse = useCallback(() => {
     setSettingsPanelConfig(prev => ({ ...prev, collapsed: !prev.collapsed }));
-  }, []);
-
-  const handleResponsiveViewChange = useCallback((newView) => {
-    setResponsiveView(newView);
   }, []);
 
   return (
@@ -42,11 +36,7 @@ function App() {
               onWidthChange={handleWidthChange}
               onToggleCollapse={handleToggleCollapse}
             />
-            <EditorPanel
-              settingsPanelCollapsed={settingsPanelConfig.collapsed}
-              responsiveView={responsiveView}
-              onResponsiveViewChange={handleResponsiveViewChange}
-            />
+            <EditorPanel />
           </div>
         </BuilderProvider>
       </DndProvider>
