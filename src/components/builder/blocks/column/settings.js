@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { Slider, NumberInput, Select, Button, ColorInput, Stack, Text } from '@mantine/core';
-import Form, { Field } from 'rc-field-form';
+import { Field } from 'rc-field-form';
 
 const ColumnBlockSettings = ({ form, element, initialValues, throttledUpdate }) => {
     const columns = element.props?.columns || 2;
@@ -32,13 +32,12 @@ const ColumnBlockSettings = ({ form, element, initialValues, throttledUpdate }) 
         const columnCount = formColumnCount || columns;
 
         return Array(columnCount).fill(0).map((_, index) => (
-            <Field
-                key={`width-${index}`}
-                name={['columnWidths', index]}
-                rules={[{ required: true, message: 'Please input the column width' }]}
-            >
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>{`Column ${index + 1} Width (%)`}</Text>
+            <Stack gap="xs" key={`width-stack-${index}`}>
+                <Text size="sm" fw={500}>{`Column ${index + 1} Width (%)`}</Text>
+                <Field
+                    name={['columnWidths', index]}
+                    rules={[{ required: true, message: 'Please input the column width' }]}
+                >
                     <NumberInput
                         min={5}
                         max={95}
@@ -47,19 +46,19 @@ const ColumnBlockSettings = ({ form, element, initialValues, throttledUpdate }) 
                         suffix="%"
                         style={{ width: '100%' }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
         ));
     };
 
     return (
-        <>
-            <Field
-                name="columns"
-                rules={[{ required: true, message: 'Please select the number of columns' }]}
-            >
-                <Stack gap="xs">
-                    <Text size="sm" fw={500}>Number of Columns</Text>
+        <Stack gap="md">
+            <Stack gap="xs">
+                <Text size="sm" fw={500}>Number of Columns</Text>
+                <Field
+                    name="columns"
+                    rules={[{ required: true, message: 'Please select the number of columns' }]}
+                >
                     <Slider
                         min={2}
                         max={12}
@@ -74,42 +73,44 @@ const ColumnBlockSettings = ({ form, element, initialValues, throttledUpdate }) 
                         onChange={(value) => {
                             // When column count changes, immediately update column widths
                             const equalWidth = Math.floor(100 / value);
+                            const newWidths = Array(value).fill(equalWidth);
                             form?.setFieldsValue({
-                                columnWidths: Array(value).fill(equalWidth)
+                                columns: value,
+                                columnWidths: newWidths
                             });
+
                             // Trigger live update
                             const allValues = form?.getFieldsValue() || {};
-                            allValues.columnWidths = Array(value).fill(equalWidth);
-                            handleValuesChange({ columns: value, columnWidths: allValues.columnWidths }, allValues);
+                            allValues.columns = value;
+                            allValues.columnWidths = newWidths;
+                            handleValuesChange({ columns: value, columnWidths: newWidths }, allValues);
                         }}
                     />
-                </Stack>
-            </Field>
+                </Field>
+            </Stack>
 
             <div className="column-widths-container">
                 {renderColumnWidthFields(form?.getFieldValue('columns') || columns)}
             </div>
 
-            <Stack gap="xs">
-                <Button
-                    variant="outline"
-                    onClick={() => {
-                        // Distribute column widths evenly
-                        const count = form?.getFieldValue('columns') || columns;
-                        const equalWidth = Math.floor(100 / count);
-                        const newWidths = Array(count).fill(equalWidth);
-                        form?.setFieldsValue({
-                            columnWidths: newWidths
-                        });
-                        // Trigger live update
-                        const allValues = form?.getFieldsValue() || {};
-                        allValues.columnWidths = newWidths;
-                        handleValuesChange({ columnWidths: newWidths }, allValues);
-                    }}
-                >
-                    Distribute Evenly
-                </Button>
-            </Stack>
+            <Button
+                variant="outline"
+                onClick={() => {
+                    // Distribute column widths evenly
+                    const count = form?.getFieldValue('columns') || columns;
+                    const equalWidth = Math.floor(100 / count);
+                    const newWidths = Array(count).fill(equalWidth);
+                    form?.setFieldsValue({
+                        columnWidths: newWidths
+                    });
+                    // Trigger live update
+                    const allValues = form?.getFieldsValue() || {};
+                    allValues.columnWidths = newWidths;
+                    handleValuesChange({ columnWidths: newWidths }, allValues);
+                }}
+            >
+                Distribute Evenly
+            </Button>
 
             <Stack gap="xs">
                 <Text size="sm" fw={500}>Gap Between Columns</Text>
@@ -174,7 +175,7 @@ const ColumnBlockSettings = ({ form, element, initialValues, throttledUpdate }) 
                     />
                 </Field>
             </Stack>
-        </>
+        </Stack>
     );
 };
 
