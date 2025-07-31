@@ -1,49 +1,8 @@
 /* Container styles */
 .canvas {
-    .drop-zone {
-        position: relative;
-
-        /* Stable dropzone indicators using absolute positioning */
-        &::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border: 1px dashed transparent;
-            background-color: transparent;
-            pointer-events: none;
-            opacity: 0;
-            transition: all 0.2s ease;
-            z-index: 1;
-        }
-
-        /* Drop zone hover states */
-        &.drop-zone-hover::after {
-            border-color: #1890ff;
-            background-color: rgba(24, 144, 255, 0.1);
-            opacity: 1;
-        }
-
-        /* Show during drag operations */
-        &.during-drag::after {
-            border-color: rgba(24, 144, 255, 0.3);
-            background-color: rgba(24, 144, 255, 0.03);
-            opacity: 1;
-        }
-
-        /* Enhanced visibility when parent is hovered during drag */
-        .draggable-block:hover &.during-drag::after {
-            border-color: rgba(24, 144, 255, 0.6);
-            background-color: rgba(24, 144, 255, 0.05);
-        }
-    }
 
     /* Container styles for example containers */
     .example-container {
-        background-color: rgba(0, 0, 0, 0.02);
-        border: 1px dashed #b5b5b5;
         padding: 10px;
         margin-bottom: 15px;
         box-sizing: border-box;
@@ -77,7 +36,6 @@
 
 /* Simple container styling */
 .example-container {
-    border-color: #d9d9d9 !important;
     width: 100% !important;
 }
 

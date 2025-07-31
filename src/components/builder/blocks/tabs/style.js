@@ -30,8 +30,7 @@ const TabsBlockStyles = (props, uniqueId) => {
         }
 
         .fildora-builder-tabs-block:hover {
-            outline: 1px dashed rgba(24, 144, 255, 0.3);
-            outline-offset: 2px;
+            /* Remove outline to reduce visual clutter */
         }
 
         .fildora-builder-tabs-block.during-drag {
@@ -79,47 +78,6 @@ const TabsBlockStyles = (props, uniqueId) => {
             height: 100px;
             color: #8c8c8c;
             font-style: italic;
-        }
-
-        /* DropZone styling within tabs - stable indicators */
-        .fildora-builder-tabs-block .drop-zone {
-            min-height: 120px;
-            border: 2px dashed #e8e8e8;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #8c8c8c;
-            transition: all 0.2s ease;
-            position: relative;
-        }
-
-        .fildora-builder-tabs-block .drop-zone::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border: 2px dashed transparent;
-            background-color: transparent;
-            border-radius: 4px;
-            pointer-events: none;
-            opacity: 0;
-            transition: all 0.2s ease;
-            z-index: 1;
-        }
-
-        .fildora-builder-tabs-block .drop-zone:hover::after {
-            border-color: #1890ff;
-            background-color: rgba(24, 144, 255, 0.02);
-            opacity: 1;
-        }
-
-        .fildora-builder-tabs-block .drop-zone.drag-over::after {
-            border-color: #1890ff;
-            background-color: rgba(24, 144, 255, 0.05);
-            opacity: 1;
         }
 
         /* Instance-specific styles using unique ID */

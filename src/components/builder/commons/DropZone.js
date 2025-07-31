@@ -5,7 +5,7 @@ import blockManager from './block/blockManager';
 import { BlockRenderer } from './index';
 import PositionalDropZone from './PositionalDropZone';
 
-const DropZone = ({ parentId, layoutClass = 'vertical-layout' }) => {
+const DropZone = ({ parentId, className = '', layoutClass = 'vertical-layout' }) => {
     const { createBlock, moveBlock, getBlocks, isDragging } = useBuilder();
     const dropZoneRef = useRef(null);
 
@@ -51,7 +51,7 @@ const DropZone = ({ parentId, layoutClass = 'vertical-layout' }) => {
     return (
         <div
             ref={setRefs}
-            className={`drop-zone vertical-layout ${isOver ? 'drop-zone-hover' : ''} ${isDragging ? 'during-drag' : ''}`}
+            className={`drop-zone ${className} ${layoutClass} ${isOver ? 'drop-zone-hover' : ''} ${isDragging ? 'during-drag' : ''}`}
             data-parent-id={parentId}
         >
             {/* Drop zone at the top */}

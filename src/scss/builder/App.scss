@@ -2,6 +2,7 @@
 @use './ContainerStyles.scss';
 @use './ColumnElement.scss';
 @use './DragOperations.scss';
+@use './UnifiedDropzones.scss';
 
 @import '@mantine/core/styles.css';
 
@@ -255,46 +256,14 @@
     }
 }
 
-/* Drop Zone - Base styles with stable indicators */
-.drop-zone {
-    min-height: 40px;
-    width: 100%;
-    position: relative;
-
-    /* Use absolute positioned pseudo-element for stable visual feedback */
-    &::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        border: 2px dashed transparent;
-        background-color: transparent;
-        pointer-events: none;
-        opacity: 0;
-        transition: all 0.2s ease;
-        z-index: 1;
-    }
-
-    &.drop-zone-hover::after {
-        border-color: #1890ff;
-        background-color: rgba(24, 144, 255, 0.1);
-        opacity: 1;
-    }
-}
-
 /* Draggable Element */
 .draggable-block {
     position: relative;
     margin: 5px 0;
     padding: 5px;
-    border: 1px solid transparent;
     transition: all 0.2s;
 
     &:hover {
-        border-color: #d9d9d9;
-
         .block-actions {
             opacity: 1;
         }
@@ -355,14 +324,9 @@
     width: 100%;
     padding: 10px;
     margin: 0;
-    border: 1px solid transparent;
     cursor: text;
     transition: all 0.2s;
     box-sizing: border-box;
-
-    &:hover {
-        border-color: #d9d9d9;
-    }
 }
 
 .text-element-editor {

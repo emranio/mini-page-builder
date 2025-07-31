@@ -32,7 +32,7 @@ const ExampleContainerBlockStyles = (props, uniqueId) => {
         }
 
         .fildora-builder-example-container-block:hover {
-            border-color: rgba(24, 144, 255, 0.6);
+            /* Remove border to reduce visual clutter */
         }
 
         .fildora-builder-example-container-block.during-drag {

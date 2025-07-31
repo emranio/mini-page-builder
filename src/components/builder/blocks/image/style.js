@@ -19,8 +19,7 @@ const ImageBlockStyles = (props, uniqueId) => {
         }
 
         .fildora-builder-image-block:hover {
-            outline: 1px dashed rgba(24, 144, 255, 0.5);
-            outline-offset: 2px;
+            /* Remove outline to reduce visual clutter */
         }
 
         .fildora-builder-image-block .newsletter-image:hover {

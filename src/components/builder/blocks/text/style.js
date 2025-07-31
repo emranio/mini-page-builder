@@ -14,8 +14,7 @@ const TextBlockStyles = (props, uniqueId) => {
         }
 
         .fildora-builder-text-block:hover .text-block {
-            outline: 1px dashed rgba(24, 144, 255, 0.5);
-            outline-offset: 2px;
+            /* Remove outline to reduce visual clutter */
         }
 
         /* Instance-specific styles using unique ID */

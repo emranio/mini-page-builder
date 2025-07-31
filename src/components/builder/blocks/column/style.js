@@ -24,8 +24,7 @@ const ColumnBlockStyles = (props, uniqueId) => {
         }
 
         .fildora-builder-column-block:hover {
-            outline: 1px dashed rgba(24, 144, 255, 0.3);
-            outline-offset: 2px;
+            /* Remove outline to reduce visual clutter */
         }
 
         .fildora-builder-column-block .column-element-row.during-drag {
@@ -47,24 +46,10 @@ const ColumnBlockStyles = (props, uniqueId) => {
             display: flex;
         }
 
-        .fildora-builder-column-block .column-drop-area {
+        /* Column dropzones use unified styling from UnifiedDropzones.scss */
+        .fildora-builder-column-block .drop-zone {
             flex: 1;
-            min-height: 180px;
-            border: 1px dashed rgba(0, 0, 0, 0.1);
-            border-radius: 4px;
-            position: relative;
-            transition: all 0.2s ease;
             width: 100%;
-        }
-
-        .fildora-builder-column-block .column-drop-area:hover {
-            border-color: rgba(24, 144, 255, 0.4);
-            background-color: rgba(24, 144, 255, 0.02);
-        }
-
-        .fildora-builder-column-block .column-drop-area.during-drag {
-            border-color: #1890ff;
-            background-color: rgba(24, 144, 255, 0.05);
         }
 
         .fildora-builder-column-block .loading {

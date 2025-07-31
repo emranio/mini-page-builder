@@ -78,7 +78,7 @@ const TabsBlockView = ({
         return {
             value: tab.id,
             children: tabContainerId ? (
-                <DropZone parentId={tabContainerId} />
+                <DropZone parentId={tabContainerId} className="tab-content-dropzone" />
             ) : (
                 <div className="loading">Loading tab content...</div>
             )
