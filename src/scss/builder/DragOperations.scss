@@ -87,68 +87,6 @@ body.dragging {
     }
 }
 
-/* Small drag preview box that follows the cursor */
-.drag-preview-box {
-    position: fixed !important;
-    width: 60px !important;
-    height: 60px !important;
-    background: white !important;
-    border: 2px solid #1890ff !important;
-    border-radius: 8px !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    z-index: 9999 !important;
-    pointer-events: none !important;
-    opacity: 0.95 !important;
-    transform: translate(-50%, -50%) !important;
-
-    .drag-preview-icon {
-        font-size: 18px !important;
-        margin-bottom: 4px !important;
-        color: #1890ff !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-    }
-
-    .drag-preview-title {
-        font-size: 9px !important;
-        font-weight: 600 !important;
-        color: #666 !important;
-        text-align: center !important;
-        line-height: 1.1 !important;
-        max-width: 55px !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-        white-space: nowrap !important;
-    }
-}
-
-/* Smooth pulsing animation for dropzones during drag */
-.drop-zone.during-drag::after {
-    animation: pulseDropzone 2s infinite;
-}
-
-@keyframes pulseDropzone {
-    0% {
-        background-color: rgba(24, 144, 255, 0.02);
-        border-color: rgba(24, 144, 255, 0.3);
-    }
-
-    50% {
-        background-color: rgba(24, 144, 255, 0.05);
-        border-color: rgba(24, 144, 255, 0.5);
-    }
-
-    100% {
-        background-color: rgba(24, 144, 255, 0.02);
-        border-color: rgba(24, 144, 255, 0.3);
-    }
-}
-
 /* Canvas highlighting during drag operations */
 .canvas-during-drag {
     border-color: #91d5ff !important;
