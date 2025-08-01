@@ -2,10 +2,10 @@ import React, { memo, useRef } from 'react';
 import { DropZone } from '../../commons';
 
 /**
- * ExampleContainerBlockView component - Simplified with new architecture
+ * ContainerBlockView component - Simplified with new architecture
  * Wrapper div and click handling are handled by BlockFactory
  */
-const ExampleContainerBlockView = memo(({
+const ContainerBlockView = memo(({
     id
 }) => {
     const containerRef = useRef(null);
@@ -19,4 +19,4 @@ const ExampleContainerBlockView = memo(({
     );
 });
 
-export default ExampleContainerBlockView;
+export default ContainerBlockView;

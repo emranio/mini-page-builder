@@ -3,10 +3,10 @@ import { NumberInput, Select, ColorInput, Stack, Text } from '@mantine/core';
 import { Field } from 'rc-field-form';
 
 /**
- * ExampleContainerBlockSettings - Simplified form component for new architecture
+ * ContainerBlockSettings - Simplified form component for new architecture
  * Common functionality (form handling, prop defaults) is handled by createBlockSettings factory
  */
-const ExampleContainerBlockSettings = ({ form }) => {
+const ContainerBlockSettings = ({ form }) => {
     return (
         <>
             <Stack gap="xs">
@@ -100,4 +100,4 @@ const ExampleContainerBlockSettings = ({ form }) => {
     );
 };
 
-export default ExampleContainerBlockSettings;
+export default ContainerBlockSettings;

@@ -1,10 +1,10 @@
 import React from 'react';
 
 /**
- * ExampleContainerBlockView - Simplified view for HTML generation
+ * ContainerBlockView - Simplified view for HTML generation
  * This component generates clean HTML without editing functionality
  */
-const ExampleContainerBlockView = ({
+const ContainerBlockView = ({
     id,
     getChildrenHTML
 }) => {
@@ -19,4 +19,4 @@ const ExampleContainerBlockView = ({
     );
 };
 
-export default ExampleContainerBlockView;
+export default ContainerBlockView;

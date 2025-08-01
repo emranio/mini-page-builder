@@ -1,9 +1,9 @@
 /**
- * Example Container Block Styles - Updated for new structure with wrapper in BlockFactory
+ * Container Block Styles - Updated for new structure with wrapper in BlockFactory
  * Targets the fildora-builder-container-block class instead of unique ID
  */
 
-const ExampleContainerBlockStyles = (props, uniqueId) => {
+const ContainerBlockStyles = (props, uniqueId) => {
     const {
         padding = 10,
         margin = 5,
@@ -19,7 +19,7 @@ const ExampleContainerBlockStyles = (props, uniqueId) => {
         : backgroundColor;
 
     return `
-        /* Common styles for all example container blocks */
+        /* Common styles for all container blocks */
         .fildora-builder-container-block {
             width: 100%;
             position: relative;
@@ -79,4 +79,4 @@ const ExampleContainerBlockStyles = (props, uniqueId) => {
     `;
 };
 
-export default ExampleContainerBlockStyles;
+export default ContainerBlockStyles;
